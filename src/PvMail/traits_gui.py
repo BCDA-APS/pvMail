@@ -13,16 +13,14 @@ Copyright (c) 2011, UChicago Argonne, LLC
 '''
 
 
+import traits.api
+import traitsui.api
 import pvMail
-
-from traits import api as traitsapi
-from traitsui import api as traitsuiapi
-
 
 __svnid__ = "$Id: traits_gui.py 1594 2014-11-06 06:05:39Z jemian $"
 
 
-class ActionHandler(traitsuiapi.Handler):
+class ActionHandler(traitsui.api.Handler):
     '''implements controls for PvMail GUI application'''
     
     _gui = None
@@ -71,46 +69,46 @@ class ActionHandler(traitsuiapi.Handler):
             self._gui.SetStatus('Not running')
 
 
-class PvMail_GUI(traitsapi.HasTraits):
+class PvMail_GUI(traits.api.HasTraits):
     '''
     GUI used for pvMail,
     declared using Enthought's Traits module
     '''
-    triggerPV = traitsapi.String(
+    triggerPV = traits.api.String(
                  desc="EPICS PV name on which to trigger an email",
                  label="trigger PV",)
-    messagePV = traitsapi.String(
+    messagePV = traits.api.String(
                  desc="EPICS string PV name with short message text",
                  label="message PV",)
-    recipients = traitsapi.List(
-                 trait=traitsapi.String,
+    recipients = traits.api.List(
+                 trait=traits.api.String,
                  value=["", "",],
                  desc="email addresses of message recipients",
                  label="email address(es)",)
-    actionRun = traitsuiapi.Action(name = "Run",
+    actionRun = traitsui.api.Action(name = "Run",
                        desc = "start watching for trigger PV to go from 0 to 1",
                        action = "do_run")
-    actionStop = traitsuiapi.Action(name = "Stop",
+    actionStop = traitsui.api.Action(name = "Stop",
                         desc = "stop watching trigger PV",
                         action = "do_stop")
 
-    status_label = traitsapi.String('status:')
-    status_msg = traitsapi.String
-    running = traitsapi.Bool(False)
-    pvm = traitsapi.Generic(None)
+    status_label = traits.api.String('status:')
+    status_msg = traits.api.String
+    running = traits.api.Bool(False)
+    pvm = traits.api.Generic(None)
     
-    view = traitsuiapi.View('triggerPV', 
+    view = traitsui.api.View('triggerPV', 
                 'messagePV', 
                 'recipients', 
-                traitsuiapi.Item('running', style = 'readonly', label = 'Running?', ),
+                traitsui.api.Item('running', style = 'readonly', label = 'Running?', ),
                 title="PvMail GUI",
                 width=500,
                 height=300,
                 buttons = [actionRun, actionStop],
                 handler = ActionHandler(),
                 statusbar = [
-                   traitsuiapi.StatusItem(name = 'status_label', width = 80),
-                   traitsuiapi.StatusItem(name = 'status_msg', width = 0.5),
+                   traitsui.api.StatusItem(name = 'status_label', width = 80),
+                   traitsui.api.StatusItem(name = 'status_msg', width = 0.5),
                 ],
                 resizable=True)
 
