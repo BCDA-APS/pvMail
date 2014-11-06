@@ -21,25 +21,16 @@ PV value can be either integer or float.
 
 .. _svn.repo:
 
-subversion repository
-*********************
+version control repository
+**************************
 
-The PvMail project is hosted on the APS XSD subversion server.
+The PvMail project is hosted on GitHub (https://github.com/prjemian/pvMail).
 You may check out the entire project source code 
-:index:`subversion repository`
-and development subdirectory::
+:index:`github repository`::
 
-	svn co  https://subversion.xray.aps.anl.gov/bcdaext/pvMail ./pvMail
+	git clone  https://github.com/prjemian/pvMail
 
-
-project management site
-***********************
-
-You may find it easier to view the various code revisions and other aspects
-of the project from the project management site.  Links there will direct
-you to the resources (documentation, source code) for the PvMail project.
-
-https://subversion.xray.aps.anl.gov/trac/bcdaext/wiki/PvMail
+GitHub has additional advice for alternative methods.
 
 
 Documentation
@@ -52,7 +43,7 @@ Documentation for the PvMail project,
 maintained using Sphinx (http://sphinx.pocoo.org),
 is available from:
 
-* http://subversion.xray.aps.anl.gov/admin_bcdaext/pvMail
+* http://PvMail.readthedocs.org
 
 
 .. index:: TODO items
@@ -88,3 +79,4 @@ Requirements
     the email message.
 :requires: PyEpics (http://cars9.uchicago.edu/software/python/pyepics3/)
 :requires: Traits (http://code.enthought.com/projects/traits/)
+:requires: TraitsUI (http://code.enthought.com/projects/traits_ui/)

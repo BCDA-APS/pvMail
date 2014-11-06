@@ -3,7 +3,7 @@
 PvMail: combined CLI and GUI
 ############################
 
-http://subversion.xray.aps.anl.gov/admin_bcdaext/pvMail
+http://PvMail.readthedocs.org
 
 .. note:: While *PvMail* is the name of the Python package, 
    the executable installed in <python>/bin is called 
