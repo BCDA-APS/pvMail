@@ -1,0 +1,27 @@
+########### SVN repository information ###################
+# $Date: 2011-11-25 20:16:30 -0600 (Fri, 25 Nov 2011) $
+# $Author: jemian $
+# $Revision: 659 $
+# $URL: https://subversion.xray.aps.anl.gov/bcdaext/pvMail/trunk/src/PvMail/test.db $
+# $Id: test.db 659 2011-11-26 02:16:30Z jemian $
+########### SVN repository information ###################
+
+# EPICS database to use while testing and developing pvMail.py code
+
+#  /APSshare/epics/base-3.14.12.1/bin/linux-x86-el5-debug/softIoc -d test.db
+#
+#  IOC:     softIoc -d test.db
+#  client:  camonitor pvMail:{trigger,message}
+#  pvMail:  pvMail.py  pvMail:trigger pvMail:message prjemian@gmail.com,jemian@anl.gov
+
+record(bo, "pvMail:trigger")
+{
+	field(DESC, "trigger PV")
+	field(ZNAM, "off")
+	field(ONAM, "on")
+}
+record(stringout, "pvMail:message")
+{
+	field(DESC, "message to be sent by email")
+	field(VAL,  "pvMail default message")
+}
