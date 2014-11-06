@@ -1,4 +1,3 @@
-.. $Id: pvMail.rst 1594 2014-11-06 06:05:39Z jemian $
 
 PvMail Python Package
 =====================

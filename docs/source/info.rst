@@ -1,4 +1,3 @@
-.. $Id: info.rst 1593 2014-11-06 05:44:30Z jemian $
 
 More Information
 ################

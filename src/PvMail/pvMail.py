@@ -404,11 +404,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-########### SVN repository information ###################
-# $Date: 2014-11-05 23:44:30 -0600 (Wed, 05 Nov 2014) $
-# $Author: jemian $
-# $Revision: 1593 $
-# $URL: https://subversion.xray.aps.anl.gov/bcdaext/pvMail/trunk/src/PvMail/pvMail.py $
-# $Id: pvMail.py 1593 2014-11-06 05:44:30Z jemian $
-########### SVN repository information ###################

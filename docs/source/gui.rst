@@ -1,9 +1,8 @@
-.. $Id: gui.rst 1448 2013-10-18 16:27:26Z jemian $
 
 .. _GUI:
 
 pvMail: graphical user interface
-====================================
+================================
 
 .. index:: example
 

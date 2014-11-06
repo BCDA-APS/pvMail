@@ -1,7 +1,6 @@
-.. $Id: test_database.rst 669 2011-11-28 19:01:45Z jemian $
 
 EPICS test database
-==================================
+===================
 
 To test the program during its development, a test database
 (:ref:`test_database`)
@@ -66,7 +65,7 @@ application from EPICS base::
 .. _test_database:
 
 test.db
----------------
+-------
 
 .. index:: test.db
 

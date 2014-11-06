@@ -1,4 +1,3 @@
-.. $Id: dependencies.rst 1094 2012-09-07 19:39:37Z jemian $
 
 Dependencies
 ============

@@ -1,7 +1,6 @@
-.. $Id: cli.rst 1448 2013-10-18 16:27:26Z jemian $
 
 pvMail: command-line interface
-==================================
+==============================
 
 Basically, you use it either as a background daemon or as a GUI. Call
 it with a ``-g`` or ``--gui`` command line option to force the GUI to run,
@@ -25,7 +24,7 @@ package to build the GUI (which means it could use either WX or QT).
 
 
 Starting PvMail from the command-line
-+++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++
 
 .. index:: example
 
@@ -122,7 +121,7 @@ The full message, as seen in the mail browser is::
 	recipients: jemian
 
 Starting PvMail from the command-line at the APS
-+++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++
 
 At the APS, Enthought Python Distribution is installed on the /APSshare partition
 available to all beam lines.
@@ -143,14 +142,14 @@ or the 32-bit version::
 
 
 command-line parameters
-===============================
+=======================
 
 .. index:: command-line
 
 .. index:: usage
 
 usage
-+++++++++++++++++++++++++++++
++++++
 
 .. index:: example
 
@@ -168,7 +167,7 @@ It tells us we must supply three :index:`positional arguments`:
 ``trigger_PV message_PV email_addresses``.
 
 positional argument: ``trigger_PV``
-+++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++
 
 EPICS process variable name to watch using a CA monitor.  
 When ``trigger_PV`` makes a transition from 0 (zero) to 1 (one),
@@ -176,7 +175,7 @@ then get the string from the ``message_PV`` and send an email
 to all of the ``email_addresses`` on the list.
 
 positional argument: ``message_PV``
-+++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++
 
 EPICS process variable name pointing to a (short) message that will
 be used as the first part of the email message to be sent.
@@ -184,7 +183,7 @@ be used as the first part of the email message to be sent.
 .. Can this be a waveform of char acting as a string?  Probably but test it.
 
 positional argument: ``email_addresses``
-++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++
 
 List of email addresses, separated by commas if more than one.  For example,
 ``user1@email.domain,user2@host.server`` will send one email to 
@@ -201,7 +200,7 @@ List of email addresses, separated by commas if more than one.  For example,
 .. index:: optional arguments
 
 option: ``--version``  or  ``-v``
-++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++
 
 The current version of the program can always be printed using the
 ``-v`` or ``--version``.  With this option, the program prints
@@ -213,7 +212,7 @@ the version number and then quits.
 	3.0-663
 
 option: ``--help``  or  ``-h``
-++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++
 
 It may be easier to review the short help instructions for command-line options::
 
@@ -238,14 +237,14 @@ It may be easier to review the short help instructions for command-line options:
 	  -v, --version        show program's version number and exit
 
 option: ``--gui``  or ``-g``
-+++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++
 
 This command line option is used to start the GUI (see :ref:`GUI`).
 If either GUI option is used, then the positional arguments 
 (``triggerPV messagePV email@address``) are optional.
 
 option: ``-l LOG_FILE``
-+++++++++++++++++++++++++++++
++++++++++++++++++++++++
 
 Both the command-line and GUI versions of PvMail log all
 program output to a log file.  If a LOG_FILE is not specified on the command
@@ -263,7 +262,7 @@ as a background daemon.  The UNIX/Linux command is::
 	kill PID
 
 option: ``-i LOGGING_INTERVAL``
-++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++
 
 :units: seconds
 
@@ -275,7 +274,7 @@ default is every 5 minutes) to the LOG_FILE.  The program ensures that
 LOGGING_INTERVAL is no shorter than 5 seconds or longer than 1 hour.
 
 option: ``-r SLEEP_DURATION``
-++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++
 
 :units: seconds
 

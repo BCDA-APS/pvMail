@@ -1,13 +1,5 @@
 #!/usr/bin/env python
 
-########### SVN repository information ###################
-# $Date: 2014-11-06 00:05:39 -0600 (Thu, 06 Nov 2014) $
-# $Author: jemian $
-# $Revision: 1594 $
-# $URL: https://subversion.xray.aps.anl.gov/bcdaext/pvMail/trunk/src/PvMail/traits_gui.py $
-# $Id: traits_gui.py 1594 2014-11-06 06:05:39Z jemian $
-########### SVN repository information ###################
-
 '''
 ===================================
 pvMail: just the GUI

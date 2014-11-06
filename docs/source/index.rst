@@ -1,4 +1,3 @@
-.. $Id: index.rst 1574 2014-07-10 17:28:14Z jemian $
 
 PvMail: combined CLI and GUI
 ############################

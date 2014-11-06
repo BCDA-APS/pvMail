@@ -1,5 +1,3 @@
-.. $Id: glossary.rst 1448 2013-10-18 16:27:26Z jemian $
-
 
 Glossary
 ========

@@ -329,34 +329,5 @@ epub_tocdepth = 4
 #epub_tocdup = True
 
 
-
-# picked from http://read-the-docs.readthedocs.org/en/latest/faq.html#i-get-import-errors-on-libraries-that-depend-on-c-modules  # noqa
-class Mock(object):
-
-    __all__ = []
-
-    def __init__(self, *args, **kwargs):
-        pass
-
-    def __call__(self, *args, **kwargs):
-        return Mock()
-
-    @classmethod
-    def __getattr__(cls, name):
-        if name in ('__file__', '__path__'):
-            return '/dev/null'
-        elif name == 'c_byte':
-            return 0
-        else:
-            return Mock()
-
-MOCK_MODULES = ['epics',
-                'pyepics',
-                'enthought.traits',
-                'enthought.traits.api', 
-				'enthought.traits.ui.api']
-for mod_name in MOCK_MODULES:
-    sys.modules[mod_name] = Mock()
-
 # To turn-off the warnings at object generation.
 numpydoc_show_class_members = False
