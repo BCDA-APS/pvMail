@@ -30,6 +30,7 @@ setup(
         # create & install console_scripts in <python>/bin
         'console_scripts': PvMail.__console_scripts__,
     },
+    zip_safe = False,
 )
 
 ########### SVN repository information ###################
