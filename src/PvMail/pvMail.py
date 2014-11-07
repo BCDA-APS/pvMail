@@ -405,7 +405,7 @@ def gui(results):
                                 results.email_addresses.strip().split(","),
                                 results.log_file,
                                 )
-    traits_gui.run_GUI(gui_object)
+    traits_gui.run(gui_object)
 
 
 def main():

@@ -17,8 +17,6 @@ import traits.api
 import traitsui.api
 import pvMail
 
-__svnid__ = "$Id: traits_gui.py 1594 2014-11-06 06:05:39Z jemian $"
-
 
 class ActionHandler(traitsui.api.Handler):
     '''implements controls for PvMail GUI application'''
@@ -69,8 +67,12 @@ class ActionHandler(traitsui.api.Handler):
             self._gui.SetStatus('Not running')
 
 
-def run_GUI(traits_object):
-    '''run the traits GUI'''
+def run(traits_object):
+    '''
+    run the traits GUI
+    
+    This is an abstraction that allows to change the GUI backend from this file.
+    '''
     traits_object.configure_traits()
 
 
