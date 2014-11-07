@@ -69,6 +69,11 @@ class ActionHandler(traitsui.api.Handler):
             self._gui.SetStatus('Not running')
 
 
+def run_GUI(traits_object):
+    '''run the traits GUI'''
+    traits_object.configure_traits()
+
+
 class PvMail_GUI(traits.api.HasTraits):
     '''
     GUI used for pvMail,
