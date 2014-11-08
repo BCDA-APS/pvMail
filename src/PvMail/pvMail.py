@@ -9,6 +9,7 @@ import argparse
 import datetime
 import epics
 import logging
+import mailer
 import os
 import socket
 import sys
@@ -150,7 +151,7 @@ class PvMail(threading.Thread):
         message += 'message PV: %s\n' % self.messagePV
         message += 'recipients: %s\n' % ", ".join(self.recipients)
         self.subject = "pvMail development test"
-        sendMail_sendmail(self.subject, self.message, self.recipients)
+        mailer.sendMail_sendmail(self.subject, self.message, self.recipients, logger=logger)
 
 
 class SendMessage(threading.Thread):
@@ -187,7 +188,7 @@ class SendMessage(threading.Thread):
             msg += 'recipients: %s\n' % ", ".join(pvm.recipients)
             pvm.message = msg
 
-            sendMail_sendmail(pvm.subject, msg, pvm.recipients)
+            mailer.sendMail_sendmail(pvm.subject, msg, pvm.recipients, logger=logger)
             logger("message(s) sent")
         except:
             err_msg = traceback.format_exc()
@@ -276,54 +277,6 @@ def sendMail_SMTP(recipient_list, message_text,
     #server.set_debuglevel(1)
     server.sendmail(sender_email, recipient_list, str(msg))
     #server.quit()
-
-
-def sendMail_sendmail(subject, message, recipients):
-    '''
-    send an email message using sendmail
-    
-    :param str subject: short text for email subject
-    :param str message: full text of email body
-    :param [str] recipients: list of email addresses to receive the message
-    '''
-    global gui_object
-    
-    from_addr = sys.argv[0]
-    to_addr = str(" ".join(recipients))
-
-    cmd = 'the mail configuration has not been set yet'
-    if 'el' in str(os.uname()):         # RHEL uses postfix
-        email_program = '/usr/lib/sendmail'
-        mail_command = "%s -F %s -t %s" % (email_program, from_addr, to_addr)
-        mail_message = [mail_command, "Subject: "+subject, message]
-        cmd = '''cat << +++ | %s\n+++''' % "\n".join(mail_message)
-    
-    if 'Ubuntu' in str(os.uname()):     # some Ubuntu (11) uses exim, some (10) postfix
-        email_program = '/usr/bin/mail'
-        mail_command = "%s %s" % (email_program, to_addr)
-        content = '%s\n%s' % (subject, message)
-        # TODO: needs to do THIS
-        '''
-        cat /tmp/message.txt | mail jemian@anl.gov
-        '''
-        cmd = '''echo %s | %s''' % (content, mail_command)
-
-    iso8601 = str(datetime.datetime.now())
-    msg = "(%s) sending email to: %s" % (iso8601, to_addr)
-    logger(msg)
-    if gui_object is not None:
-        gui_object.SetStatus(msg)   # FIXME: get the GUI status line to update
-
-    try:
-        logger( "email command:\n" + cmd )
-        if os.path.exists(email_program):
-            os.popen(cmd)    # send the message
-        else:
-            logger( 'email program (%s) does not exist' % email_program )
-    except:
-        err_msg = traceback.format_exc()
-        final_msg = "cmd = %s\ntraceback: %s" % (cmd, err_msg)
-        logger(final_msg)
 
 
 def logger(message):
