@@ -131,22 +131,6 @@ class PvMail(threading.Thread):
                 # self.ca_timestamp = epics.ca.get_timestamp(pv.chid)
                 SendMessage(self)
         self.old_value = value
-    
-    def send_test_message(self):
-        '''
-        sends a test message, used for development only
-        '''
-        logger("send_test_message")
-        self.recipients = ["jemian", "prjemian"]
-        message = ''
-        message += 'host: %s\n' % socket.gethostname()
-        message += 'date: %s (UNIX, not PV)\n' % datetime.datetime.now()
-        message += 'program: %s\n' % sys.argv[0]
-        message += 'trigger PV: %s\n' % self.triggerPV
-        message += 'message PV: %s\n' % self.messagePV
-        message += 'recipients: %s\n' % ", ".join(self.recipients)
-        self.subject = "pvMail development test"
-        mailer.sendMail_sendmail(self.subject, self.message, self.recipients, logger=logger)
 
 
 class SendMessage(threading.Thread):
@@ -193,7 +177,7 @@ class SendMessage(threading.Thread):
 
 def logger(message):
     '''
-    log a report from this class.
+    log a message or report from PvMail
 
     :param str message: words to be logged
     '''
@@ -202,32 +186,6 @@ def logger(message):
     name = os.path.basename(name)
     text = "(%s,%s) %s" % (name, now, message)
     logging.info(text)
-
-
-def basicStartTest():
-    '''simple test of the PvMail class'''
-    logging.basicConfig(filename=LOG_FILE,level=logging.INFO)
-    logger("startup")
-    pvm = PvMail()
-    pvm.recipients = ['prjemian@gmail.com']
-    pvm.triggerPV = "pvMail:trigger"
-    pvm.messagePV = "pvMail:message"
-    retry_interval_s = 0.05
-    end_time = time.time() + 60
-    report_time = time.time() + 5.0
-    pvm.do_start()
-    while time.time() < end_time:
-        if time.time() > report_time:
-            report_time = time.time() + 5.0
-            logger("time remaining: %.1f seconds ..." % (end_time - time.time()))
-        time.sleep(retry_interval_s)
-    pvm.do_stop()
-
-
-def basicMailTest():
-    '''simple test sending mail using the PvMail class'''
-    pvm = PvMail()
-    pvm.send_test_message()
 
 
 def cli(results):

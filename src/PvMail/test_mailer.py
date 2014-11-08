@@ -13,6 +13,9 @@ unit tests for the spec module
 #-----------------------------------------------------------------------------
 
 
+import datetime
+import socket
+import sys
 import unittest
 
 import mailer
@@ -26,16 +29,27 @@ class Test(unittest.TestCase):
 #     def tearDown(self):
 #         pass
 
-    def test_short(self):
+    def test_sendmail(self):
+        # this should fail on windows
         recipients = ["jemian@anl.gov"]
         subject = "pvMail test using sendmail"
         #message = "\n".join(["%s\t%s" % (k, v) for k, v in sorted(os.environ.items())])
-        
-        message = "This is a short test"
-        
+        message = "pvMail mailer test_sendmail"
+        mailer.sendMail_sendmail(subject, message, recipients)
+    
+    def test_sendmail_2(self):
+        # this should fail on windows
+        recipients = ["jemian", "prjemian"]
+        message = ''
+        message += 'host: %s\n' % socket.gethostname()
+        message += 'date: %s (UNIX, not PV)\n' % datetime.datetime.now()
+        message += 'program: %s\n' % sys.argv[0]
+        message += 'recipients: %s\n' % ", ".join(recipients)
+        subject = "pvMail mailer test_sendmail_2"
         mailer.sendMail_sendmail(subject, message, recipients)
 
     def test_smtp(self):
+        subject = "pvMail mailer test_smtp"
         pass
 
 

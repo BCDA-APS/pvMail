@@ -8,9 +8,7 @@ import datetime
 import os
 import sys
 
-
-SMTP_SERVER = 'apsmail.aps.anl.gov'
-SENDER_EMAIL = '1ID@aps.anl.gov'
+import PvMail
 
 
 def sendMail_sendmail(subject, message, recipients, logger = None):
@@ -71,9 +69,9 @@ def sendMail_sendmail(subject, message, recipients, logger = None):
 def sendMail_SMTP(recipient_list, message_text,
                   subject = '[pvMail]',
                   recipient_name = None,
-                  sender_email = SENDER_EMAIL,
+                  sender_email = None,
                   simulation = False,
-                  smtp_server = SMTP_SERVER,
+                  smtp_server = None,
                   ):
     '''
     send an email message using an SMTP server. 
@@ -124,13 +122,17 @@ def sendMail_SMTP(recipient_list, message_text,
     
     '''
     
-    # FIXME: what is difference between recipient_name and recipient_list?
-
     # Postpone imports until needed (lazy import)
     # This routine is not often called
     # The import has a slight delay on first use (which is OK)
     from email.Message import Message
     import smtplib
+    
+    # assign defaults, as needed
+    if sender_email is None:
+        sender_email = PvMail.sender_email
+    if smtp_server is None:
+        smtp_server = PvMail.smtp_server
     
     if not simulation:
         print("e-mail message simulation:")
@@ -145,7 +147,7 @@ def sendMail_SMTP(recipient_list, message_text,
         print(70*"=")
         return
     msg = Message()
-    # create a recipient name string if none is specified
+    # show recipient name string if specified
     if recipient_name is not None:
         msg['To'] = recipient_name
     msg['From'] = sender_email
