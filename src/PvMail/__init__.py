@@ -22,7 +22,7 @@ __classifiers__ = [
      'Topic :: Utilities',
    ]
 __keywords__ = ['EPICS', 'PV', 'email', 'monitor']
-__install_requires__ = ['pyepics', 'traits', 'traitsui', ]
+__install_requires__ = ['pyepics>=3.2.3', 'traits', 'traitsui', ]
 
 __project_name__ = "PvMail"
 __description__ = "Watch an EPICS PV. Send email when it changes from 0 to 1."
