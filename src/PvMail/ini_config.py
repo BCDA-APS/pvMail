@@ -25,7 +25,7 @@ class Config(object):
         op_sys_config_dir_env = dict(posix='HOME',nt='APPDATA')[os.name]
         dir_prefix = dict(posix='.',nt='')[os.name]
         self.ini_dir = os.path.join(os.environ.get(op_sys_config_dir_env, None) or '.', dir_prefix + APPLICATION)
-        self.ini_file = os.path.join(self.ini_dir, dir_prefix + INI_FILE)
+        self.ini_file = os.path.join(self.ini_dir, INI_FILE)
 
         self.mail_transfer_agent = 'sendmail'
         if sys.platform not in ('linux2'):
