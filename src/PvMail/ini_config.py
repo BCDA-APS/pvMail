@@ -10,20 +10,20 @@ operating system).
 
 The application configuration settings file *pvMail.ini*
 is stored in a directory that depends on the operating system,
-as selected by the :attr:`os.name` value::
+as selected by the :attr:`os.name` value, as shown in this table:
 
-===============  =================================
+===============  =======================================
 :attr:`os.name`  path
-===============  =================================
+===============  =======================================
 *posix*          *$HOST/.pvMail/pvMail.ini*
-*nt*             *%APPDATA%\\pvMail\\pvMail.ini*
-===============  =================================
+*nt*             *%APPDATA%\\\\pvMail\\\\pvMail.ini*
+===============  =======================================
 
 The user can override this path by defining the 
 **PVMAIL_INI_FILE** environment variable to point
 to the desired application configuration settings file.
 This definition must be made before the call to 
-:class:`ini_config.Config`.
+:class:`PvMail.ini_config.Config`.
 
 The main reason why an application configuration settings file
 is needed is to supply the configuration to send email
@@ -45,6 +45,118 @@ example ``pvMail.ini`` file::
     
     [sendmail]
     from = joeuser
+
+
+OVERVIEW
+
+The :class:`PvMail.ini_config.Config` class reads the entire contents
+of the application configuration settings file and copies that to
+a dictionary in the class:  *self.agent_db*.  Each of the sections in the file
+(such as *SMTP*, *sendmail*) comprise subdictionaries with *key = value* content.
+The *header* section contains metadata about the file and is not read.  
+The *mailer* section has a key *mail_transfer_agent* that indicates
+which mail transport agent [#]_ will be used to send the email.
+Current choices available are: *SMTP* or *sendmail* (supported on Linux only).
+
+.. [#] MTA: https://en.wikipedia.org/wiki/Message_transfer_agent
+
+Comments in the application configuration settings file will be ignored
+and will not be written back to the file if the file is rewritten
+from :meth:`PvMail.ini_config.Config.write`.  A tricky way to preserve
+*comment* information is to write the comment as if it were a variable 
+to be set inside a section, or possible an entire section.  Such as::
+    
+    [work-SMTP]
+    server = smtp.mycompany.com
+    from = j.o.e.user
+    password = keep_this_private
+    comment_1 = this is a comment
+
+or::
+    
+    [comment]
+    comment_2 = this is also a comment
+
+It is possible to define other sections, such as to preserve the content
+of two different SMTP configurations.  For example::
+
+    [header]
+    application = pvMail
+    written = 2014-11-09 11:47:47.709000
+    
+    [mailer]
+    mail_transfer_agent = SMTP
+    
+    [SMTP]
+    server = smtp.mycompany.com
+    from = j.o.e.user
+    password = keep_this_private
+    
+    [work-SMTP]
+    server = smtp.mycompany.com
+    from = j.o.e.user
+    password = keep_this_private
+    
+    [gmail-SMTP]
+    server = smtp.googlemail.com
+    from = joeuser@gmail.com
+    password = keep_this_private
+    
+    [sendmail]
+    from = joeuser
+
+To manage between multiple *SMTP* configurations,
+copy the settings from the desired section and replace
+the content of the *SMTP* section.  The above example
+is configured for Joe's work email SMTP server.
+
+KEYWORDS
+
+These keywords (exact spelling) are recognized (others are ignored):
+
+:server:      IP name or address of email server
+:from:        username accepted by *server* to send an email
+:password:    (optional) if required by SMTP server
+
+WRITING THE CONFIGURATION FILE
+
+Under normal use, the application configuration settings file
+is only read.  It is possible to create a new configuration
+file (in the default location) by running the 
+:mod:`PvMail.ini_config` program directly from the command line.
+A new file will be created if none existed.
+If the file already exists, it will not be modified.
+The only output from this program will be the absolute path name
+to the application configuration settings file.
+
+It is possible to edit this file with any text editor.
+
+.. tip::  It is advised to set the permissions on the
+   application configuration settings file so that only the
+   owner can read the file (owner: read+write).  
+   One way to do this on a linux system::
+   
+       [joeuser] $ /path/to/PvMail/ini_config.py
+       /home/joeuser/.pvMail/pvMail.ini
+       [joeuser] $ chmod 600 /home/joeuser/.pvMail/pvMail.ini
+   
+   It is also advisable to restrict access to the parent
+   directory of this file (owner: read+write+executable)::
+
+       [joeuser] $ chmod 700 /home/joeuser/.pvMail
+
+On Windows, the default file might be:
+``C:\\Users\\JoeUser\\AppData\\Roaming\\pvMail\\pvMail.ini``.
+
+It is possible to provide a custom editor (command-line or GUI)
+for the application configuration settings file.  For now,
+a text editor will suffice.
+
+ALTERNATE CONFIGURATION FILE
+
+An alternate application configuration settings file may be
+used by setting the **PVMAIL_INI_FILE** environment variable
+with the absolute file path to the desired file.
 
 '''
 
@@ -82,7 +194,7 @@ class Config(object):
             # only use sendmail on linux systems
             self.mail_transfer_agent = 'SMTP'
 
-        self.mta = {
+        self.agent_db = {
             'sendmail': {
                             'from': 'joeuser'
                          },
@@ -99,9 +211,9 @@ class Config(object):
             self.write()
             self.read()
 
-    def setMTA(self, agent):
+    def setAgent(self, agent):
         '''choose the mail transfer agent'''
-        if agent in self.mta:
+        if agent in self.agent_db:
             self.mail_transfer_agent = agent
         else:
             raise Unknown_MTA(str(agent))
@@ -116,20 +228,13 @@ class Config(object):
         
         self.mail_transfer_agent = config.get('mailer', 'mail_transfer_agent')
         
-        # https://docs.python.org/2/library/configparser.html#ConfigParser.RawConfigParser.defaults
-        # https://docs.python.org/2/library/configparser.html#ConfigParser.RawConfigParser.sections
-        # https://docs.python.org/2/library/configparser.html#ConfigParser.RawConfigParser.options
-        for default in config.defaults():
-            pass
+        # https://docs.python.org/2/library/configparser.html#ConfigParser.RawConfigParser
         for section in config.sections():
-            for option in config.options(section):
-                pass
-        
-        for section, fields in self.mta.items():
-            if config.has_section(section):
-                for option in fields.keys():
-                    if config.has_option(section, option):
-                        fields[option] = config.get(section, option)
+            if section not in ('header', 'mailer'):
+                for option in config.options(section):
+                    if section not in self.agent_db:
+                        self.agent_db[section] = {}
+                    self.agent_db[section][option] = config.get(section, option)
     
     def write(self):
         '''
@@ -143,9 +248,9 @@ class Config(object):
         config.add_section('mailer')
         config.set('mailer', 'mail_transfer_agent', self.mail_transfer_agent)
         
-        for section in self.mta:
+        for section in self.agent_db:
             config.add_section(section)
-            for k, v in self.mta[section].items():
+            for k, v in self.agent_db[section].items():
                 config.set(section, k, v)
         
         if not os.path.exists(self.ini_dir):
@@ -156,10 +261,10 @@ class Config(object):
         '''
         return the chosen configuration dictionary
         '''
-        return self.mta[self.mail_transfer_agent]
+        return self.agent_db[self.mail_transfer_agent]
 
 
 if __name__ == '__main__':
     con = Config()
     print con.ini_file
-    print con
+    # print len(con.agent_db), ' configuration(s) described'

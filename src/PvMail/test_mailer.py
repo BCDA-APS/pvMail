@@ -52,14 +52,14 @@ class Test(unittest.TestCase):
     def test_smtp(self):
         subject = "pvMail mailer test_smtp"
         message_text = subject
-        mta = self.cfg.get()
+        agent = self.cfg.get()
         mailer.sendMail_SMTP(['prjemian@gmail.com',], message_text,
                   subject = subject,
-                  recipient_name = mta['from'],
-                  sender_email = mta['from'],
-                  sender_password = mta['password'],
+                  recipient_name = agent['from'],
+                  sender_email = agent['from'],
+                  sender_password = agent['password'],
                   simulation = False,
-                  smtp_server = mta['server'],
+                  smtp_server = agent['server'],
                   )
 
 
