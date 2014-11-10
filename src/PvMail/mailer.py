@@ -70,6 +70,7 @@ def sendMail_SMTP(recipient_list, message_text,
                   subject = '[pvMail]',
                   recipient_name = None,
                   sender_email = None,
+                  sender_password = None,
                   simulation = False,
                   smtp_server = None,
                   ):
@@ -80,20 +81,14 @@ def sendMail_SMTP(recipient_list, message_text,
     (Note, this requires the sender_email to be accepted by the SMTP server.)
     Simulation mode disables sending of e-mail messages, to avoid spam.
     
-    # TODO: verify that recipient_list is either string, list, or tuple
-    :param str recipient_list: A string containing a single e-mail address or a list or tuple (etc.)
-       containing a list of strings with e-mail addresses.
+    :param [str] recipient_list: A string list containing one or more e-mail addresses
     :param str message_text: The text message to be sent.
     :param str subject: a subject to be included in the e-mail message (default: ``[pvMail]``)
-    # TODO: verify the autoassignment of @aps.anl.gov
-    :param str recipient_name: Recipient(s) of the message. If not specified,
-       no "To:" header shows up in the e-mail. 
-       This should be an e-mail address or *@aps.anl.gov* is appended.
+    :param str recipient_name: Recipient(s) of the message. If not specified,  no "To:" header shows up in the e-mail. 
     :param str sender_email: E-mail address identified as the sender of the e-mail
-       (defaults: ``SENDER_EMAIL = "1ID@aps.anl.gov"``). 
-       This should be an e-mail address or *@aps.anl.gov* is appended.
+    :param str sender_password: E-mail address password
     :param bool simulation: set to *True* to use simulation mode (default: *False*)
-    :param str smtp_server: SMTP server to be used (default: ``SMTP_SERVER = 'apsmail.aps.anl.gov'``)
+    :param str smtp_server: SMTP server to be used
        
     Examples:
       >>> msg = 'This is a very short e-mail'
@@ -125,16 +120,10 @@ def sendMail_SMTP(recipient_list, message_text,
     # Postpone imports until needed (lazy import)
     # This routine is not often called
     # The import has a slight delay on first use (which is OK)
-    from email.Message import Message
+    import email
     import smtplib
     
-    # assign defaults, as needed
-    if sender_email is None:
-        sender_email = PvMail.sender_email
-    if smtp_server is None:
-        smtp_server = PvMail.smtp_server
-    
-    if not simulation:
+    if simulation:
         print("e-mail message simulation:")
         #for who in recipient_list:
         #    print("\tTo:\t"+str(who))
@@ -145,16 +134,19 @@ def sendMail_SMTP(recipient_list, message_text,
         print(70*"=")
         print(message_text)
         print(70*"=")
-        return
-    msg = Message()
-    # show recipient name string if specified
-    if recipient_name is not None:
-        msg['To'] = recipient_name
-    msg['From'] = sender_email
-    msg['Subject'] = subject
-    msg.set_payload(message_text)
-    #if debug: print "sending e-mail message"
-    server = smtplib.SMTP(smtp_server)   # TODO: password?
-    #server.set_debuglevel(1)
-    server.sendmail(sender_email, recipient_list, str(msg))
-    #server.quit()
+    else:
+        msg = email.Message.Message()
+        # show recipient name string if specified
+        if recipient_name is not None:
+            msg['To'] = recipient_name
+        msg['From'] = sender_email
+        msg['Subject'] = subject
+        msg.set_payload(message_text)
+        #if debug: print "sending e-mail message"
+        server = smtplib.SMTP(smtp_server)
+        if sender_password is not None:
+            server.login(sender_email, sender_password)
+        #server.set_debuglevel(1)
+        _result = server.sendmail(sender_email, recipient_list, str(msg))
+        #server.quit()
+        pass

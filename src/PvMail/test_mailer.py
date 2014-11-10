@@ -18,13 +18,14 @@ import socket
 import sys
 import unittest
 
+import ini_config
 import mailer
 
 
 class Test(unittest.TestCase):
 
     def setUp(self):
-        pass
+        self.cfg = ini_config.Config()
 
 #     def tearDown(self):
 #         pass
@@ -50,7 +51,16 @@ class Test(unittest.TestCase):
 
     def test_smtp(self):
         subject = "pvMail mailer test_smtp"
-        pass
+        message_text = subject
+        mta = self.cfg.get()
+        mailer.sendMail_SMTP(['prjemian@gmail.com',], message_text,
+                  subject = subject,
+                  recipient_name = mta['from'],
+                  sender_email = mta['from'],
+                  sender_password = mta['password'],
+                  simulation = False,
+                  smtp_server = mta['server'],
+                  )
 
 
 if __name__ == "__main__":
