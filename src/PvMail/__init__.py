@@ -36,7 +36,3 @@ __license__ += " (see LICENSE file for details)"
 
 # create & install console_scripts in <python>/bin
 __console_scripts__ = ['pvMail = PvMail.pvMail:main', ]
-
-
-smtp_server = 'apsmail.aps.anl.gov'
-sender_email = '1ID@aps.anl.gov'
