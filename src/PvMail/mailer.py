@@ -1,6 +1,16 @@
 
 '''
 send a message by email to one or more recipients (by SMTP or sendmail)
+
+
+========  ================================================================
+agent     description
+========  ================================================================
+sendmail  (linux-only) uses either */usr/lib/sendmail* or */usr/bin/mail*
+SMTP      uses smtplib [#]_
+========  ================================================================
+
+.. [#] *smtplib*: https://docs.python.org/2/library/smtplib.html
 '''
 
 
@@ -8,7 +18,7 @@ import datetime
 import os
 import sys
 
-import PvMail
+# import PvMail
 
 
 def sendMail_sendmail(subject, message, recipients, logger = None):
