@@ -116,6 +116,15 @@ class Config(object):
         
         self.mail_transfer_agent = config.get('mailer', 'mail_transfer_agent')
         
+        # https://docs.python.org/2/library/configparser.html#ConfigParser.RawConfigParser.defaults
+        # https://docs.python.org/2/library/configparser.html#ConfigParser.RawConfigParser.sections
+        # https://docs.python.org/2/library/configparser.html#ConfigParser.RawConfigParser.options
+        for default in config.defaults():
+            pass
+        for section in config.sections():
+            for option in config.options(section):
+                pass
+        
         for section, fields in self.mta.items():
             if config.has_section(section):
                 for option in fields.keys():
