@@ -9,13 +9,15 @@ import argparse
 import datetime
 import epics
 import logging
-import mailer
 import os
 import socket
 import sys
 import threading
 import time
 import traceback
+
+import ini_config
+import mailer
 
 
 LOG_FILE = "pvMail-%d.log" % os.getpid()
@@ -144,6 +146,11 @@ class SendMessage(threading.Thread):
         logger("SendMessage")
         pvm.trigger = False        # triggered event received
 
+        # TODO: what happens if config file does not exist?
+        agent_db = ini_config.Config()
+        email_agent_dict = dict(sendmail=mailer.sendMail_sendmail, SMTP=mailer.sendMail_SMTP)
+        email_agent = email_agent_dict[agent_db.mail_transfer_agent]
+
         try:
             pvm.basicChecks()
             
@@ -167,7 +174,7 @@ class SendMessage(threading.Thread):
             msg += 'recipients: %s\n' % ", ".join(pvm.recipients)
             pvm.message = msg
 
-            mailer.sendMail_sendmail(pvm.subject, msg, pvm.recipients, logger=logger)
+            email_agent(pvm.subject, msg, pvm.recipients, logger=logger)
             logger("message(s) sent")
         except:
             err_msg = traceback.format_exc()

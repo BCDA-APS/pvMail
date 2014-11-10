@@ -14,7 +14,6 @@ SMTP      uses smtplib [#]_
 '''
 
 
-import datetime
 import os
 import sys
 
@@ -27,24 +26,41 @@ SMTP_TIMEOUT = 10
 class MailerError(Exception): pass
 
 
-def sendMail_sendmail(subject, message, recipients, logger = None):
+def sendMail_sendmail(subject, message, recipients, sendmail_cfg, sender = None, logger = None):
     '''
     send an email message using sendmail (linux only)
-    
+
     :param str subject: short text for email subject
     :param str message: full text of email body
     :param [str] recipients: list of email addresses to receive the message
+    :param dict smtp_cfg: such as returned from :mod:`PvMail.ini_config.Config.get`
+    
+        :server:               required - (*str*) SMTP server
+        :user:                 required - (*str*) username to login to SMTP server
+        :port:                 optional - (*str*) SMTP port
+        :password:             optional - (*str*) password for username
+        :connection_security:  optional - (*str*) **STARTTLS** (the only choice, if specified)
+
+    :param str sender: "From" address, if *None* use *smtp_cfg['user']* value
     :param obj logger: optional message logging method
-    :returns str: status message or None (if exception)
+    
+    EXAMPLE::
+    
+        >>> import PvMail.ini_config
+        >>> sendmail_cfg = PvMail.ini_config.Config().get()
+        >>> recipients = ['joe@gmail.com', 'sally@example.org']
+        >>> subject = 'sendmail test message'
+        >>> message = PvMail.ini_config.__doc__
+        >>> sendMail_sendmail(subject, message, recipients, sendmail_cfg)
+
     '''
     
     if sys.platform not in ('linux2'):
         raise MailerError('Cannot use this method on sys.platform='+sys.platform)
     
-    from_addr = sys.argv[0]
+    from_addr = sender or sendmail_cfg['from']
     to_addr = str(" ".join(recipients))
 
-    # TODO: replace with email package?
     cmd = 'the mail configuration has not been set yet'
     if 'el' in str(os.uname()):         # RHEL uses postfix
         email_program = '/usr/lib/sendmail'
@@ -62,10 +78,11 @@ def sendMail_sendmail(subject, message, recipients, logger = None):
         '''
         cmd = '''echo %s | %s''' % (content, mail_command)
 
-    iso8601 = str(datetime.datetime.now())
-    msg = "(%s) sending email to: %s" % (iso8601, to_addr)
     if logger is not None:
-        logger(msg)
+        logger('sending email to: ' + str(recipients) )
+        logger('email program: ' + email_program )
+        logger('mail command: ' + mail_command )
+        logger('email From: ' + sender )
 
     try:
         if logger is not None:
@@ -76,22 +93,22 @@ def sendMail_sendmail(subject, message, recipients, logger = None):
             if logger is not None:
                 logger( 'email program (%s) does not exist' % email_program )
     except Exception, err_msg:
-        # TODO: consider passing exception to caller
         #err_msg = traceback.format_exc()
         final_msg = "cmd = %s\ntraceback: %s" % (cmd, err_msg)
         logger(final_msg)
-        msg = None
+        raise MailerError(final_msg)
         
-    return msg
+    if logger is not None:
+        logger( "sendmail sent" )
 
 
-def sendMail_SMTP(recipients, subject, message, smtp_cfg, sender = None):
+def sendMail_SMTP(subject, message, recipients, smtp_cfg, sender = None, logger = None):
     '''
     send email message through SMTP server
     
-    :param [str] recipients: string list of email addresses which should receive message by email
-    :param str subject: email message subject
-    :param str message: email message content
+    :param str subject: short text for email subject
+    :param str message: full text of email body
+    :param [str] recipients: list of email addresses to receive the message
     :param dict smtp_cfg: such as returned from :mod:`PvMail.ini_config.Config.get`
     
         :server:               required - (*str*) SMTP server
@@ -108,8 +125,8 @@ def sendMail_SMTP(recipients, subject, message, smtp_cfg, sender = None):
         >>> smtp_cfg = PvMail.ini_config.Config().get()
         >>> recipients = ['joe@gmail.com', 'sally@example.org']
         >>> subject = 'SMTP test message'
-        >>> message = '\\n'.join(['%s: %s' % (k, v) for k, v in os.environ.items()])
-        >>> sendMail_SMTP(recipients, subject, message, smtp_cfg)
+        >>> message = PvMail.ini_config.__doc__
+        >>> sendMail_SMTP(subject, message, recipients, smtp_cfg)
     
     '''
     import smtplib
@@ -140,29 +157,45 @@ def sendMail_SMTP(recipients, subject, message, smtp_cfg, sender = None):
     msg['Subject'] = subject
     msg.set_payload(message)
 
+    if logger is not None:
+        logger('sending email to: ' + str(recipients) )
+        logger('SMTP server: ' + host )
+        logger('SMTP user: ' + username )
+        logger('email From: ' + sender )
+
     smtpserver = smtplib.SMTP(timeout=SMTP_TIMEOUT)
     # smtpserver.set_debuglevel(1)
     if port is None:
         _r = smtpserver.connect(host)
-    if port is not None:
+    else:
         _r = smtpserver.connect(host, int(port))
+    if logger is not None:
+        logger('SMTP connected')
     
     _r = smtpserver.ehlo()
     if smtp_cfg.get('connection_security', None) == 'STARTTLS':
         _r = smtpserver.starttls()
         _r = smtpserver.ehlo()
+        if logger is not None:
+            logger('SMTP STARTTLS')
     
     if password is not None:
         _r = smtpserver.login(username, password)
+        if logger is not None:
+            logger('SMTP authenticated')
     
     smtpserver.sendmail(username, recipients, str(msg))
     smtpserver.close()
+    if logger is not None:
+        logger('SMTP complete')
 
 
 if __name__ == '__main__':
     import ini_config
-    smtp_cfg = ini_config.Config().get()
-    recipients = ['prjemian@gmail.com', 'Pete@jemian.org']
-    subject = sys.argv[0] + ' test message'
-    message = '\n'.join(['%s: %s' % (k, v) for k, v in os.environ.items()])
-    sendMail_SMTP(recipients, subject, message, smtp_cfg)
+    cfg = ini_config.Config()
+    sendmail_cfg = cfg.get()
+    recipients = ['jemian@anl.gov', 'jemian@aps.anl.gov']
+    subject = 'sendmail test message'
+    message = 'something\nsomething else\nmore\nless\nfin'
+    email_agent_dict = dict(sendmail=sendMail_sendmail, SMTP=sendMail_SMTP)
+    email_agent_dict[cfg.mail_transfer_agent](subject, message, recipients, sendmail_cfg)
