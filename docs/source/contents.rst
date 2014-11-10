@@ -9,7 +9,6 @@ Contents
    gui
    test_database
    pvMail/modules
-   ini_config
    info
    changes
    license

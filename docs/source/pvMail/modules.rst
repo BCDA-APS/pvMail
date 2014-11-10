@@ -36,3 +36,5 @@ PvMail source code documentation
    :maxdepth: 4
 
    pvMail
+   ini_config
+   mailer

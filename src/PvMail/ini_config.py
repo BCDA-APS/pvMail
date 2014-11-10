@@ -66,11 +66,11 @@ from :meth:`PvMail.ini_config.Config.write`.  A tricky way to preserve
 *comment* information is to write the comment as if it were a variable 
 to be set inside a section, or possible an entire section.  Such as::
     
-    [work-SMTP]
+    [SMTP]
     server = smtp.mycompany.com
-    user = j.o.e.user
+    user = j.o.e.user@mycompany.com
     password = keep_this_private
-    comment_1 = this is a comment
+    hint = comment: use your email as "user" name
 
 or::
     
@@ -104,6 +104,7 @@ of two different SMTP configurations.  For example::
     [gmail-SMTP]
     server = smtp.googlemail.com
     user = joeuser@gmail.com
+    hint = use your gmail account as "user" name
     password = keep_this_private
     port = 587
     authentication = Normal password

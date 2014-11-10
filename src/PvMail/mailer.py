@@ -21,6 +21,12 @@ import sys
 # import PvMail
 
 
+SMTP_TIMEOUT = 10
+
+
+class MailerError(Exception): pass
+
+
 def sendMail_sendmail(subject, message, recipients, logger = None):
     '''
     send an email message using sendmail (linux only)
@@ -31,6 +37,9 @@ def sendMail_sendmail(subject, message, recipients, logger = None):
     :param obj logger: optional message logging method
     :returns str: status message or None (if exception)
     '''
+    
+    if sys.platform not in ('linux2'):
+        raise MailerError('Cannot use this method on sys.platform='+sys.platform)
     
     from_addr = sys.argv[0]
     to_addr = str(" ".join(recipients))
@@ -76,87 +85,84 @@ def sendMail_sendmail(subject, message, recipients, logger = None):
     return msg
 
 
-def sendMail_SMTP(recipient_list, message_text,
-                  subject = '[pvMail]',
-                  recipient_name = None,
-                  sender_email = None,
-                  sender_password = None,
-                  simulation = False,
-                  smtp_server = None,
-                  ):
+def sendMail_SMTP(recipients, subject, message, smtp_cfg, sender = None):
     '''
-    send an email message using an SMTP server. 
+    send email message through SMTP server
     
-    Uses the APS outgoing email server (apsmail.aps.anl.gov) to send the message via SMTP. 
-    (Note, this requires the sender_email to be accepted by the SMTP server.)
-    Simulation mode disables sending of e-mail messages, to avoid spam.
+    :param [str] recipients: string list of email addresses which should receive message by email
+    :param str subject: email message subject
+    :param str message: email message content
+    :param dict smtp_cfg: such as returned from :mod:`PvMail.ini_config.Config.get`
     
-    :param [str] recipient_list: A string list containing one or more e-mail addresses
-    :param str message_text: The text message to be sent.
-    :param str subject: a subject to be included in the e-mail message (default: ``[pvMail]``)
-    :param str recipient_name: Recipient(s) of the message. If not specified,  no "To:" header shows up in the e-mail. 
-    :param str sender_email: E-mail address identified as the sender of the e-mail
-    :param str sender_password: E-mail address password
-    :param bool simulation: set to *True* to use simulation mode (default: *False*)
-    :param str smtp_server: SMTP server to be used
-       
-    Examples:
-      >>> msg = 'This is a very short e-mail'
-      >>> macros.sendMail_SMTP(['toby@sigmaxi.net','brian.h.toby@gmail.com'],msg, subject='test')
+        :server:               required - (*str*) SMTP server
+        :user:                 required - (*str*) username to login to SMTP server
+        :port:                 optional - (*str*) SMTP port
+        :password:             optional - (*str*) password for username
+        :connection_security:  optional - (*str*) **STARTTLS** (the only choice, if specified)
 
-    or with a single address:
-      >>> msg = """Dear Brian,
-      ...   How about a longer message?
-      ... Thanks, Brian
-      ... """
-      >>> to = "toby@anl.gov"
-      >>> macros.sendMail_SMTP(to,msg,recipient_name='monty@python.good',sender_email='spammer@anl.gov')
-
-    A good way to use this routine is within a try/except block:
-      >>> userlist = ['user@univ.edu','contact@anl.gov']
-      >>> try:
-      >>>     for iLoop in range(nLoop):
-      >>>         for xLoop in range(nX): 
-      >>>             # do something
-      >>> except Exception:
-      >>>     import traceback
-      >>>     msg = "(%s, %s):\n" % (datestamp, __file__)
-      >>>     msg += str(traceback.format_exc())
-      >>>     subject = '[' + sys.argv[0] + ']'
-      >>>     macros.sendMail_SMTP(userlist, msg, subject=subject)
+    :param str sender: "From" address, if *None* use *smtp_cfg['user']* value
+    
+    EXAMPLE::
+    
+        >>> import PvMail.ini_config
+        >>> smtp_cfg = PvMail.ini_config.Config().get()
+        >>> recipients = ['joe@gmail.com', 'sally@example.org']
+        >>> subject = 'SMTP test message'
+        >>> message = '\\n'.join(['%s: %s' % (k, v) for k, v in os.environ.items()])
+        >>> sendMail_SMTP(recipients, subject, message, smtp_cfg)
     
     '''
-    
-    # Postpone imports until needed (lazy import)
-    # This routine is not often called
-    # The import has a slight delay on first use (which is OK)
-    import email
     import smtplib
+    import email
     
-    if simulation:
-        print("e-mail message simulation:")
-        #for who in recipient_list:
-        #    print("\tTo:\t"+str(who))
-        print("\tTo:\t" + ', '.join(recipient_list))
-        print("\tFrom:\t"+str(sender_email))
-        print("\tSubject:\t"+str(subject))
-        print("\tContents: ")
-        print(70*"=")
-        print(message_text)
-        print(70*"=")
+    host = smtp_cfg.get('server', None)
+    if host is None:
+        raise MailerError('must define an SMTP host to be used')
+    port = smtp_cfg.get('port', None)
+    username = smtp_cfg.get('user', None)
+    if username is None:
+        raise MailerError('must define a username for the SMTP server')
+    if sender is None:
+        sender = username
+    password = smtp_cfg.get('password', None)
+    connection_security = smtp_cfg.get('connection_security', None)
+    if connection_security not in (None, 'STARTTLS'):
+        msg = 'connection_security must be: STARTTLS or not defined, found: '
+        raise MailerError(msg + connection_security)
+    
+    msg = email.Message.Message()
+    if isinstance(recipients, str):
+        msg['To'] = recipients
     else:
-        msg = email.Message.Message()
-        # show recipient name string if specified
-        if recipient_name is not None:
-            msg['To'] = recipient_name
-        msg['From'] = sender_email
-        msg['Subject'] = subject
-        msg.set_payload(message_text)
-        #if debug: print "sending e-mail message"
-        server = smtplib.SMTP(smtp_server)
-        if sender_password is not None:
-            server.login(sender_email, sender_password)
-        #server.set_debuglevel(1)
-        _result = server.sendmail(sender_email, recipient_list, str(msg))
-        #server.quit()
-        pass
+        for who in recipients:
+            msg['To'] = who
+    msg['From'] = sender
+    msg['Subject'] = subject
+    msg.set_payload(message)
+
+    smtpserver = smtplib.SMTP(timeout=SMTP_TIMEOUT)
+    # smtpserver.set_debuglevel(1)
+    if port is None:
+        _r = smtpserver.connect(host)
+    if port is not None:
+        _r = smtpserver.connect(host, int(port))
+    
+    _r = smtpserver.ehlo()
+    if smtp_cfg.get('connection_security', None) == 'STARTTLS':
+        _r = smtpserver.starttls()
+        _r = smtpserver.ehlo()
+    
+    if password is not None:
+        _r = smtpserver.login(username, password)
+    
+    smtpserver.sendmail(username, recipients, str(msg))
+    smtpserver.close()
+
+
+if __name__ == '__main__':
+    import ini_config
+    smtp_cfg = ini_config.Config().get()
+    recipients = ['prjemian@gmail.com', 'Pete@jemian.org']
+    subject = sys.argv[0] + ' test message'
+    message = '\n'.join(['%s: %s' % (k, v) for k, v in os.environ.items()])
+    sendMail_SMTP(recipients, subject, message, smtp_cfg)
