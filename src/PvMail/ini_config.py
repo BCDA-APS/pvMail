@@ -91,16 +91,23 @@ of two different SMTP configurations.  For example::
     server = smtp.mycompany.com
     user = j.o.e.user
     password = keep_this_private
+    port = 465
+    connection_security = STARTTLS
     
     [work-SMTP]
     server = smtp.mycompany.com
     user = j.o.e.user
     password = keep_this_private
+    port = 465
+    connection_security = STARTTLS
     
     [gmail-SMTP]
     server = smtp.googlemail.com
     user = joeuser@gmail.com
     password = keep_this_private
+    port = 587
+    authentication = Normal password
+    connection_security = STARTTLS
     
     [sendmail]
     user = joeuser
@@ -119,7 +126,7 @@ These keywords (exact spelling) are recognized (others are ignored):
 :password:    (optional) if required by SMTP server
 :port:        port number to be used
 :authentication: ``Normal password``
-:connection_security: ``SSL/TLS`` | ``STARTTLS``
+:connection_security: ``STARTTLS`` (SSL/TLS is not available via smtplib)
 
 WRITING THE CONFIGURATION FILE
 
@@ -200,7 +207,9 @@ class Config(object):
         self.agent_db = dict(sendmail=dict(user='joeuser'),
                              SMTP=dict(user='joeuser',
                                        password='keep_this_private',
-                                       server='smtp.server.org'),)
+                                       server='smtp.server.org',
+                                       port='465',
+                                       connection_security='STARTTLS',),)
 
         try:
             self.read()
