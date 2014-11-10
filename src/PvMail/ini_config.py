@@ -145,7 +145,7 @@ class Config(object):
         
         for section in self.mta:
             config.add_section(section)
-            for k, v in self.mta['section'].items():
+            for k, v in self.mta[section].items():
                 config.set(section, k, v)
         
         if not os.path.exists(self.ini_dir):
