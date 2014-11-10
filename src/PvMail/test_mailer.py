@@ -55,8 +55,8 @@ class Test(unittest.TestCase):
         agent = self.cfg.get()
         mailer.sendMail_SMTP(['prjemian@gmail.com',], message_text,
                   subject = subject,
-                  recipient_name = agent['from'],
-                  sender_email = agent['from'],
+                  recipient_name = agent['user'],
+                  sender_email = agent['user'],
                   sender_password = agent['password'],
                   simulation = False,
                   smtp_server = agent['server'],

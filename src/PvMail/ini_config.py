@@ -40,11 +40,11 @@ example ``pvMail.ini`` file::
     
     [SMTP]
     password = keep_this_private
-    from = joeuser
+    user = joeuser
     server = smtp.server.org
     
     [sendmail]
-    from = joeuser
+    user = joeuser
 
 
 OVERVIEW
@@ -68,7 +68,7 @@ to be set inside a section, or possible an entire section.  Such as::
     
     [work-SMTP]
     server = smtp.mycompany.com
-    from = j.o.e.user
+    user = j.o.e.user
     password = keep_this_private
     comment_1 = this is a comment
 
@@ -89,21 +89,21 @@ of two different SMTP configurations.  For example::
     
     [SMTP]
     server = smtp.mycompany.com
-    from = j.o.e.user
+    user = j.o.e.user
     password = keep_this_private
     
     [work-SMTP]
     server = smtp.mycompany.com
-    from = j.o.e.user
+    user = j.o.e.user
     password = keep_this_private
     
     [gmail-SMTP]
     server = smtp.googlemail.com
-    from = joeuser@gmail.com
+    user = joeuser@gmail.com
     password = keep_this_private
     
     [sendmail]
-    from = joeuser
+    user = joeuser
 
 To manage between multiple *SMTP* configurations,
 copy the settings from the desired section and replace
@@ -115,8 +115,11 @@ KEYWORDS
 These keywords (exact spelling) are recognized (others are ignored):
 
 :server:      IP name or address of email server
-:from:        username accepted by *server* to send an email
+:user:        username accepted by *server* to send an email
 :password:    (optional) if required by SMTP server
+:port:        port number to be used
+:authentication: ``Normal password``
+:connection_security: ``SSL/TLS`` | ``STARTTLS``
 
 WRITING THE CONFIGURATION FILE
 
@@ -194,16 +197,10 @@ class Config(object):
             # only use sendmail on linux systems
             self.mail_transfer_agent = 'SMTP'
 
-        self.agent_db = {
-            'sendmail': {
-                            'from': 'joeuser'
-                         },
-            'SMTP': {
-                        'from': 'joeuser', 
-                        'password': 'keep_this_private', 
-                        'server': 'smtp.server.org'
-                     },
-        }
+        self.agent_db = dict(sendmail=dict(user='joeuser'),
+                             SMTP=dict(user='joeuser',
+                                       password='keep_this_private',
+                                       server='smtp.server.org'),)
 
         try:
             self.read()
