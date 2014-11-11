@@ -221,6 +221,7 @@ def main():
 
     recipients = results.recipient
     print "Sending email(s) to: " + str(" ".join(recipients))
+    print "mail transfer agent: " + cfg.mail_transfer_agent
 
     subject = 'PvMail mailer test message: ' + cfg.mail_transfer_agent
     message = 'This is a test of the PvMail mailer, v' + PvMail.__version__
