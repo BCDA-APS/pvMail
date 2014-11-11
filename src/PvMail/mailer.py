@@ -58,7 +58,7 @@ def sendMail_sendmail(subject, message, recipients, sendmail_cfg, sender = None,
     if sys.platform not in ('linux2'):
         raise MailerError('Cannot use this method on sys.platform='+sys.platform)
     
-    from_addr = sender or sendmail_cfg['from']
+    from_addr = sender or sendmail_cfg['user']
     to_addr = str(" ".join(recipients))
 
     cmd = 'the mail configuration has not been set yet'
