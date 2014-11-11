@@ -38,4 +38,5 @@ __license__ += " (see LICENSE file for details)"
 __console_scripts__ = [
                        'pvMail = PvMail.pvMail:main', 
                        'pvMail_mail_test = PvMail.mailer:main', 
+                       'pvMail_mail_config_file = PvMail.ini_config:main', 
                        ]
