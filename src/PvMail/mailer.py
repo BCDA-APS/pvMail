@@ -13,8 +13,15 @@ SMTP      uses smtplib [#]_
 
 .. [#] *smtplib*: https://docs.python.org/2/library/smtplib.html
 
-USAGE::
 
+.. rubric:: TESTING THE CONFIGURATION
+
+.. index:: email; testing the configuration
+.. index:: configuration file; testing
+
+To test the email sending using the configuration file, use either of the first two lines::
+
+    [joeuser] $ pvMail_mail_test
     [joeuser] $ python ./mailer.py
     
     usage: mailer.py [-h] recipient [recipient ...]

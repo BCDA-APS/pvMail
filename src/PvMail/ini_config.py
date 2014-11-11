@@ -9,6 +9,8 @@ a *secure* location such that it is accessible and readable
 only to the account user (to the extent possible on the
 operating system).
 
+.. index:: configuration file; default path
+
 The application configuration settings file *pvMail.ini*
 is stored in a directory that depends on the operating system,
 as selected by the :attr:`os.name` value, as shown in this table:
@@ -26,29 +28,31 @@ to the desired application configuration settings file.
 This definition must be made before the call to 
 :class:`PvMail.ini_config.Config`.
 
+If the application configuration settings file does not exist,
+a default one will be created on the first call to 
+:class:`PvMail.ini_config.Config`.  This default configuration file 
+is only a template and **must be modified** with the user's settings
+before email can be sent successfully.
+
 The main reason why an application configuration settings file
 is needed is to supply the configuration to send email
 through an SMTP server.
 
-example ``pvMail.ini`` file::
+.. rubric:: EXAMPLE
 
-    [header]
-    application = pvMail
-    written = 2014-11-09 11:47:47.709000
-    
-    [mailer]
-    mail_transfer_agent = SMTP
-    
-    [SMTP]
-    password = keep_this_private
-    user = joeuser
-    server = smtp.server.org
-    
-    [sendmail]
-    user = joeuser
+example ``pvMail.ini`` file:
+
+.. index:: configuration file; default
+
+.. literalinclude:: ../../../src/PvMail/pvMail.ini
+    :tab-width: 4
+    :linenos:
+    :language: guess
 
 
-OVERVIEW
+.. rubric:: OVERVIEW
+
+.. index:: configuration file; overview
 
 The :class:`PvMail.ini_config.Config` class reads the entire contents
 of the application configuration settings file and copies that to
@@ -65,7 +69,12 @@ Comments in the application configuration settings file will be ignored
 and will not be written back to the file if the file is rewritten
 from :meth:`PvMail.ini_config.Config.write`.  A tricky way to preserve
 *comment* information is to write the comment as if it were a variable 
-to be set inside a section, or possible an entire section.  Such as::
+to be set inside a section, or possible an entire section.  Such as:
+
+.. index:: SMTP
+
+.. code-block:: guess
+    :linenos:
     
     [SMTP]
     server = smtp.mycompany.com
@@ -73,13 +82,21 @@ to be set inside a section, or possible an entire section.  Such as::
     password = keep_this_private
     hint = comment: use your email as "user" name
 
-or::
+or:
+
+.. code-block:: guess
+    :linenos:
     
     [comment]
     comment_2 = this is also a comment
 
 It is possible to define other sections, such as to preserve the content
-of two different SMTP configurations.  For example::
+of two different SMTP configurations.  For example:
+
+.. index:: configuration file; example
+
+.. code-block:: guess
+    :linenos:
 
     [header]
     application = pvMail
@@ -119,7 +136,9 @@ copy the settings from the desired section and replace
 the content of the *SMTP* section.  The above example
 is configured for the work email SMTP server.
 
-KEYWORDS
+.. rubric:: KEYWORDS
+
+.. index:: configuration file; keywords
 
 These keywords (exact spelling) are recognized (others are ignored):
 
@@ -130,7 +149,7 @@ These keywords (exact spelling) are recognized (others are ignored):
 :authentication: ``Normal password``
 :connection_security: ``STARTTLS`` (SSL/TLS is not available via smtplib)
 
-WRITING THE CONFIGURATION FILE
+.. rubric:: WRITING THE CONFIGURATION FILE
 
 Under normal use, the application configuration settings file
 is only read.  It is possible to create a new configuration
@@ -144,18 +163,25 @@ to the application configuration settings file.
 It is possible to edit this file with any text editor.
 
 .. tip::  It is advised to set the permissions on the
-   application configuration settings file so that only the
-   owner can read the file (owner: read+write).  
-   One way to do this on a linux system::
-   
-       [joeuser] $ /path/to/PvMail/ini_config.py
-       /home/joeuser/.pvMail/pvMail.ini
-       [joeuser] $ chmod 600 /home/joeuser/.pvMail/pvMail.ini
-   
-   It is also advisable to restrict access to the parent
-   directory of this file (owner: read+write+executable)::
+    application configuration settings file so that only the
+    owner can read the file (owner: read+write).  
+    One way to do this on a linux system:
 
-       [joeuser] $ chmod 700 /home/joeuser/.pvMail
+    .. code-block:: guess
+        :linenos:
+   
+        [joeuser] $ /path/to/PvMail/ini_config.py
+        /home/joeuser/.pvMail/pvMail.ini
+        [joeuser] $ chmod 600 /home/joeuser/.pvMail/pvMail.ini
+   
+    It is also advisable to restrict access to the parent
+    directory of this file (owner: read+write+executable),
+    such as this linux command:
+
+    .. code-block:: guess
+        :linenos:
+
+        [joeuser] $ chmod 700 /home/joeuser/.pvMail
 
 On Windows, the default file might be:
 ``C:\\Users\\JoeUser\\AppData\\Roaming\\pvMail\\pvMail.ini``.
@@ -164,7 +190,11 @@ It is possible to provide a custom editor (command-line or GUI)
 for the application configuration settings file.  For now,
 a text editor will suffice.
 
-ALTERNATE CONFIGURATION FILE
+
+.. rubric:: ALTERNATE CONFIGURATION FILE
+
+.. index:: PVMAIL_INI_FILE
+.. index:: configuration file; environment variable
 
 An alternate application configuration settings file may be
 used by setting the **PVMAIL_INI_FILE** environment variable
