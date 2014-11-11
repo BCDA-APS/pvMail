@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 
 '''
 handle application configuration settings in a .ini file
@@ -116,7 +117,7 @@ of two different SMTP configurations.  For example::
 To manage between multiple *SMTP* configurations,
 copy the settings from the desired section and replace
 the content of the *SMTP* section.  The above example
-is configured for Joe's work email SMTP server.
+is configured for the work email SMTP server.
 
 KEYWORDS
 
@@ -168,7 +169,6 @@ ALTERNATE CONFIGURATION FILE
 An alternate application configuration settings file may be
 used by setting the **PVMAIL_INI_FILE** environment variable
 with the absolute file path to the desired file.
-
 '''
 
 
