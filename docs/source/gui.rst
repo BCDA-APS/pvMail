@@ -15,14 +15,14 @@ command-line interface is started.::
 
 	$ pvMail -g &
 
-..	tip::
-	Usually, you want to run the GUI as a background task by appending
-	the ampersand (``&``) on the command line, as shown above.
+.. tip::
+   Usually, you want to run the GUI as a background task by appending
+   the ampersand (``&``) on the command line, as shown above.
 
-..	figure:: gui.png
-	:width: 300 pt
-
-	GUI of the *PvMail* application
+.. figure:: gui.png
+   :width: 300 pt
+   
+   GUI of the *PvMail* application
 
 The GUI provides editable text entry widgets for each of the required 
 command-line terms (a.k.a. *positional arguments*): 
@@ -30,18 +30,19 @@ command-line terms (a.k.a. *positional arguments*):
 The list of email addresses is separated.  The GUI provides a tool
 to add additional address or remove addresses.
 
-..	warning::
-	At present, the GUI provides few visual cues 
-	about the success of PV connections or even 
-	that the program is working.  This will be fixed soon.
+.. warning::
+   At present, the GUI provides few visual cues 
+   about the success of PV connections or even 
+   that the program is working.  
+   This will be fixed in a future version.
 
 The GUI also shows (using *True* or *False* text) whether or not
 the PV monitor process is running.
 
-..	warning::
-	If either of the PVs fails to connect, it is likely that the GUI may
-	become confused whether or not it is running.  In such cases, press
-	the *Stop* button, then press the *Run* button to try to restart monitoring.
+.. warning::
+   If either of the PVs fails to connect, it is likely that the GUI may
+   become confused whether or not it is running.  In such cases, press
+   the *Stop* button, then press the *Run* button to try to restart monitoring.
 
 All PvMail monitoring will be stopped if the GUI window is closed.
 At present, there is no feature to detach or reattach a monitor set.
