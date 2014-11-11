@@ -1,4 +1,6 @@
 
+.. _cli:
+
 pvMail: command-line interface
 ==============================
 

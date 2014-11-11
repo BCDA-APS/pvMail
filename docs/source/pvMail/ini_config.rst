@@ -1,4 +1,7 @@
 
+.. _ini_config:
+
+
 :mod:`ini_config` Module
 ########################
 

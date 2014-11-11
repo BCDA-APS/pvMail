@@ -1,4 +1,7 @@
 
+.. _mailer:
+
+
 :mod:`mailer` Module
 ####################
 
