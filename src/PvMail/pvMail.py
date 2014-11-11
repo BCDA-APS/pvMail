@@ -2,7 +2,7 @@
 
 '''Watch an EPICS PV. Send email when it changes from 0 to 1'''
 # see file LICENSE included with this distribution. 
-# docs: http://subversion.xray.aps.anl.gov/admin_bcdaext/pvMail
+# docs: http://PvMail.readthedocs.org
 
 
 import argparse
@@ -146,7 +146,6 @@ class SendMessage(threading.Thread):
         logger("SendMessage")
         pvm.trigger = False        # triggered event received
 
-        # TODO: what happens if config file does not exist?
         agent_db = ini_config.Config()
         email_agent_dict = dict(sendmail=mailer.sendMail_sendmail, SMTP=mailer.sendMail_SMTP)
         email_agent = email_agent_dict[agent_db.mail_transfer_agent]
