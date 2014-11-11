@@ -68,7 +68,7 @@ def sendMail_sendmail(subject, message, recipients, sendmail_cfg, sender = None,
         mail_message = [mail_command, "Subject: "+subject, message]
         cmd = '''cat << +++ | %s\n+++''' % "\n".join(mail_message)
     
-    if 'Ubuntu' in str(os.uname()):     # some Ubuntu (11) uses exim, some (10) postfix
+    elif 'Ubuntu' in str(os.uname()):     # some Ubuntu (11) uses exim, some (10) postfix
         email_program = '/usr/bin/mail'
         mail_command = "%s %s" % (email_program, to_addr)
         content = '%s\n%s' % (subject, message)
