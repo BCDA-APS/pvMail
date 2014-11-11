@@ -2,6 +2,7 @@
 '''
 send a message by email to one or more recipients (by SMTP or sendmail)
 
+.. index:: mail agents
 
 ========  ================================================================
 agent     description
@@ -11,6 +12,24 @@ SMTP      uses smtplib [#]_
 ========  ================================================================
 
 .. [#] *smtplib*: https://docs.python.org/2/library/smtplib.html
+
+USAGE::
+
+    [joeuser] $ python ./mailer.py
+    
+    usage: mailer.py [-h] recipient [recipient ...]
+    
+    test the email sender from PvMail 3.1.0
+    
+    positional arguments:
+      recipient   email address(es), whitespace-separated if more than one
+    
+    optional arguments:
+      -h, --help  show this help message and exit
+
+
+    [joeuser] $ python ./mailer.py joeuser@example.com
+
 '''
 
 
@@ -33,13 +52,9 @@ def sendMail_sendmail(subject, message, recipients, sendmail_cfg, sender = None,
     :param str subject: short text for email subject
     :param str message: full text of email body
     :param [str] recipients: list of email addresses to receive the message
-    :param dict smtp_cfg: such as returned from :mod:`PvMail.ini_config.Config.get`
+    :param dict sendmail_cfg: such as returned from :mod:`PvMail.ini_config.Config.get`
     
-        :server:               required - (*str*) SMTP server
-        :user:                 required - (*str*) username to login to SMTP server
-        :port:                 optional - (*str*) SMTP port
-        :password:             optional - (*str*) password for username
-        :connection_security:  optional - (*str*) **STARTTLS** (the only choice, if specified)
+        :user: required - (*str*) username to for sendmail (or similar) program
 
     :param str sender: "From" address, if *None* use *smtp_cfg['user']* value
     :param obj logger: optional message logging method
@@ -58,25 +73,46 @@ def sendMail_sendmail(subject, message, recipients, sendmail_cfg, sender = None,
     if sys.platform not in ('linux2'):
         raise MailerError('Cannot use this method on sys.platform='+sys.platform)
     
-    from_addr = sender or sendmail_cfg['user']
-    to_addr = str(" ".join(recipients))
-
-    cmd = 'the mail configuration has not been set yet'
-    if 'el' in str(os.uname()):         # RHEL uses postfix
-        email_program = '/usr/lib/sendmail'
-        mail_command = "%s -F %s -t %s" % (email_program, from_addr, to_addr)
-        mail_message = [mail_command, "Subject: "+subject, message]
-        cmd = '''cat << +++ | %s\n+++''' % "\n".join(mail_message)
+    sender = sender or sendmail_cfg['user']
+    if isinstance(recipients, str):
+        recipients = [recipients,]
     
-    elif 'Ubuntu' in str(os.uname()):     # some Ubuntu (11) uses exim, some (10) postfix
-        email_program = '/usr/bin/mail'
+    def _sendmail_handler(email_program, from_addr, recipients, subject, message):
+        to_addr = str(" ".join(recipients))
+        mail_command = "%s -F %s -t %s" % (email_program, from_addr, to_addr)
+        mail_message = [mail_command,]
+        for who in recipients:
+            mail_message.append("To: " + who)
+        mail_message.append("Subject: " + subject)
+        mail_message.append(message)
+        cmd = '''cat << +++ | %s\n+++''' % "\n".join(mail_message)
+        return mail_command, cmd
+    
+    def _mail_handler(email_program, from_addr, recipients, subject, message):
+        to_addr = str(" ".join(recipients))
         mail_command = "%s %s" % (email_program, to_addr)
-        content = '%s\n%s' % (subject, message)
+        mail_message = '%s\n%s' % (subject, message)
         # TODO: needs to do THIS
         '''
         cat /tmp/message.txt | mail jemian@anl.gov
         '''
-        cmd = '''echo %s | %s''' % (content, mail_command)
+        cmd = '''echo %s | %s''' % (mail_message, mail_command)
+        raise MailerError('code needs improvement here')
+        return mail_command, cmd
+    
+    cmd = None
+    for email_program, handler in (
+                                   ('/usr/lib/sendmail', _sendmail_handler),
+                                   ('/usr/bin/sendmail', _sendmail_handler),
+                                   ('/usr/bin/mail',     _mail_handler),
+                                   ):
+        if os.path.exists(email_program):
+            results = handler(email_program, sender, recipients, subject, message)
+            mail_command, cmd = results
+            break
+
+    if cmd is None:
+        raise MailerError('Cannot find mail transport agent for sendmail.')
 
     if logger is not None:
         logger('sending email to: ' + str(recipients) )
@@ -190,12 +226,40 @@ def sendMail_SMTP(subject, message, recipients, smtp_cfg, sender = None, logger 
         logger('SMTP complete')
 
 
-if __name__ == '__main__':
+def main():
+    '''
+    user on-demand test of the mailer module and configuration
+    '''
+    import argparse
     import ini_config
+    import PvMail
+    
+    doc = 'test the email sender from PvMail ' + PvMail.__version__
+    parser = argparse.ArgumentParser(description=doc)
+    msg = 'email address(es), whitespace-separated if more than one'
+    parser.add_argument('recipient', action='store', nargs='+',
+                        help=msg, 
+                        default="")
+    results = parser.parse_args()
+    print doc
+    
     cfg = ini_config.Config()
+    print "Using configuration from: " + cfg.ini_file
+
     sendmail_cfg = cfg.get()
-    recipients = ['jemian@anl.gov', 'jemian@aps.anl.gov']
-    subject = 'sendmail test message'
-    message = 'something\nsomething else\nmore\nless\nfin'
+    print "Using user name: " + sendmail_cfg['user']
+
+    recipients = results.recipient
+    print "Sending email(s) to: " + str(" ".join(recipients))
+
+    subject = 'PvMail mailer test message: ' + cfg.mail_transfer_agent
+    message = 'This is a test of the PvMail mailer, v' + PvMail.__version__
+    message += '\nFor more help, see: ' + PvMail.__url__
     email_agent_dict = dict(sendmail=sendMail_sendmail, SMTP=sendMail_SMTP)
-    email_agent_dict[cfg.mail_transfer_agent](subject, message, recipients, sendmail_cfg)
+    agent = email_agent_dict[cfg.mail_transfer_agent]
+    agent(subject, message, recipients, sendmail_cfg)
+    
+
+if __name__ == '__main__':
+    sys.argv.append('jemian@anl.gov')
+    main()
