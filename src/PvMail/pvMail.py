@@ -173,7 +173,7 @@ class SendMessage(threading.Thread):
             msg += 'recipients: %s\n' % ", ".join(pvm.recipients)
             pvm.message = msg
 
-            email_agent(pvm.subject, msg, pvm.recipients, logger=logger)
+            email_agent(pvm.subject, msg, pvm.recipients, agent_db.get(), logger=logger)
             logger("message(s) sent")
         except:
             err_msg = traceback.format_exc()
