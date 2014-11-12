@@ -11,12 +11,10 @@ Copyright (c) 2014, UChicago Argonne, LLC
 '''
 
 
-import traits.api
-import traitsui.api
 import pvMail
 
 
-def run(traits_object):
+def run(obj):
     '''
     run the GUI
     
