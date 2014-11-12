@@ -22,7 +22,7 @@ __classifiers__ = [
      'Topic :: Utilities',
    ]
 __keywords__ = ['EPICS', 'PV', 'email', 'monitor']
-__install_requires__ = ['pyepics', 'traits', 'traitsui', ]
+__install_requires__ = ['pyepics>=3.2.3', 'traits', 'traitsui', ]
 
 __project_name__ = "PvMail"
 __description__ = "Watch an EPICS PV. Send email when it changes from 0 to 1."
@@ -30,9 +30,13 @@ __version__ = _get_version()
 __author__ = "Pete Jemian"
 __institution__ = "Advanced Photon Source, Argonne National Laboratory"
 __author_email__= "jemian@anl.gov"
-__url__ = "http://subversion.xray.aps.anl.gov/admin_bcdaext/pvMail"
+__url__ = "http://PvMail.readthedocs.org"
 __license__ = "(c) 2009-2014, UChicago Argonne, LLC"
 __license__ += " (see LICENSE file for details)"
 
 # create & install console_scripts in <python>/bin
-__console_scripts__ = ['pvMail = PvMail.pvMail:main', ]
+__console_scripts__ = [
+                       'pvMail = PvMail.pvMail:main', 
+                       'pvMail_mail_test = PvMail.mailer:main', 
+                       'pvMail_mail_config_file = PvMail.ini_config:main', 
+                       ]

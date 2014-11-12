@@ -9,3 +9,4 @@ Watches an EPICS PV and sends email when value changes from 0 to 1.
 :license:   ANL OPEN SOURCE LICENSE (see *LICENSE*)
 :docs:      http://PvMail.readthedocs.org
 :git:       https://github.com/prjemian/pvMail
+:PyPI:      https://pypi.python.org/pypi/PvMail 

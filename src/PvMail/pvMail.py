@@ -2,7 +2,7 @@
 
 '''Watch an EPICS PV. Send email when it changes from 0 to 1'''
 # see file LICENSE included with this distribution. 
-# docs: http://subversion.xray.aps.anl.gov/admin_bcdaext/pvMail
+# docs: http://PvMail.readthedocs.org
 
 
 import argparse
@@ -15,6 +15,9 @@ import sys
 import threading
 import time
 import traceback
+
+import ini_config
+import mailer
 
 
 LOG_FILE = "pvMail-%d.log" % os.getpid()
@@ -125,30 +128,11 @@ class PvMail(threading.Thread):
                 # since the trigger PV just may transition back
                 # to zero before SendMessage() runs.
                 self.trigger = True
-                try:                        # PyEpics v3.2.3
-                    pv = epics.ca._PVMonitors[self.triggerPV]
-                except AttributeError:      # PyEpics up to v3.2.2
-                    pv = epics._MONITORS_[self.triggerPV]
+                pv = epics.ca._PVMonitors[self.triggerPV]
                 self.ca_timestamp = pv.timestamp
-                # or epics.ca.get_timestamp(pv.chid)
+                # self.ca_timestamp = epics.ca.get_timestamp(pv.chid)
                 SendMessage(self)
         self.old_value = value
-    
-    def send_test_message(self):
-        '''
-        sends a test message, used for development only
-        '''
-        logger("send_test_message")
-        self.recipients = ["jemian", "prjemian"]
-        message = ''
-        message += 'host: %s\n' % socket.gethostname()
-        message += 'date: %s (UNIX, not PV)\n' % datetime.datetime.now()
-        message += 'program: %s\n' % sys.argv[0]
-        message += 'trigger PV: %s\n' % self.triggerPV
-        message += 'message PV: %s\n' % self.messagePV
-        message += 'recipients: %s\n' % ", ".join(self.recipients)
-        self.subject = "pvMail development test"
-        sendMail(self.subject, self.message, self.recipients)
 
 
 class SendMessage(threading.Thread):
@@ -161,6 +145,10 @@ class SendMessage(threading.Thread):
     def __init__(self, pvm):
         logger("SendMessage")
         pvm.trigger = False        # triggered event received
+
+        agent_db = ini_config.Config()
+        email_agent_dict = dict(sendmail=mailer.sendMail_sendmail, SMTP=mailer.sendMail_SMTP)
+        email_agent = email_agent_dict[agent_db.mail_transfer_agent]
 
         try:
             pvm.basicChecks()
@@ -176,7 +164,7 @@ class SendMessage(threading.Thread):
             msg += 'date: %s (UNIX, not PV)\n' % datetime.datetime.now()
             try:
                 msg += 'CA_timestamp: %d\n' % pvm.ca_timestamp
-	    except:
+            except:
                 msg += 'CA_timestamp: not available\n'
             msg += 'program: %s\n' % sys.argv[0]
             msg += 'PID: %d\n' % os.getpid()
@@ -185,64 +173,17 @@ class SendMessage(threading.Thread):
             msg += 'recipients: %s\n' % ", ".join(pvm.recipients)
             pvm.message = msg
 
-            sendMail(pvm.subject, msg, pvm.recipients)
+            email_agent(pvm.subject, msg, pvm.recipients, agent_db.get(), logger=logger)
             logger("message(s) sent")
         except:
             err_msg = traceback.format_exc()
             final_msg = "pvm.subject = %s\nmsg = %s\ntraceback: %s" % (pvm.subject, str(msg), err_msg)
             logger(final_msg)
 
-def sendMail(subject, message, recipients):
-    '''
-    send an email message using sendmail
-    
-    :param str subject: short text for email subject
-    :param str message: full text of email body
-    :param [str] recipients: list of email addresses to receive the message
-    '''
-    global gui_object
-    
-    from_addr = sys.argv[0]
-    to_addr = str(" ".join(recipients))
-
-    cmd = 'the mail configuration has not been set yet'
-    if 'el' in str(os.uname()):         # RHEL uses postfix
-        email_program = '/usr/lib/sendmail'
-        mail_command = "%s -F %s -t %s" % (email_program, from_addr, to_addr)
-        mail_message = [mail_command, "Subject: "+subject, message]
-        cmd = '''cat << +++ | %s\n+++''' % "\n".join(mail_message)
-    
-    if 'Ubuntu' in str(os.uname()):     # some Ubuntu (11) uses exim, some (10) postfix
-        email_program = '/usr/bin/mail'
-        mail_command = "%s %s" % (email_program, to_addr)
-        content = '%s\n%s' % (subject, message)
-        # TODO: needs to do THIS
-        '''
-        cat /tmp/message.txt | mail jemian@anl.gov
-        '''
-        cmd = '''echo %s | %s''' % (content, mail_command)
-
-    iso8601 = str(datetime.datetime.now())
-    msg = "(%s) sending email to: %s" % (iso8601, to_addr)
-    logger(msg)
-    if gui_object is not None:
-        gui_object.SetStatus(msg)   # FIXME: get the GUI status line to update
-
-    try:
-        logger( "email command:\n" + cmd )
-        if os.path.exists(email_program):
-            os.popen(cmd)    # send the message
-        else:
-            logger( 'email program (%s) does not exist' % email_program )
-    except:
-        err_msg = traceback.format_exc()
-        final_msg = "cmd = %s\ntraceback: %s" % (cmd, err_msg)
-        logger(final_msg)
-
 
 def logger(message):
     '''
-    log a report from this class.
+    log a message or report from PvMail
 
     :param str message: words to be logged
     '''
@@ -251,32 +192,6 @@ def logger(message):
     name = os.path.basename(name)
     text = "(%s,%s) %s" % (name, now, message)
     logging.info(text)
-
-
-def basicStartTest():
-    '''simple test of the PvMail class'''
-    logging.basicConfig(filename=LOG_FILE,level=logging.INFO)
-    logger("startup")
-    pvm = PvMail()
-    pvm.recipients = ['prjemian@gmail.com']
-    pvm.triggerPV = "pvMail:trigger"
-    pvm.messagePV = "pvMail:message"
-    retry_interval_s = 0.05
-    end_time = time.time() + 60
-    report_time = time.time() + 5.0
-    pvm.do_start()
-    while time.time() < end_time:
-        if time.time() > report_time:
-            report_time = time.time() + 5.0
-            logger("time remaining: %.1f seconds ..." % (end_time - time.time()))
-        time.sleep(retry_interval_s)
-    pvm.do_stop()
-
-
-def basicMailTest():
-    '''simple test sending mail using the PvMail class'''
-    pvm = PvMail()
-    pvm.send_test_message()
 
 
 def cli(results):
@@ -319,7 +234,7 @@ def gui(results):
                                 results.email_addresses.strip().split(","),
                                 results.log_file,
                                 )
-    gui_object.configure_traits()
+    traits_gui.run(gui_object)
 
 
 def main():
