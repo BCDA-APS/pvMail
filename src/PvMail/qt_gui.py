@@ -146,7 +146,7 @@ class PvMail_GUI(QtGui.QMainWindow):
         self.setStatus('added email: ' + email_addr)
     
     def getEmailList(self):
-        return []
+        return self.email_address_model.listdata
     
     def setEmailList(self, email_list):
         self.email_address_model.reset()
@@ -176,6 +176,9 @@ class EmailListModel(QtCore.QAbstractListModel):
         # see: http://www.saltycrane.com/blog/2008/01/pyqt-43-simple-qabstractlistmodel/
         super(EmailListModel, self).__init__(parent, *args) 
         self.listdata = input_list
+        # TODO: enable editing
+        # see "Subclassing" on this URL:
+        # http://qt-project.org/doc/qt-4.8/qabstractlistmodel.html
  
     def rowCount(self, parent=QtCore.QModelIndex()): 
         return len(self.listdata) 
@@ -185,6 +188,12 @@ class EmailListModel(QtCore.QAbstractListModel):
             return QtCore.QVariant(self.listdata[index.row()])
         else: 
             return QtCore.QVariant()
+    
+    # def setData
+    # http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#setData
+    
+    # def flags
+    # http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#flags
 
 
 if __name__ == '__main__':
