@@ -32,16 +32,12 @@ class PvMail_GUI(QtGui.QMainWindow):
         self.centralwidget = QtGui.QWidget(self)
         self.setCentralWidget(self.centralwidget)
         self.gridLayout = QtGui.QGridLayout(self.centralwidget)
+        
+        self.email_address_model = EmailListModel([], self)
 
         self._create_statusbar()
-
-        self.setStatus('creating menubar') 
         self._create_menubar()
-
-        self.setStatus('creating widgets')
         self._create_widgets()
-        
-        self.setStatus('assigning window title')
         self.setWindowTitle(WINDOW_TITLE)
 
         self.setStatus('ready')
@@ -74,7 +70,6 @@ class PvMail_GUI(QtGui.QMainWindow):
         splitter = QtGui.QSplitter(self.centralwidget)
         splitter.setOrientation(QtCore.Qt.Vertical)
 
-        self.setStatus('creating entry form')
         verticalLayoutWidget = QtGui.QWidget(splitter)
         vLayout = QtGui.QVBoxLayout(verticalLayoutWidget)
         vLayout.setMargin(0)
@@ -93,11 +88,11 @@ class PvMail_GUI(QtGui.QMainWindow):
         self.messagePV = QtGui.QLineEdit(verticalLayoutWidget)
         formLayout.setWidget(1, QtGui.QFormLayout.FieldRole, self.messagePV)
 
-        self.email_list = QtGui.QListWidget(verticalLayoutWidget)
+        self.email_list = QtGui.QListView(verticalLayoutWidget)
         self.email_list.setAlternatingRowColors(True)
         formLayout.setWidget(2, QtGui.QFormLayout.FieldRole, self.email_list)
+        self.email_list.setModel(self.email_address_model)
 
-        self.setStatus('creating controls')
         hLayout = QtGui.QHBoxLayout()
 
         spacer_args = (40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
@@ -122,7 +117,6 @@ class PvMail_GUI(QtGui.QMainWindow):
         hLayout.addItem(spacer)
         vLayout.addLayout(hLayout)
 
-        self.setStatus('creating history')
         groupBox = QtGui.QGroupBox('History', splitter)
         boxLayout = QtGui.QHBoxLayout(groupBox)
         self.history = QtGui.QTextBrowser(groupBox)
@@ -145,16 +139,19 @@ class PvMail_GUI(QtGui.QMainWindow):
     
     def doStop(self, *args, **kw):
         self.setStatus('stop requested')
+#         self.setStatus('inspector: ' + str(self.email_list.gridSize()))
     
     def appendEmailList(self, email_addr):
-        self.email_list.insertItem(-1, email_addr)
+        self.email_address_model.listdata.append(email_addr)
+        self.setStatus('added email: ' + email_addr)
     
     def getEmailList(self):
         return []
     
     def setEmailList(self, email_list):
-        self.email_list.clear()
-        self.email_list.addItems(email_list)
+        self.email_address_model.reset()
+        for v in email_list:
+            self.appendEmailList(v)
     
     def getMessagePV(self):
         return self.messagePV.text()
@@ -170,22 +167,43 @@ class PvMail_GUI(QtGui.QMainWindow):
 
     def setStatus(self, message):
         self.statusbar.showMessage(str(message))
+        self.history.append(message)
+
+
+class EmailListModel(QtCore.QAbstractListModel): 
+    def __init__(self, input_list, parent=None, *args): 
+        """ datain: a list where each item is a row"""
+        # see: http://www.saltycrane.com/blog/2008/01/pyqt-43-simple-qabstractlistmodel/
+        super(EmailListModel, self).__init__(parent, *args) 
+        self.listdata = input_list
+ 
+    def rowCount(self, parent=QtCore.QModelIndex()): 
+        return len(self.listdata) 
+ 
+    def data(self, index, role): 
+        if index.isValid() and role == QtCore.Qt.DisplayRole:
+            return QtCore.QVariant(self.listdata[index.row()])
+        else: 
+            return QtCore.QVariant()
 
 
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
     main_window = PvMail_GUI()
+    
     # TODO: remove these lines before release
+    main_window.history.clear()
     main_window.setMessagePV('epics:message:pv')
     main_window.setTriggerPV('epics:trigger:pv')
     liszt = ['meg', 'yergoo', 'yerek',]
-    main_window.setEmailList(liszt+liszt+liszt+liszt+liszt+liszt)
-    main_window.history.clear()
-    main_window.history.append(open(__file__, 'r').read())
+    main_window.setEmailList(liszt)
+
     main_window.show()
     _r = app.exec_()
+    
     # TODO: remove these lines before release
     print 'message PV: ', main_window.getMessagePV()
     print 'trigger PV: ', main_window.getTriggerPV()
     print 'email list: ', main_window.getEmailList()
+
     sys.exit(_r)
