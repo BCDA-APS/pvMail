@@ -20,34 +20,6 @@ import PvMail
 WINDOW_TITLE = 'pvMail'
 
 
-def run(obj):
-    '''
-    run the GUI
-    
-    This is an abstraction that allows to change the GUI backend from this file.
-    '''
-    raise NotImplementedError
-
-
-    #triggerPV = traits.api.String(
-    #          desc="EPICS PV name on which to trigger an email",
-    #          label="trigger PV",)
-    #messagePV = traits.api.String(
-    #          desc="EPICS string PV name with short message text",
-    #          label="message PV",)
-    #recipients = traits.api.List(
-    #          trait=traits.api.String,
-    #          value=["", "",],
-    #          desc="email addresses of message recipients",
-    #          label="email address(es)",)
-    #actionRun = traitsui.api.Action(name = "Run",
-    #            desc = "start watching for trigger PV to go from 0 to 1",
-    #            action = "do_run")
-    #actionStop = traitsui.api.Action(name = "Stop",
-    #             desc = "stop watching trigger PV",
-    #             action = "do_stop")
-
-
 class PvMail_GUI(QtGui.QMainWindow):
     '''
     GUI used for pvMail, based on PyQt4
@@ -58,75 +30,20 @@ class PvMail_GUI(QtGui.QMainWindow):
         super(PvMail_GUI, self).__init__(**kw)
         self.resize(600, 400)
         self.centralwidget = QtGui.QWidget(self)
+        self.setCentralWidget(self.centralwidget)
         self.gridLayout = QtGui.QGridLayout(self.centralwidget)
 
-        self._create_menubar()
         self._create_statusbar()
-        self.statusbar.showMessage('starting') 
 
-        self.statusbar.showMessage('creating splitter')
-        self.splitter = QtGui.QSplitter(self.centralwidget)
-        self.splitter.setOrientation(QtCore.Qt.Vertical)
+        self.statusbar.showMessage('creating menubar') 
+        self._create_menubar()
 
-        self.statusbar.showMessage('creating entry form')
-        self.verticalLayoutWidget = QtGui.QWidget(self.splitter)
-        self.verticalLayout_2 = QtGui.QVBoxLayout(self.verticalLayoutWidget)
-        self.verticalLayout_2.setMargin(0)
-
-        self.formLayout_2 = QtGui.QFormLayout()
-        self.label = QtGui.QLabel(self.verticalLayoutWidget)
-        self.formLayout_2.setWidget(0, QtGui.QFormLayout.LabelRole, self.label)
+        self.statusbar.showMessage('creating widgets')
+        self._create_widgets()
         
-        self.label_2 = QtGui.QLabel(self.verticalLayoutWidget)
-        self.formLayout_2.setWidget(1, QtGui.QFormLayout.LabelRole, self.label_2)
-        
-        self.label_3 = QtGui.QLabel(self.verticalLayoutWidget)
-        self.formLayout_2.setWidget(2, QtGui.QFormLayout.LabelRole, self.label_3)
-        self.triggerPV = QtGui.QLineEdit(self.verticalLayoutWidget)
-        self.formLayout_2.setWidget(0, QtGui.QFormLayout.FieldRole, self.triggerPV)
-        self.messagePV = QtGui.QLineEdit(self.verticalLayoutWidget)
-        self.formLayout_2.setWidget(1, QtGui.QFormLayout.FieldRole, self.messagePV)
+        self.statusbar.showMessage('assigning window title')
+        self.setWindowTitle(WINDOW_TITLE)
 
-        self.email_list = QtGui.QListWidget(self.verticalLayoutWidget)
-        self.email_list.setAlternatingRowColors(True)
-        #self.email_list.setObjectName(_fromUtf8("email_list"))
-        self.formLayout_2.setWidget(2, QtGui.QFormLayout.FieldRole, self.email_list)
-        self.verticalLayout_2.addLayout(self.formLayout_2)
-
-        self.statusbar.showMessage('creating controls')
-        self.horizontalLayout = QtGui.QHBoxLayout()
-
-        spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem)
-        self.w_btn_run = QtGui.QPushButton(self.verticalLayoutWidget)
-        self.w_btn_run.setObjectName('w_btn_run')
-        self.horizontalLayout.addWidget(self.w_btn_run)
-
-        spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem1)
-        self.w_running_stopped = QtGui.QLabel(self.verticalLayoutWidget)
-        self.w_running_stopped.setObjectName('w_running_stopped')
-        self.horizontalLayout.addWidget(self.w_running_stopped)
-
-        spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem2)
-        self.w_btn_stop = QtGui.QPushButton(self.verticalLayoutWidget)
-        self.w_btn_stop.setObjectName('w_btn_stop')
-        self.horizontalLayout.addWidget(self.w_btn_stop)
-
-        spacerItem3 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem3)
-        self.verticalLayout_2.addLayout(self.horizontalLayout)
-
-        self.statusbar.showMessage('creating history')
-        self.w_history = QtGui.QTextBrowser(self.splitter)
-        self.w_history.setObjectName('w_history')
-
-        self.gridLayout.addWidget(self.splitter, 0, 0, 1, 1)
-        self.setCentralWidget(self.centralwidget)
-        
-        self.statusbar.showMessage('assigning labels')
-        self._assign_labels()
         self.statusbar.showMessage('ready')
 
     def _create_statusbar(self):
@@ -137,47 +54,105 @@ class PvMail_GUI(QtGui.QMainWindow):
         self.menubar = QtGui.QMenuBar(self)
         self.setMenuBar(self.menubar)
 
-        self.menuFile = QtGui.QMenu(self.menubar)
+        self.menuFile = QtGui.QMenu('File', self.menubar)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menuFile.addSeparator()
         self.actionExit = QtGui.QAction('E&xit', None)
         self.actionExit.triggered.connect(self.doClose)
         self.menuFile.addAction(self.actionExit)
 
-        self.menuEdit = QtGui.QMenu(self.menubar)
+        self.menuEdit = QtGui.QMenu('Edit', self.menubar)
         self.menubar.addAction(self.menuEdit.menuAction())
 
-        self.menuHelp = QtGui.QMenu(self.menubar)
+        self.menuHelp = QtGui.QMenu('Help', self.menubar)
         self.menubar.addAction(self.menuHelp.menuAction())
         self.actionAbout = QtGui.QAction('About ...', None)
         self.actionAbout.triggered.connect(self.doAbout)
         self.menuHelp.addAction(self.actionAbout)
 
-    def _assign_labels(self):
-        self.setWindowTitle(WINDOW_TITLE)
-        self.label.setText("trigger PV")
-        self.label_2.setText("message PV")
-        self.label_3.setText("email address(es)")
-        self.w_btn_run.setText("Run")
-        self.w_running_stopped.setText("running | stopped")
-        self.w_btn_stop.setText("Stop")
-        self.menuFile.setTitle("File")
-        self.menuEdit.setTitle("Edit")
-        self.menuHelp.setTitle("Help")
-        self.actionExit.setText("Exit")
+    def _create_widgets(self):
+        self.splitter = QtGui.QSplitter(self.centralwidget)
+        self.splitter.setOrientation(QtCore.Qt.Vertical)
 
-    def _init_actions_(self):
-        self.actionExit.triggered.connect(self.doClose)
-        #self.actionAbout.triggered.connect(self.doAbout)
-    
+        self.statusbar.showMessage('creating entry form')
+        verticalLayoutWidget = QtGui.QWidget(self.splitter)
+        verticalLayout = QtGui.QVBoxLayout(verticalLayoutWidget)
+        verticalLayout.setMargin(0)
+
+        formLayout = QtGui.QFormLayout()
+        l_trigger_PV = QtGui.QLabel('trigger PV', verticalLayoutWidget)
+        formLayout.setWidget(0, QtGui.QFormLayout.LabelRole, l_trigger_PV)
+        
+        l_message_PV = QtGui.QLabel('message PV', verticalLayoutWidget)
+        formLayout.setWidget(1, QtGui.QFormLayout.LabelRole, l_message_PV)
+        
+        l_emails = QtGui.QLabel('email address(es)', verticalLayoutWidget)
+        formLayout.setWidget(2, QtGui.QFormLayout.LabelRole, l_emails)
+        self.triggerPV = QtGui.QLineEdit(verticalLayoutWidget)
+        formLayout.setWidget(0, QtGui.QFormLayout.FieldRole, self.triggerPV)
+        self.messagePV = QtGui.QLineEdit(verticalLayoutWidget)
+        formLayout.setWidget(1, QtGui.QFormLayout.FieldRole, self.messagePV)
+
+        self.email_list = QtGui.QListWidget(verticalLayoutWidget)
+        self.email_list.setAlternatingRowColors(True)
+        formLayout.setWidget(2, QtGui.QFormLayout.FieldRole, self.email_list)
+        verticalLayout.addLayout(formLayout)
+
+        self.statusbar.showMessage('creating controls')
+        self.horizontalLayout = QtGui.QHBoxLayout()
+
+        spacer_args = (40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        spacer = QtGui.QSpacerItem(*spacer_args)
+        self.horizontalLayout.addItem(spacer)
+        self.w_btn_run = QtGui.QPushButton('Run', verticalLayoutWidget)
+        self.w_btn_run.released.connect(self.doRun)
+        self.horizontalLayout.addWidget(self.w_btn_run)
+
+        spacer = QtGui.QSpacerItem(*spacer_args)
+        self.horizontalLayout.addItem(spacer)
+        self.w_running_stopped = QtGui.QLabel(verticalLayoutWidget)
+        self.horizontalLayout.addWidget(self.w_running_stopped)
+
+        spacer = QtGui.QSpacerItem(*spacer_args)
+        self.horizontalLayout.addItem(spacer)
+        self.w_btn_stop = QtGui.QPushButton('Stop', verticalLayoutWidget)
+        self.w_btn_stop.released.connect(self.doStop)
+        self.horizontalLayout.addWidget(self.w_btn_stop)
+
+        spacer = QtGui.QSpacerItem(*spacer_args)
+        self.horizontalLayout.addItem(spacer)
+        verticalLayout.addLayout(self.horizontalLayout)
+
+        self.statusbar.showMessage('creating history')
+        self.w_history = QtGui.QTextBrowser(self.splitter)
+
+        self.gridLayout.addWidget(self.splitter, 0, 0, 1, 1)
+
+    def doAbout(self, *args, **kw):
+        msg = 'About: '
+        msg += PvMail.__project_name__ 
+        msg += ', v' + PvMail.__version__
+        self.setStatus(msg)
+
     def doClose(self, *args, **kw):
-        self.statusbar.showMessage('application exit requested')
+        self.setStatus('application exit requested')
         self.close()
     
-    def doAbout(self, *args, **kw):
-        print 'doAbout'
-        msg = PvMail.__project_name__ + ', v' + PvMail.__version__
-        self.statusbar.showMessage(msg)
+    def doRun(self, *args, **kw):
+        self.setStatus('run requested')
+    
+    def doStop(self, *args, **kw):
+        self.setStatus('stop requested')
+    
+    def appendEmailList(self, email_addr):
+        self.email_list.insertItem(-1, email_addr)
+    
+    def getEmailList(self):
+        return []
+    
+    def setEmailList(self, email_list):
+        self.email_list.clear()
+        self.email_list.addItems(email_list)
     
     def getMessagePV(self):
         return self.messagePV.text()
@@ -191,11 +166,19 @@ class PvMail_GUI(QtGui.QMainWindow):
     def setTriggerPV(self, triggerPV):
         self.triggerPV.setText(str(triggerPV))
 
+    def setStatus(self, message):
+        self.statusbar.showMessage(str(message))
+
 
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
     main_window = PvMail_GUI()
     main_window.setMessagePV('epics:message:pv')
     main_window.setTriggerPV('epics:trigger:pv')
+    main_window.setEmailList(['you', 'me', 'them', 'you', 'me', 'them', 'you', 'me', 'them', 'you', 'me', 'them', 'you', 'me', 'them', ])
     main_window.show()
-    sys.exit(app.exec_())
+    _r = app.exec_()
+#     print 'message PV: ', main_window.getMessagePV()
+#     print 'trigger PV: ', main_window.getTriggerPV()
+#     print 'email list: ', main_window.getEmailList()
+    sys.exit(_r)
