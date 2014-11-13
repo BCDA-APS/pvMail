@@ -139,7 +139,18 @@
         </item>
        </layout>
       </widget>
-      <widget class="QTextBrowser" name="w_history"/>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>History</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QTextBrowser" name="textBrowser"/>
+       </item>
+      </layout>
      </widget>
     </item>
    </layout>
