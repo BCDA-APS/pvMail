@@ -52,7 +52,10 @@
            <widget class="QLineEdit" name="lineEdit_2"/>
           </item>
           <item row="2" column="1">
-           <widget class="QListWidget" name="listWidget">
+           <widget class="QListView" name="history">
+            <property name="tabKeyNavigation">
+             <bool>true</bool>
+            </property>
             <property name="alternatingRowColors">
              <bool>true</bool>
             </property>
