@@ -12,6 +12,7 @@ Copyright (c) 2014, UChicago Argonne, LLC
 
 
 from PyQt4 import QtCore, QtGui
+import datetime
 import sys
 
 import PvMail
@@ -36,10 +37,10 @@ class PvMail_GUI(QtGui.QMainWindow):
         self.email_address_model = EmailListModel([], self)
 
         self._create_statusbar()
+        self.setStatus('starting')
         self._create_menubar()
         self._create_widgets()
         self.setWindowTitle(WINDOW_TITLE)
-
         self.setStatus('ready')
 
     def _create_statusbar(self):
@@ -158,16 +159,20 @@ class PvMail_GUI(QtGui.QMainWindow):
     
     def setMessagePV(self, messagePV):
         self.messagePV.setText(str(messagePV))
+        self.setStatus('set message PV: ' + messagePV)
     
     def getTriggerPV(self):
         return self.triggerPV.text()
     
     def setTriggerPV(self, triggerPV):
         self.triggerPV.setText(str(triggerPV))
+        self.setStatus('set trigger PV: ' + triggerPV)
 
     def setStatus(self, message):
+        ts = str(datetime.datetime.now())
         self.statusbar.showMessage(str(message))
-        self.history.append(message)
+        if hasattr(self, 'history'):
+            self.history.append(ts + '  ' + message)
 
 
 class EmailListModel(QtCore.QAbstractListModel): 
