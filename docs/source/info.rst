@@ -52,10 +52,6 @@ is available from:
 TODO items for a future release
 ###############################
 
-#. Connect status updates from :class:`pvMail.PvMail()` with status in the GUI
-#. Report PV connection problems in an obvious way
-#. GUI: display the tail end of the LOG_FILE.
-#. GUI: save/restore settings from a named file
 #. GUI: manage multiple pvMail.PvMail() objects (starting, stopping, detaching, ...)
 
 
