@@ -10,6 +10,10 @@ Build the Graphical User Interface for PvMail using PyQt4.
 Copyright (c) 2014, UChicago Argonne, LLC
 '''
 
+# TODO: Connect status updates from :class:`pvMail.PvMail()` with status in the GUI
+# TODO: Report PV connection problems in an obvious way
+# TODO: GUI: display the tail end of the LOG_FILE.
+
 
 from PyQt4 import QtCore, QtGui
 import datetime
@@ -26,7 +30,7 @@ class PvMail_GUI(QtGui.QMainWindow):
     GUI used for pvMail, based on PyQt4
     '''
 
-    def __init__(self, *args, **kw):
+    def __init__(self, logger=None, *args, **kw):
         '''make this class callable from pvMail application'''
         super(PvMail_GUI, self).__init__(**kw)
         self.resize(600, 400)
@@ -35,6 +39,7 @@ class PvMail_GUI(QtGui.QMainWindow):
         self.gridLayout = QtGui.QGridLayout(self.centralwidget)
         
         self.email_address_model = EmailListModel([], self)
+        self.logger = None
 
         self._create_statusbar()
         self.setStatus('starting')
@@ -153,6 +158,8 @@ class PvMail_GUI(QtGui.QMainWindow):
         self.email_address_model.reset()
         for v in email_list:
             self.appendEmailList(v)
+        # always keep a blank item at end to grow the list
+        self.appendEmailList('')
     
     def getMessagePV(self):
         return self.messagePV.text()
@@ -173,6 +180,8 @@ class PvMail_GUI(QtGui.QMainWindow):
         self.statusbar.showMessage(str(message))
         if hasattr(self, 'history'):
             self.history.append(ts + '  ' + message)
+        if self.logger is not None:
+            pass
 
 
 class EmailListModel(QtCore.QAbstractListModel): 
@@ -181,7 +190,6 @@ class EmailListModel(QtCore.QAbstractListModel):
         # see: http://www.saltycrane.com/blog/2008/01/pyqt-43-simple-qabstractlistmodel/
         super(EmailListModel, self).__init__(parent, *args) 
         self.listdata = input_list
-        # TODO: enable editing
         # see "Subclassing" on this URL:
         # http://qt-project.org/doc/qt-4.8/qabstractlistmodel.html
  
@@ -193,12 +201,31 @@ class EmailListModel(QtCore.QAbstractListModel):
             return QtCore.QVariant(self.listdata[index.row()])
         else: 
             return QtCore.QVariant()
+
+    def setData(self, index, value, role = QtCore.Qt.EditRole):
+        if role == QtCore.Qt.EditRole:
+            row = index.row()
+            self.listdata[row] = str(value.toString())
+            if row+1 == len(self.listdata):
+                # always keep a blank item at end to grow the list
+                self.listdata.append('')
+            self.dataChanged.emit(index, index)
+            return True
+        return False
     
-    # def setData
-    # http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#setData
-    
-    # def flags
-    # http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#flags
+    def flags(self, index):
+        # http://www.riverbankcomputing.com/pipermail/pyqt/2009-April/022729.html
+        # http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#flags
+        defaultFlags = QtCore.QAbstractItemModel.flags(self, index)
+       
+        if index.isValid():
+            return QtCore.Qt.ItemIsEditable \
+                    | QtCore.Qt.ItemIsDragEnabled \
+                    | QtCore.Qt.ItemIsDropEnabled \
+                    | defaultFlags
+           
+        else:
+            return QtCore.Qt.ItemIsDropEnabled | defaultFlags
 
 
 if __name__ == '__main__':
@@ -218,6 +245,7 @@ if __name__ == '__main__':
     # TODO: remove these lines before release
     print 'message PV: ', main_window.getMessagePV()
     print 'trigger PV: ', main_window.getTriggerPV()
-    print 'email list: ', main_window.getEmailList()
+    emails = main_window.getEmailList()
+    print 'email list: ', ', '.join([v for v in emails if len(v)>0])
 
     sys.exit(_r)
