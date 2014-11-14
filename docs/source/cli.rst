@@ -20,9 +20,8 @@ GUI::
 	pvMail triggerPV messagePV user1@email.domain,user2@host.server -g &
 
 PvMail uses Matt Newville's `PyEpics <http://cars9.uchicago.edu/software/python/pyepics3/>`_ 
-package for EPICS CA connections and Enthought's 
-`Traits <http://code.enthought.com/projects/traits/>`_ 
-package to build the GUI (which means it could use either WX or QT).
+package for EPICS CA connections and `PyQt4 <http://pypi.python.org/pypi>`_ 
+package to manage the GUI.
 
 
 Starting PvMail from the command-line

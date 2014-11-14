@@ -36,8 +36,8 @@ Glossary
 :index:`PyEpics`
     Python package to manage connections with PVs served by an EPICS IOC
 
-:index:`Traits`
-    Python package to simplify construction of a GUI
+:index:`PyQt4`
+    Python framework for GUI and other Qt components
 
 :index:`trigger PV`
     EPICS PV that signals an email is to be sent

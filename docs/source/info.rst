@@ -73,5 +73,4 @@ Requirements
     and the "SendMessage PV" contains a string to send as part of 
     the email message.
 :requires: PyEpics (http://cars9.uchicago.edu/software/python/pyepics3/)
-:requires: Traits (http://code.enthought.com/projects/traits/)
-:requires: TraitsUI (http://code.enthought.com/projects/traits_ui/)
+:requires: PyQt4 (https://wiki.python.org/moin/PyQt)
