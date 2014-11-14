@@ -196,6 +196,20 @@ def sendMail_SMTP(subject, message, recipients, smtp_cfg, sender = None, logger 
         logger('SMTP complete')
 
 
+def send_message(subject, message, recipients, config):
+    '''
+    send an email message
+    
+    :param str subject: short text for email subject
+    :param str message: full text of email body
+    :param [str] recipients: list of email addresses to receive the message
+    :param dict config: such as returned from :mod:`PvMail.ini_config.Config`
+    '''
+    email_agent_dict = dict(sendmail=sendMail_sendmail, SMTP=sendMail_SMTP)
+    agent = email_agent_dict[config.mail_transfer_agent]
+    agent(subject, message, recipients, config.get())
+
+
 def main():
     '''
     user on-demand test of the mailer module and configuration
@@ -215,9 +229,7 @@ def main():
     
     cfg = ini_config.Config()
     print "Using configuration from: " + cfg.ini_file
-
-    sendmail_cfg = cfg.get()
-    print "Using user name: " + sendmail_cfg['user']
+    print "Using user name: " + cfg.get()['user']
 
     recipients = results.recipient
     print "Sending email(s) to: " + str(" ".join(recipients))
@@ -226,9 +238,8 @@ def main():
     subject = 'PvMail mailer test message: ' + cfg.mail_transfer_agent
     message = 'This is a test of the PvMail mailer, v' + PvMail.__version__
     message += '\nFor more help, see: ' + PvMail.__url__
-    email_agent_dict = dict(sendmail=sendMail_sendmail, SMTP=sendMail_SMTP)
-    agent = email_agent_dict[cfg.mail_transfer_agent]
-    agent(subject, message, recipients, sendmail_cfg)
+    
+    send_message(subject, message, recipients, cfg)
     
 
 if __name__ == '__main__':
