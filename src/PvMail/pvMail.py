@@ -33,7 +33,7 @@ class PvMail(threading.Thread):
     when the PV changes from 0 to 1.
     '''
     
-    def __init__(self):
+    def __init__(self, config=None):
         self.trigger = False
         self.message = "default message"
         self.subject = "pvMail.py"
@@ -43,6 +43,7 @@ class PvMail(threading.Thread):
         self.old_value = None
         self.monitoredPVs = []
         self.ca_timestamp = None
+        self.config = config
     
     def basicChecks(self):
         '''
@@ -131,7 +132,7 @@ class PvMail(threading.Thread):
                 pv = epics.ca._PVMonitors[self.triggerPV]
                 self.ca_timestamp = pv.timestamp
                 # self.ca_timestamp = epics.ca.get_timestamp(pv.chid)
-                SendMessage(self)
+                SendMessage(self, self.config)
         self.old_value = value
 
 
@@ -142,11 +143,10 @@ class SendMessage(threading.Thread):
     :param obj pvm: instance of PvMail object on which to report
     '''
 
-    def __init__(self, pvm):
+    def __init__(self, pvm, agent_db):
         logger("SendMessage")
         pvm.trigger = False        # triggered event received
 
-        agent_db = ini_config.Config()
         email_agent_dict = dict(sendmail=mailer.sendMail_sendmail, SMTP=mailer.sendMail_SMTP)
         email_agent = email_agent_dict[agent_db.mail_transfer_agent]
 
@@ -188,22 +188,22 @@ def logger(message):
     :param str message: words to be logged
     '''
     now = datetime.datetime.now()
-    name = sys.argv[0]
-    name = os.path.basename(name)
+    name = os.path.basename(sys.argv[0])
     text = "(%s,%s) %s" % (name, now, message)
     logging.info(text)
 
 
-def cli(results):
+def cli(results, config=None):
     '''
     command-line interface to the PvMail class
     
     :param obj results: default parameters from argparse, see main()
+    :param obj config: email configuration from ini_config.Config()
     '''
     logging_interval = min(60*60, max(5.0, results.logging_interval))
     sleep_duration = min(5.0, max(0.0001, results.sleep_duration))
 
-    pvm = PvMail()
+    pvm = PvMail(config)
     pvm.triggerPV = results.trigger_PV
     pvm.messagePV = results.message_PV
     pvm.recipients = results.email_addresses.strip().split(",")
@@ -214,27 +214,29 @@ def cli(results):
             checkpoint_time += logging_interval
             logger("checkpoint")
         if pvm.trigger:
-            SendMessage(pvm)
+            SendMessage(pvm, config)
+            logger('triggered received, sending email')
         time.sleep(sleep_duration)
     pvm.do_stop()        # this will never be called
 
 
-def gui(results):
+def gui(results, config=None):
     '''
     graphical user interface to the PvMail class
     
     :param obj results: default parameters from argparse, see main()
+    :param obj config: email configuration from ini_config.Config()
     '''
     
-    import traits_gui
-    global gui_object
-    
-    gui_object = traits_gui.PvMail_GUI(results.trigger_PV, 
-                                results.message_PV, 
-                                results.email_addresses.strip().split(","),
-                                results.log_file,
-                                )
-    traits_gui.run(gui_object)
+    import qt_gui
+    qt_gui.main(
+        results.trigger_PV, 
+        results.message_PV, 
+        results.email_addresses.strip().split(","),
+        logger=logger,
+        logfile=results.log_file,
+        config=config,
+    )
 
 
 def main():
@@ -283,6 +285,8 @@ def main():
 
     addresses = results.email_addresses.strip().split(",")
     interface = {False: 'command-line', True: 'GUI'}[results.interface]
+    
+    agent_db = ini_config.Config()
 
     logging.basicConfig(filename=results.log_file, level=logging.INFO)
     logger("#"*60)
@@ -300,6 +304,7 @@ def main():
     logger("program          = " + sys.argv[0] )
     logger("PID              = " + str(os.getpid()) )
     logger("PyEpics version  = " + str(epics.__version__) )
+    logger("config file      = " + agent_db.ini_file )
     
     if results.interface is False:
         # When the GUI is not selected, 
