@@ -19,7 +19,7 @@ from PyQt4 import QtCore, QtGui
 import datetime
 import sys
 
-import PvMail
+import pvMail
 
 
 WINDOW_TITLE = 'pvMail'
@@ -40,6 +40,10 @@ class PvMail_GUI(QtGui.QMainWindow):
         
         self.email_address_model = EmailListModel([], self)
         self.logger = None
+        self.pvmail = None
+        self.watching = False
+        
+        # TODO: add GUI action to send test email
 
         self._create_statusbar()
         self.setStatus('starting')
@@ -73,6 +77,7 @@ class PvMail_GUI(QtGui.QMainWindow):
         menuHelp.addAction(self.actionAbout)
 
     def _create_widgets(self):
+        # TODO: show configuration file
         splitter = QtGui.QSplitter(self.centralwidget)
         splitter.setOrientation(QtCore.Qt.Vertical)
 
@@ -131,6 +136,7 @@ class PvMail_GUI(QtGui.QMainWindow):
         self.gridLayout.addWidget(splitter, 0, 0, 1, 1)
 
     def doAbout(self, *args, **kw):
+        import PvMail
         msg = 'About: '
         msg += PvMail.__project_name__ 
         msg += ', v' + PvMail.__version__
@@ -141,18 +147,45 @@ class PvMail_GUI(QtGui.QMainWindow):
         self.close()
     
     def doRun(self, *args, **kw):
-        self.setStatus('run requested')
+        self.setStatus('<Run> button pressed')
+        if self.watching:
+            self.setStatus('already watching')
+        else:
+            self.pvmail = pvMail.PvMail()
+            self.pvmail.triggerPV = str(self.getTriggerPV())
+            self.pvmail.messagePV = str(self.getMessagePV())
+            addresses = self.getEmailList_Stripped()
+            self.pvmail.recipients = addresses
+            self.setStatus('trigger PV: ' + self.pvmail.triggerPV)
+            self.setStatus('message PV: ' + self.pvmail.messagePV)
+            self.setStatus('recipients: ' + '  '.join(addresses))
+            # TODO: need to set status when email is sent
+            # TODO: show/edit messagePV content
+            self.pvmail.do_start()
+            self.setStatus('CA monitors started')
+            self.watching = True
     
     def doStop(self, *args, **kw):
-        self.setStatus('stop requested')
-#         self.setStatus('inspector: ' + str(self.email_list.gridSize()))
+        if not self.watching:
+            self.setStatus('not watching now')
+        else:
+            self.setStatus('<Stop> button pressed')
+            self.pvmail.do_stop()
+            self.setStatus('CA monitors stopped')
+            self.pvmail = None
+            self.watching = False
     
     def appendEmailList(self, email_addr):
         self.email_address_model.listdata.append(email_addr)
         self.setStatus('added email: ' + email_addr)
     
     def getEmailList(self):
+        '''the complete list of email addresses'''
         return self.email_address_model.listdata
+    
+    def getEmailList_Stripped(self):
+        '''the list of email addresses with empty items removed'''
+        return [v for v in self.email_address_model.listdata if len(v)>0]
     
     def setEmailList(self, email_list):
         self.email_address_model.reset()
@@ -234,9 +267,9 @@ if __name__ == '__main__':
     
     # TODO: remove these lines before release
     main_window.history.clear()
-    main_window.setMessagePV('epics:message:pv')
-    main_window.setTriggerPV('epics:trigger:pv')
-    liszt = ['meg', 'yergoo', 'yerek',]
+    main_window.setMessagePV('pvMail:message')
+    main_window.setTriggerPV('pvMail:trigger')
+    liszt = ['prjemian@gmail.com',]
     main_window.setEmailList(liszt)
 
     main_window.show()
