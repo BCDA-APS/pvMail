@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>pvMail</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -24,40 +24,82 @@
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <layout class="QFormLayout" name="formLayout_2">
-          <item row="0" column="0">
+          <item row="2" column="0">
            <widget class="QLabel" name="label">
             <property name="text">
              <string>trigger PV</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item row="3" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>message PV</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="5" column="0">
            <widget class="QLabel" name="label_3">
             <property name="text">
              <string>email address(es)</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit"/>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_2"/>
-          </item>
           <item row="2" column="1">
-           <widget class="QListView" name="history">
+           <widget class="QLineEdit" name="w_triggerPV"/>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="w_messagePV"/>
+          </item>
+          <item row="5" column="1">
+           <widget class="QListView" name="emails">
             <property name="tabKeyNavigation">
              <bool>true</bool>
             </property>
             <property name="alternatingRowColors">
              <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>config file</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="w_config_file_name">
+            <property name="text">
+             <string>email configuration settings file name goes here</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>message text</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="w_messagePV_text">
+            <property name="text">
+             <string>text from PV goes here</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>log file</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="w_log_file_name">
+            <property name="text">
+             <string>log file name goes here</string>
             </property>
            </widget>
           </item>
@@ -151,7 +193,7 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
-        <widget class="QTextBrowser" name="textBrowser"/>
+        <widget class="QTextBrowser" name="history"/>
        </item>
       </layout>
      </widget>
@@ -164,13 +206,14 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionSend_test_email"/>
     <addaction name="separator"/>
     <addaction name="actionE_xit"/>
    </widget>
@@ -198,6 +241,11 @@
   <action name="actionE_xit">
    <property name="text">
     <string>E&amp;xit</string>
+   </property>
+  </action>
+  <action name="actionSend_test_email">
+   <property name="text">
+    <string>send test email</string>
    </property>
   </action>
  </widget>
