@@ -17,6 +17,7 @@ Copyright (c) 2014, UChicago Argonne, LLC
 
 from PyQt4 import QtCore, QtGui
 import datetime
+import os
 import sys
 
 import pvMail
@@ -30,7 +31,7 @@ class PvMail_GUI(QtGui.QMainWindow):
     GUI used for pvMail, based on PyQt4
     '''
 
-    def __init__(self, logger=None, *args, **kw):
+    def __init__(self, logger=None, logfile=None, config=None, *args, **kw):
         '''make this class callable from pvMail application'''
         super(PvMail_GUI, self).__init__(**kw)
         self.resize(600, 400)
@@ -39,11 +40,11 @@ class PvMail_GUI(QtGui.QMainWindow):
         self.gridLayout = QtGui.QGridLayout(self.centralwidget)
         
         self.email_address_model = EmailListModel([], self)
-        self.logger = None
+        self.logfile = logfile
+        self.logger = logger
+        self.config = config
         self.pvmail = None
         self.watching = False
-        
-        # TODO: add GUI action to send test email
 
         self._create_statusbar()
         self.setStatus('starting')
@@ -62,6 +63,9 @@ class PvMail_GUI(QtGui.QMainWindow):
 
         menuFile = QtGui.QMenu('File', mbar)
         mbar.addAction(menuFile.menuAction())
+        self.actionTestEmail = QtGui.QAction('Send test email', None)
+        self.actionTestEmail.triggered.connect(self.doSendTestMessage)
+        menuFile.addAction(self.actionTestEmail)
         menuFile.addSeparator()
         self.actionExit = QtGui.QAction('E&xit', None)
         self.actionExit.triggered.connect(self.doClose)
@@ -77,7 +81,9 @@ class PvMail_GUI(QtGui.QMainWindow):
         menuHelp.addAction(self.actionAbout)
 
     def _create_widgets(self):
-        # TODO: show configuration file
+        # TODO: show configuration file name
+        # TODO: show log file name
+        # TODO: allow to edit the message PV text, when connected
         splitter = QtGui.QSplitter(self.centralwidget)
         splitter.setOrientation(QtCore.Qt.Vertical)
 
@@ -140,6 +146,7 @@ class PvMail_GUI(QtGui.QMainWindow):
         msg = 'About: '
         msg += PvMail.__project_name__ 
         msg += ', v' + PvMail.__version__
+        msg += ', PID=' + str(os.getpid())
         self.setStatus(msg)
 
     def doClose(self, *args, **kw):
@@ -151,7 +158,7 @@ class PvMail_GUI(QtGui.QMainWindow):
         if self.watching:
             self.setStatus('already watching')
         else:
-            self.pvmail = pvMail.PvMail()
+            self.pvmail = pvMail.PvMail(self.config)
             self.pvmail.triggerPV = str(self.getTriggerPV())
             self.pvmail.messagePV = str(self.getMessagePV())
             addresses = self.getEmailList_Stripped()
@@ -174,6 +181,19 @@ class PvMail_GUI(QtGui.QMainWindow):
             self.setStatus('CA monitors stopped')
             self.pvmail = None
             self.watching = False
+    
+    def doSendTestMessage(self):
+        import mailer
+        import PvMail
+        self.setStatus('requested a test email')
+        subject = 'PvMail mailer test message: ' + self.config.mail_transfer_agent
+        message = 'This is a test of the PvMail mailer, v' + PvMail.__version__
+        message += '\n\n triggerPV = ' + str(self.getTriggerPV())
+        message += '\n messagePV = ' + str(self.getMessagePV())
+        message += '\n\n For more help, see: ' + PvMail.__url__
+        recipients = self.getEmailList_Stripped()
+        mailer.send_message(subject, message, recipients, self.config)
+        self.setStatus('sent a test email')
     
     def appendEmailList(self, email_addr):
         self.email_address_model.listdata.append(email_addr)
@@ -214,7 +234,7 @@ class PvMail_GUI(QtGui.QMainWindow):
         if hasattr(self, 'history'):
             self.history.append(ts + '  ' + message)
         if self.logger is not None:
-            pass
+            self.logger(message)
 
 
 class EmailListModel(QtCore.QAbstractListModel): 
@@ -250,6 +270,9 @@ class EmailListModel(QtCore.QAbstractListModel):
         # http://www.riverbankcomputing.com/pipermail/pyqt/2009-April/022729.html
         # http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#flags
         defaultFlags = QtCore.QAbstractItemModel.flags(self, index)
+        
+        # FIXME: item selection for editing removes item text
+        # TODO: support undo
        
         if index.isValid():
             return QtCore.Qt.ItemIsEditable \
@@ -261,24 +284,28 @@ class EmailListModel(QtCore.QAbstractListModel):
             return QtCore.Qt.ItemIsDropEnabled | defaultFlags
 
 
-if __name__ == '__main__':
+def main(triggerPV, messagePV, recipients, logger=None, logfile=None, config=None):
+    import ini_config
     app = QtGui.QApplication(sys.argv)
-    main_window = PvMail_GUI()
+    if config is None:
+        config = ini_config.Config()
+    gui = PvMail_GUI(logger = logger, config=config)
     
-    # TODO: remove these lines before release
-    main_window.history.clear()
-    main_window.setMessagePV('pvMail:message')
-    main_window.setTriggerPV('pvMail:trigger')
-    liszt = ['prjemian@gmail.com',]
-    main_window.setEmailList(liszt)
+    gui.history.clear()
+    gui.setStatus('PID: ' + str(os.getpid()))
+    if logfile is not None and os.path.exists(logfile):
+        gui.history.append(open(logfile, 'r').read())
+        gui.setStatus('log file: ' + logfile)
+    gui.setStatus('email configuration file: ' + config.ini_file)
+    gui.setStatus('email agent: ' + config.mail_transfer_agent)
+    gui.setMessagePV(messagePV)
+    gui.setTriggerPV(triggerPV)
+    gui.setEmailList(recipients)
 
-    main_window.show()
+    gui.show()
     _r = app.exec_()
-    
-    # TODO: remove these lines before release
-    print 'message PV: ', main_window.getMessagePV()
-    print 'trigger PV: ', main_window.getTriggerPV()
-    emails = main_window.getEmailList()
-    print 'email list: ', ', '.join([v for v in emails if len(v)>0])
-
     sys.exit(_r)
+
+
+if __name__ == '__main__':
+    main('pvMail:trigger', 'pvMail:message', ['prjemian@gmail.com',])
