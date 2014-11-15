@@ -50,6 +50,8 @@ class Customizer(object):
         self.ui.w_btn_run.released.connect(self.doRun)
         self.ui.w_btn_stop.released.connect(self.doStop)
 
+        self.ui.emails.setModel(self.email_address_model)
+
     def doAbout(self, *args, **kw):
         import PvMail
         msg = 'About: '
@@ -61,7 +63,6 @@ class Customizer(object):
     def doClose(self, *args, **kw):
         self.setStatus('application exit requested')
         self.ui.close()
-        sys.exit()      # FIXME: does not exit cleanly
     
     def doRun(self, *args, **kw):
         self.setStatus('<Run> button pressed')
@@ -165,10 +166,13 @@ class EmailListModel(QtCore.QAbstractListModel):
         return len(self.listdata) 
  
     def data(self, index, role): 
-        if index.isValid() and role == QtCore.Qt.DisplayRole:
-            return QtCore.QVariant(self.listdata[index.row()])
-        else: 
-            return QtCore.QVariant()
+        if index.isValid():
+            if role == QtCore.Qt.DisplayRole:
+                return QtCore.QVariant(self.listdata[index.row()])
+            elif role == QtCore.Qt.EditRole:
+                return QtCore.QVariant(self.listdata[index.row()])
+            else: 
+                return QtCore.QVariant()
 
     def setData(self, index, value, role = QtCore.Qt.EditRole):
         if role == QtCore.Qt.EditRole:
@@ -186,7 +190,6 @@ class EmailListModel(QtCore.QAbstractListModel):
         # http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#flags
         defaultFlags = QtCore.QAbstractItemModel.flags(self, index)
         
-        # FIXME: item selection for editing removes item text
         # TODO: support undo
        
         if index.isValid():
@@ -205,6 +208,9 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     ui = uic.loadUi(MAIN_UI_FILE)
     custom = Customizer(ui)
+    custom.setTriggerPV('pvMail:trigger')
+    custom.setMessagePV('pvMail:message')
+    custom.setEmailList(['prjemian@gmail.com'])
     
     ui.show()
     _r = app.exec_()
