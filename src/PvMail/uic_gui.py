@@ -11,7 +11,6 @@ Copyright (c) 2014, UChicago Argonne, LLC
 '''
 
 # TODO: Connect status updates from :class:`pvMail.PvMail()` with status in the GUI
-# TODO: Report PV connection problems in an obvious way
 # TODO: GUI: display the tail end of the LOG_FILE.
 
 
@@ -85,7 +84,11 @@ class FullGUI(object):
             self.setStatus('recipients: ' + '  '.join(addresses))
             # TODO: need to set status when email is sent
             # TODO: show/edit messagePV content
-            self.pvmail.do_start()
+            try:
+                self.pvmail.do_start()
+            except Exception, exc:
+                self.setStatus(str(exc))
+                return
             self.ui.w_running_stopped.setText('running')
             self.setStatus('CA monitors started')
             self.watching = True
