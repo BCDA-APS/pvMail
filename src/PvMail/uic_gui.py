@@ -17,7 +17,7 @@ Copyright (c) 2014, UChicago Argonne, LLC
 # http://pyqt.sourceforge.net/Docs/PyQt4/designer.html
 
 
-from PyQt4 import QtCore
+from PyQt4 import QtCore, QtGui, uic
 import datetime
 import os
 import sys
@@ -30,13 +30,21 @@ WINDOW_TITLE = 'pvMail'
 MAIN_UI_FILE = 'gui.ui'
 
 
-class FullGUI(object):
+class PvMail_GUI(object):
+    '''
+    GUI used for pvMail, based on PyQt4
+    '''
     
     def __init__(self, ui_file=None, logger=None, logfile=None, config=None, *args, **kw):
+        '''make this class callable from pvMail application'''
         self.ui = uic.loadUi(ui_file or MAIN_UI_FILE)
+        self.ui.history.clear()
+        self.logger = logger
+        
+        self.setStatus('starting')
+
         self.email_address_model = EmailListModel([], self.ui)
         self.logfile = logfile
-        self.logger = logger
         self.config = config or ini_config.Config()
         self.pvmail = None
         self.watching = False
@@ -50,15 +58,22 @@ class FullGUI(object):
         self.ui.w_btn_run.released.connect(self.doRun)
         self.ui.w_btn_stop.released.connect(self.doStop)
 
+        # the list of email recipients
         self.ui.emails.setModel(self.email_address_model)
         
+        # adjust dynamic labels
+        self.ui.config_file_name.setText(config.ini_file)
+        self.ui.log_file_name.setText(str(logfile))
         self.ui.w_running_stopped.setText('stopped')
+
+        self.setStatus('ready')
     
     def show(self):
         self.ui.show()
 
     def doAbout(self, *args, **kw):
         import PvMail
+        # TODO: display an About... box (show clickable URL and License)
         msg = 'About: '
         msg += PvMail.__project_name__ 
         msg += ', v' + PvMail.__version__
@@ -204,25 +219,35 @@ class EmailListModel(QtCore.QAbstractListModel):
         # TODO: support undo
        
         if index.isValid():
-            return QtCore.Qt.ItemIsEditable \
+            return defaultFlags \
+                    | QtCore.Qt.ItemIsEditable \
                     | QtCore.Qt.ItemIsDragEnabled \
-                    | QtCore.Qt.ItemIsDropEnabled \
-                    | defaultFlags
+                    | QtCore.Qt.ItemIsDropEnabled
            
         else:
-            return QtCore.Qt.ItemIsDropEnabled | defaultFlags
+            return defaultFlags \
+                    | QtCore.Qt.ItemIsDropEnabled
+
+
+def main(triggerPV, messagePV, recipients, logger=None, logfile=None, config=None):
+    app = QtGui.QApplication(sys.argv)
+    config = config or ini_config.Config()
+    gui = PvMail_GUI(logger = logger, config=config)
+    
+    gui.setStatus('PID: ' + str(os.getpid()))
+    if logfile is not None and os.path.exists(logfile):
+        gui.ui.history.append(open(logfile, 'r').read())
+        gui.setStatus('log file: ' + logfile)
+    gui.setStatus('email configuration file: ' + config.ini_file)
+    gui.setStatus('email agent: ' + config.mail_transfer_agent)
+    gui.setMessagePV(messagePV)
+    gui.setTriggerPV(triggerPV)
+    gui.setEmailList(recipients)
+
+    gui.show()
+    _r = app.exec_()
+    sys.exit(_r)
 
 
 if __name__ == '__main__':
-    from PyQt4.QtGui import QApplication
-    from PyQt4 import uic
-    app = QApplication(sys.argv)
-    custom = FullGUI(MAIN_UI_FILE)
-    custom.setTriggerPV('pvMail:trigger')
-    custom.setMessagePV('pvMail:message')
-    custom.setEmailList(['prjemian@gmail.com'])
-    
-    custom.show()
-    _r = app.exec_()
-    print 'ui done'
-    sys.exit(_r)
+    main('pvMail:trigger', 'pvMail:message', ['prjemian@gmail.com',])

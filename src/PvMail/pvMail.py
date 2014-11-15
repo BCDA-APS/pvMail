@@ -228,8 +228,8 @@ def gui(results, config=None):
     :param obj config: email configuration from ini_config.Config()
     '''
     
-    import qt_gui
-    qt_gui.main(
+    import uic_gui
+    uic_gui.main(
         results.trigger_PV, 
         results.message_PV, 
         results.email_addresses.strip().split(","),
