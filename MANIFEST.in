@@ -3,3 +3,4 @@ include src/PvMail/LICENSE
 include src/PvMail/VERSION
 include src/PvMail/*.ui
 include src/PvMail/*.png
+include src/PvMail/*.ico
