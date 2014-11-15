@@ -24,20 +24,21 @@ import os
 import sys
 
 import pvMail
+import ini_config
 
 
 WINDOW_TITLE = 'pvMail'
 MAIN_UI_FILE = 'gui.ui'
 
 
-class Customizer(object):
+class FullGUI(object):
     
-    def __init__(self, ui, logger=None, logfile=None, config=None, *args, **kw):
-        self.ui = ui
-        self.email_address_model = EmailListModel([], ui)
+    def __init__(self, ui_file=None, logger=None, logfile=None, config=None, *args, **kw):
+        self.ui = uic.loadUi(ui_file or MAIN_UI_FILE)
+        self.email_address_model = EmailListModel([], self.ui)
         self.logfile = logfile
         self.logger = logger
-        self.config = config
+        self.config = config or ini_config.Config()
         self.pvmail = None
         self.watching = False
         
@@ -51,6 +52,11 @@ class Customizer(object):
         self.ui.w_btn_stop.released.connect(self.doStop)
 
         self.ui.emails.setModel(self.email_address_model)
+        
+        self.ui.w_running_stopped.setText('stopped')
+    
+    def show(self):
+        self.ui.show()
 
     def doAbout(self, *args, **kw):
         import PvMail
@@ -80,6 +86,7 @@ class Customizer(object):
             # TODO: need to set status when email is sent
             # TODO: show/edit messagePV content
             self.pvmail.do_start()
+            self.ui.w_running_stopped.setText('running')
             self.setStatus('CA monitors started')
             self.watching = True
     
@@ -89,6 +96,7 @@ class Customizer(object):
         else:
             self.setStatus('<Stop> button pressed')
             self.pvmail.do_stop()
+            self.ui.w_running_stopped.setText('stopped')
             self.setStatus('CA monitors stopped')
             self.pvmail = None
             self.watching = False
@@ -206,13 +214,12 @@ if __name__ == '__main__':
     from PyQt4.QtGui import QApplication
     from PyQt4 import uic
     app = QApplication(sys.argv)
-    ui = uic.loadUi(MAIN_UI_FILE)
-    custom = Customizer(ui)
+    custom = FullGUI(MAIN_UI_FILE)
     custom.setTriggerPV('pvMail:trigger')
     custom.setMessagePV('pvMail:message')
     custom.setEmailList(['prjemian@gmail.com'])
     
-    ui.show()
+    custom.show()
     _r = app.exec_()
     print 'ui done'
     sys.exit(_r)
