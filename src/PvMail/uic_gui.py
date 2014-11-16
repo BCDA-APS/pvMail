@@ -28,6 +28,7 @@ import ini_config
 
 WINDOW_TITLE = 'pvMail'
 MAIN_UI_FILE = 'gui.ui'
+ABOUT_UI_FILE = 'about.ui'
 
 
 class PvMail_GUI(object):
@@ -73,12 +74,19 @@ class PvMail_GUI(object):
 
     def doAbout(self, *args, **kw):
         import PvMail
-        # TODO: display an About... box (show clickable URL and License)
+        about = uic.loadUi(ABOUT_UI_FILE)
+        about.title.setText(PvMail.__project_name__)
+        about.version.setText('version: ' + PvMail.__version__)
+        about.url.setText(PvMail.__url__)
+
+        # feed the status message
         msg = 'About: '
         msg += PvMail.__project_name__ 
         msg += ', v' + PvMail.__version__
         msg += ', PID=' + str(os.getpid())
         self.setStatus(msg)
+        about.show()
+        about.exec_()
 
     def doClose(self, *args, **kw):
         self.setStatus('application exit requested')
