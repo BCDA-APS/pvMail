@@ -22,7 +22,7 @@ import datetime
 import os
 import sys
 
-import pvMail
+import PvMail
 import ini_config
 
 
@@ -38,7 +38,7 @@ class PvMail_GUI(object):
     
     def __init__(self, ui_file=None, logger=None, logfile=None, config=None, *args, **kw):
         '''make this class callable from pvMail application'''
-        self.ui = uic.loadUi(ui_file or MAIN_UI_FILE)
+        self.ui = uic.loadUi(PvMail.get_pkg_file_path(ui_file or MAIN_UI_FILE))
         self.ui.history.clear()
         self.logger = logger
         
@@ -73,11 +73,14 @@ class PvMail_GUI(object):
         self.ui.show()
 
     def doAbout(self, *args, **kw):
-        import PvMail
-        about = uic.loadUi(ABOUT_UI_FILE)
-        about.title.setText(PvMail.__project_name__)
-        about.version.setText('version: ' + PvMail.__version__)
+        about = uic.loadUi(PvMail.get_pkg_file_path(ABOUT_UI_FILE))
+        about.title.setText(PvMail.__project_name__ + '  ' + PvMail.__version__)
+        about.description.setText(PvMail.__description__)
+        about.authors.setText(', '.join(PvMail.__full_author_list__))
+        about.copyright.setText(PvMail.__license__)
+		# TODO: can this URL be an active link?
         about.url.setText(PvMail.__url__)
+		# TODO: provide control to show the license
 
         # feed the status message
         msg = 'About: '
@@ -97,8 +100,9 @@ class PvMail_GUI(object):
         if self.watching:
             self.setStatus('already watching')
         else:
-            self.pvmail = pvMail.PvMail(self.config)
+            self.pvmail = PvMail.pvMail.PvMail(self.config)
             self.pvmail.triggerPV = str(self.getTriggerPV())
+			# TODO: when running, show triggerPV value
             self.pvmail.messagePV = str(self.getMessagePV())
             addresses = self.getEmailList_Stripped()
             self.pvmail.recipients = addresses
@@ -106,7 +110,7 @@ class PvMail_GUI(object):
             self.setStatus('message PV: ' + self.pvmail.messagePV)
             self.setStatus('recipients: ' + '  '.join(addresses))
             # TODO: need to set status when email is sent
-            # TODO: show/edit messagePV content
+            # TODO: when running, show/edit messagePV content
             try:
                 self.pvmail.do_start()
             except Exception, exc:
@@ -129,7 +133,6 @@ class PvMail_GUI(object):
     
     def doSendTestMessage(self):
         import mailer
-        import PvMail
         self.setStatus('requested a test email')
         subject = 'PvMail mailer test message: ' + self.config.mail_transfer_agent
         message = 'This is a test of the PvMail mailer, v' + PvMail.__version__
