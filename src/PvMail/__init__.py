@@ -1,11 +1,16 @@
 import os
 
 
-def _get_version():
+VERSION_FILE = 'VERSION'
+
+
+def get_pkg_file_path(fname):
+    '''return the absolute path to the named file in the package directory'''
     vpath = os.path.abspath(os.path.dirname(__file__))
-    vfile = os.path.join(vpath, 'VERSION')
-    version = open(vfile).read().strip()
-    return version
+    vfile = os.path.join(vpath, fname)
+	if os.path.exists(vfile):
+	    RuntimeError('file does not exist: ' + vfile)
+    return vfile
 
 
 __classifiers__ = [
@@ -25,8 +30,9 @@ __install_requires__ = ['pyepics>=3.2.3', 'PyQt4>=4.10.4', ]
 
 __project_name__ = "PvMail"
 __description__ = "Watch an EPICS PV. Send email when it changes from 0 to 1."
-__version__ = _get_version()
+__version__ = open(get_pkg_file_path(VERSION_FILE)).read().strip()
 __author__ = "Pete Jemian"
+__full_author_list__ = ["Pete Jemian", "Kurt Goetze"]
 __institution__ = "Advanced Photon Source, Argonne National Laboratory"
 __author_email__= "jemian@anl.gov"
 __url__ = "http://PvMail.readthedocs.org"
