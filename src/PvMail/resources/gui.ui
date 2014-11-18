@@ -28,49 +28,9 @@
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <layout class="QFormLayout" name="formLayout">
-          <item row="2" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>trigger PV</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>message PV</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>email address(es)</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLineEdit" name="triggerPV"/>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="messagePV"/>
-          </item>
-          <item row="5" column="1">
-           <widget class="QListView" name="emails">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>60</height>
-             </size>
-            </property>
-            <property name="tabKeyNavigation">
-             <bool>true</bool>
-            </property>
-            <property name="alternatingRowColors">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
+          <property name="fieldGrowthPolicy">
+           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+          </property>
           <item row="0" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
@@ -85,20 +45,6 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string>message text</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QLineEdit" name="messagePV_text">
-            <property name="text">
-             <string>text from PV goes here</string>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_6">
             <property name="text">
@@ -110,6 +56,49 @@
            <widget class="QLabel" name="log_file_name">
             <property name="text">
              <string>log file name goes here</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>trigger PV</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="triggerPV"/>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="l_messagePV">
+            <property name="text">
+             <string>message PV</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="messagePV"/>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>email address(es)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QListView" name="emails">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>60</height>
+             </size>
+            </property>
+            <property name="tabKeyNavigation">
+             <bool>true</bool>
+            </property>
+            <property name="alternatingRowColors">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -216,7 +205,7 @@
      <x>0</x>
      <y>0</y>
      <width>600</width>
-     <height>21</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

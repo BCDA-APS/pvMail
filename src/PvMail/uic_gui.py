@@ -73,10 +73,10 @@ class PvMail_GUI(object):
         # replace standard widget with EPICS-aware widget
         # FIXME: need to replace widget in layout also
         # self.ui.messagePV_text = bcdaqwidgets.BcdaQLineEdit()
-        self.ui.l_pv_message = QtGui.QLabel('message')
-        self.ui.pv_message = bcdaqwidgets.BcdaQLineEdit()
-        self.ui.pv_message.setToolTip('PV not connected, no text available')
-        self.ui.formLayout.addRow(self.ui.l_pv_message, self.ui.pv_message)
+#         self.ui.l_pv_message = QtGui.QLabel('message')
+#         self.ui.pv_message = bcdaqwidgets.BcdaQLineEdit()
+#         self.ui.pv_message.setToolTip('PV not connected, no text available')
+#         self.ui.formLayout.addRow(self.ui.l_pv_message, self.ui.pv_message)
 
         self.setStatus('ready')
     
@@ -124,9 +124,12 @@ class PvMail_GUI(object):
                     return
             
             self.pvmail.triggerPV = trig_pv
+            self.pvmail.messagePV = msg_pv
+            
             # TODO: when running, show triggerPV value
-            self.ui.pv_message.ca_connect(msg_pv)
-            self.ui.pv_message.setText('<connecting...>')
+#             self.ui.pv_message.ca_connect(msg_pv)
+#             self.ui.pv_message.setText('<connecting...>')
+            # TODO: onConnect: self.ui.pv_message needs to pull info from PV and set widget text
             addresses = self.getEmailList_Stripped()
             self.pvmail.recipients = addresses
             self.setStatus('trigger PV: ' + self.pvmail.triggerPV)
@@ -150,9 +153,9 @@ class PvMail_GUI(object):
             self.setStatus('<Stop> button pressed')
             self.pvmail.do_stop()
             self.ui.w_running_stopped.setText('stopped')
-            self.ui.pv_message.ca_disconnect()
-            self.ui.pv_message.setToolTip('PV not connected, no text available')
-            self.ui.pv_message.setText('<not connected>')
+#             self.ui.pv_message.ca_disconnect()
+#             self.ui.pv_message.setToolTip('PV not connected, no text available')
+#             self.ui.pv_message.setText('<not connected>')
             self.setStatus('CA monitors stopped')
             self.pvmail = None
             self.watching = False
