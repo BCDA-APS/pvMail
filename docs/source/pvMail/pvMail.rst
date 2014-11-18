@@ -11,13 +11,3 @@ Source code documentation for EPICS PvMail.
    :members:
    :undoc-members:
    :show-inheritance:
-
-..
-   :mod:`traits_gui` Module
-   ------------------------
-   
-   .. automodule:: PvMail.traits_gui
-      :members:
-      :undoc-members:
-      :show-inheritance:
-

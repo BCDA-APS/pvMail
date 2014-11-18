@@ -52,10 +52,6 @@ is available from:
 TODO items for a future release
 ###############################
 
-#. Connect status updates from :class:`pvMail.PvMail()` with status in the GUI
-#. Report PV connection problems in an obvious way
-#. GUI: display the tail end of the LOG_FILE.
-#. GUI: save/restore settings from a named file
 #. GUI: manage multiple pvMail.PvMail() objects (starting, stopping, detaching, ...)
 
 
@@ -77,5 +73,4 @@ Requirements
     and the "SendMessage PV" contains a string to send as part of 
     the email message.
 :requires: PyEpics (http://cars9.uchicago.edu/software/python/pyepics3/)
-:requires: Traits (http://code.enthought.com/projects/traits/)
-:requires: TraitsUI (http://code.enthought.com/projects/traits_ui/)
+:requires: PyQt4 (https://wiki.python.org/moin/PyQt)

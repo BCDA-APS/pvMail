@@ -13,10 +13,10 @@ Additionally, this program uses:
 *PyEpics* (EPICS interface) 
 	http://cars9.uchicago.edu/software/python/pyepics3/
 
-.. index:: Traits
+.. index:: PyQt4
 
-*Traits* (GUI library) 
-	http://code.enthought.com/projects/traits/
+*PyQt4* (Qt binding) 
+	https://wiki.python.org/moin/PyQt
 
 Both of these are available for 
 `easy_install <http://packages.python.org/distribute/easy_install.html>`_ 
