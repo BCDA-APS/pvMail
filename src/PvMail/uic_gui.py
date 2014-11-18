@@ -18,6 +18,7 @@ Copyright (c) 2014, UChicago Argonne, LLC
 
 
 from PyQt4 import QtCore, QtGui, uic
+
 import datetime
 import os
 import sys
@@ -42,6 +43,9 @@ class PvMail_GUI(object):
     def __init__(self, ui_file=None, logger=None, logfile=None, config=None, *args, **kw):
         '''make this class callable from pvMail application'''
         self.ui = uic.loadUi(PvMail.get_pkg_file_path(ui_file or MAIN_UI_FILE))
+        # PySide way: 
+        # http://stackoverflow.com/questions/7144313/loading-qtdesigners-ui-files-in-pyside/18293756#18293756
+
         self.ui.history.clear()
         self.logger = logger
         
