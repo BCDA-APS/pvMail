@@ -158,7 +158,7 @@ class SendMessage(threading.Thread):
             
             msg = ''        # start with a new message
             msg += "\n\n"
-            msg += pvm.message
+            msg += epics.caget(self.messagePV)
             msg += "\n\n"
             msg += 'user: %s\n' % os.environ['LOGNAME']
             msg += 'host: %s\n' % socket.gethostname()
