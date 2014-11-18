@@ -23,6 +23,7 @@ import mailer
 LOG_FILE = "pvMail-%d.log" % os.getpid()
 RETRY_INTERVAL_S = 0.2
 CHECKPOINT_INTERVAL_S = 5 * 60.0
+CONNECTION_TEST_TIMEOUT = 0.5
 
 gui_object = None
 
@@ -54,14 +55,14 @@ class PvMail(threading.Thread):
         if len(self.recipients) == 0:
             msg = "need at least one email address for list of recipients"
             raise RuntimeWarning, msg
-        fmt = "could not connect to %s PV: %s"
         parts = {'message': self.messagePV, 
                  'trigger': self.triggerPV}
         for name, pv in parts.items():
             if len(pv) == 0:
                 raise RuntimeWarning, "no name for the %s PV" % name
             if pv not in self.monitoredPVs:
-                if self.testConnect(pv, timeout=0.5) is False:
+                if self.testConnect(pv, timeout=CONNECTION_TEST_TIMEOUT) is False:
+                    fmt = "could not connect to %s PV: %s"
                     raise RuntimeWarning, fmt % (name, pv)
         
     def testConnect(self, pvname, timeout=5.0):

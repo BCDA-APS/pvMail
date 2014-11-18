@@ -5,7 +5,7 @@
 pvMail: just the GUI
 ===================================
 
-Run the Graphical User Interface for PvMail using PyQt4 from a .ui file. 
+Run the Graphical User Interface for PvMail using PyQt4 from a .ui file with the uic subpackage. 
 
 Copyright (c) 2014, UChicago Argonne, LLC
 '''
@@ -23,7 +23,9 @@ import os
 import sys
 
 import PvMail
+import pvMail
 import ini_config
+import bcdaqwidgets
 
 
 WINDOW_TITLE = 'pvMail'
@@ -67,6 +69,14 @@ class PvMail_GUI(object):
         self.ui.config_file_name.setText(config.ini_file)
         self.ui.log_file_name.setText(str(logfile))
         self.ui.w_running_stopped.setText('stopped')
+        
+        # replace standard widget with EPICS-aware widget
+        # FIXME: need to replace widget in layout also
+        # self.ui.messagePV_text = bcdaqwidgets.BcdaQLineEdit()
+        self.ui.l_pv_message = QtGui.QLabel('message')
+        self.ui.pv_message = bcdaqwidgets.BcdaQLineEdit()
+        self.ui.pv_message.setToolTip('PV not connected, no text available')
+        self.ui.formLayout.addRow(self.ui.l_pv_message, self.ui.pv_message)
 
         self.setStatus('ready')
     
@@ -101,10 +111,22 @@ class PvMail_GUI(object):
         if self.watching:
             self.setStatus('already watching')
         else:
-            self.pvmail = PvMail.pvMail.PvMail(self.config)
-            self.pvmail.triggerPV = str(self.getTriggerPV())
+            self.pvmail = pvMail.PvMail(self.config)
+            msg_pv = str(self.getMessagePV())
+            trig_pv = str(self.getTriggerPV())
+
+            # report connection failure and abort
+            for key, pv in dict(message=msg_pv, trigger=trig_pv).items():
+                if self.pvmail.testConnect(pv, timeout=pvMail.CONNECTION_TEST_TIMEOUT) is False:
+                    msg = "could not connect to %s PV: %s" % (key, pv)
+                    self.setStatus(msg)
+                    self.pvmail = None
+                    return
+            
+            self.pvmail.triggerPV = trig_pv
             # TODO: when running, show triggerPV value
-            self.pvmail.messagePV = str(self.getMessagePV())
+            self.ui.pv_message.ca_connect(msg_pv)
+            self.ui.pv_message.setText('<connecting...>')
             addresses = self.getEmailList_Stripped()
             self.pvmail.recipients = addresses
             self.setStatus('trigger PV: ' + self.pvmail.triggerPV)
@@ -128,6 +150,9 @@ class PvMail_GUI(object):
             self.setStatus('<Stop> button pressed')
             self.pvmail.do_stop()
             self.ui.w_running_stopped.setText('stopped')
+            self.ui.pv_message.ca_disconnect()
+            self.ui.pv_message.setToolTip('PV not connected, no text available')
+            self.ui.pv_message.setText('<not connected>')
             self.setStatus('CA monitors stopped')
             self.pvmail = None
             self.watching = False
