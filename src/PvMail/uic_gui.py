@@ -174,8 +174,11 @@ class PvMail_GUI(object):
         self.setStatus('requested a test email')
         subject = 'PvMail mailer test message: ' + self.config.mail_transfer_agent
         message = 'This is a test of the PvMail mailer, v' + PvMail.__version__
+        msg_pv = str(self.getMessagePV())
+        if self.watching:
+            message += '\n\n' + self.pvmail.message
         message += '\n\n triggerPV = ' + str(self.getTriggerPV())
-        message += '\n messagePV = ' + str(self.getMessagePV())
+        message += '\n messagePV = ' + msg_pv
         message += '\n\n For more help, see: ' + PvMail.__url__
         recipients = self.getEmailList_Stripped()
         mailer.send_message(subject, message, recipients, self.config)
