@@ -143,6 +143,11 @@ class PvMail_GUI(object):
                 self.setStatus(str(exc))
                 return
             self.ui.w_running_stopped.setText('running')
+            sty = bcdaqwidgets.StyleSheet(self.ui.w_running_stopped)
+            sty.updateStyleSheet({
+                'background-color': 'lightgreen',
+                'qproperty-alignment': 'AlignCenter',
+            })
             self.setStatus('CA monitors started')
             self.watching = True
     
@@ -153,6 +158,10 @@ class PvMail_GUI(object):
             self.setStatus('<Stop> button pressed')
             self.pvmail.do_stop()
             self.ui.w_running_stopped.setText('stopped')
+            sty = bcdaqwidgets.StyleSheet(self.ui.w_running_stopped)
+            sty.updateStyleSheet({
+                'background-color': '#eee',
+            })
 #             self.ui.pv_message.ca_disconnect()
 #             self.ui.pv_message.setToolTip('PV not connected, no text available')
 #             self.ui.pv_message.setText('<not connected>')
