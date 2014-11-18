@@ -26,7 +26,7 @@ __classifiers__ = [
      'Topic :: Utilities',
    ]
 __keywords__ = ['EPICS', 'PV', 'email', 'monitor']
-__install_requires__ = ['pyepics>=3.2.3', 'PyQt4>=4.10.4', ]
+__install_requires__ = ['pyepics>=3.2.3', 'PyQt4>=4.8.5', ]
 
 __project_name__ = "PvMail"
 __description__ = "Watch an EPICS PV. Send email when it changes from 0 to 1."
