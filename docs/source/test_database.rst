@@ -61,6 +61,17 @@ application from EPICS base::
 	Old : pvMail:trigger                 off
 	New : pvMail:trigger                 on
 
+changing a PV: dbpf (in the IOC shell)
+--------------------------------------
+
+You can change the value of the trigger PV using the ``dbpf`` :index:`dbpf`
+command in the IOC shell::
+
+    $ dbpf("pvMail:trigger", 1)
+    "on"
+    $ dbpf("pvMail:trigger", 0)
+    "off"
+
 
 .. _test_database:
 

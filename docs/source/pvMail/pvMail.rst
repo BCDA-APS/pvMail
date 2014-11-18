@@ -1,11 +1,8 @@
 
-PvMail Python Package
-=====================
-
-Source code documentation for EPICS PvMail.
-
 :mod:`pvMail` Module
---------------------
+====================
+
+Source code documentation for EPICS :mod:`PvMail.pvMail`
 
 .. automodule:: PvMail.pvMail
    :members:

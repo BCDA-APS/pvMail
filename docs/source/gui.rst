@@ -2,7 +2,7 @@
 .. _GUI:
 
 pvMail: graphical user interface
-================================
+################################
 
 .. index:: example
 
@@ -20,7 +20,6 @@ command-line interface is started.::
    the ampersand (``&``) on the command line, as shown above.
 
 .. figure:: gui.png
-   :width: 300 pt
    
    GUI of the *PvMail* application
 
@@ -34,9 +33,10 @@ to add additional address or remove addresses.
    At present, the GUI provides few visual cues 
    about the success of PV connections or even 
    that the program is working.  
+   Check the status log for clues.
    This will be fixed in a future version.
 
-The GUI also shows (using *True* or *False* text) whether or not
+The GUI also shows (using *running* or *stopped* text) whether or not
 the PV monitor process is running.
 
 .. warning::
@@ -52,3 +52,10 @@ A request to enhance this capability is on the TODO list (see :ref:`TODO`).
 At the bottom of the GUI panel, a status line is shown.  At present, this 
 does not indicate the status of the monitoring process.  Again,
 this will be fixed soon.
+
+Send test email
+***************
+
+Under the *File* menu, there is an item to ``send test email`` which attenpts
+to send a test email using the current settings as described in the configuration
+file.
