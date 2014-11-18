@@ -135,7 +135,7 @@ class BcdaQSignalDef(QtCore.QObject):
     newText    = pyqtSignal()
 
 
-class BcdaQWidgetSuper(object):
+class BcdaQWidget(object):
     '''superclass for EPICS-aware widgets'''
 
     def __init__(self, pvname=None, useAlarmState=False):
@@ -234,7 +234,7 @@ class BcdaQWidgetSuper(object):
         self._style_sheet.updateStyleSheet(changes_dict)
 
 
-class BcdaQLabel(QtGui.QLabel, BcdaQWidgetSuper):
+class BcdaQLabel(QtGui.QLabel, BcdaQWidget):
     '''
     Provide the value of an EPICS PV on a PySide.QtGui.QLabel
     
@@ -255,7 +255,7 @@ class BcdaQLabel(QtGui.QLabel, BcdaQWidgetSuper):
 
     def __init__(self, pvname=None, useAlarmState=False, bgColorPv=None):
         ''':param str text: initial Label text (really, we can ignore this)'''
-        BcdaQWidgetSuper.__init__(self, useAlarmState=useAlarmState)
+        BcdaQWidget.__init__(self, useAlarmState=useAlarmState)
         QtGui.QLabel.__init__(self, self.text_cache)
 
         # define the signals we'll use in the camonitor handler to update the GUI
@@ -312,7 +312,7 @@ class BcdaQLabel(QtGui.QLabel, BcdaQWidgetSuper):
         self.updateStyleSheet({'background-color': color})
 
 
-class BcdaQLineEdit(QtGui.QLineEdit, BcdaQWidgetSuper):
+class BcdaQLineEdit(QtGui.QLineEdit, BcdaQWidget):
     '''
     Provide the value of an EPICS PV on a PySide.QtGui.QLineEdit
     
@@ -329,7 +329,7 @@ class BcdaQLineEdit(QtGui.QLineEdit, BcdaQWidgetSuper):
 
     def __init__(self, pvname=None, useAlarmState=False):
         ''':param str text: initial Label text (really, we can ignore this)'''
-        BcdaQWidgetSuper.__init__(self)
+        BcdaQWidget.__init__(self)
         QtGui.QLineEdit.__init__(self, self.text_cache)
 
         # define the signals we'll use in the camonitor handler to update the GUI
@@ -353,7 +353,7 @@ class BcdaQLineEdit(QtGui.QLineEdit, BcdaQWidgetSuper):
     def onReturnPressed(self):
         '''send the widget's text to the EPICS PV'''
         if self.pv is not None and len(self.text()) > 0:
-            self.pv.put(self.text())
+            self.pv.put(str(self.text()))
 
     def SetBackgroundColor(self, *args, **kw):
         '''set the background color of the QLineEdit() via its QPalette'''
@@ -361,7 +361,7 @@ class BcdaQLineEdit(QtGui.QLineEdit, BcdaQWidgetSuper):
         self.updateStyleSheet({'background-color': color})
 
 
-class BcdaQPushButton(QtGui.QPushButton, BcdaQWidgetSuper):
+class BcdaQPushButton(QtGui.QPushButton, BcdaQWidget):
     '''
     Provide a QtGui.QPushButton connected to an EPICS PV
     
@@ -384,7 +384,7 @@ class BcdaQPushButton(QtGui.QPushButton, BcdaQWidgetSuper):
 
     def __init__(self, label='', pvname=None):
         ''':param str text: initial Label text (really, we can ignore this)'''
-        BcdaQWidgetSuper.__init__(self)
+        BcdaQWidget.__init__(self)
         QtGui.QPushButton.__init__(self, self.text_cache)
         self.setText(label)
 
