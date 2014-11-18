@@ -3,7 +3,7 @@
 # from: https://subversion.xray.aps.anl.gov/bcdaext/bcdaqwidgets
 
 '''
-PySide-based EPICS-aware widgets for Python
+Qt4-based EPICS-aware widgets for Python
 
 Copyright (c) 2009 - 2014, UChicago Argonne, LLC.
 See LICENSE file for details.
@@ -62,7 +62,6 @@ AllowedStates = typesafe_enum('DISCONNECTED', 'CONNECTED',)
 CLUT = {   # clut: Color LookUp Table
     AllowedStates.DISCONNECTED: "#ffffff",      # white
     AllowedStates.CONNECTED:    "#e0e0e0",      # a bit darker than default #f0f0f0
-    
 }
 
 SeverityColor = typesafe_enum('NO_ALARM', 'MINOR', 'MAJOR', 'CALC_INVALID')
@@ -240,7 +239,7 @@ class BcdaQLabel(QtGui.QLabel, BcdaQWidget):
     
     USAGE::
     
-        from moxy.qtlib import bcdaqwidgets
+        from PvMail import bcdaqwidgets
         
         ...
     
@@ -318,7 +317,7 @@ class BcdaQLineEdit(QtGui.QLineEdit, BcdaQWidget):
     
     USAGE::
     
-        from moxy.qtlib import bcdaqwidgets
+        from PvMail import bcdaqwidgets
         
         ...
     
@@ -372,7 +371,7 @@ class BcdaQPushButton(QtGui.QPushButton, BcdaQWidget):
     
     USAGE::
     
-        from moxy.qtlib import bcdaqwidgets
+        from PvMail import bcdaqwidgets
         
         ...
     
@@ -445,7 +444,7 @@ class BcdaQMomentaryButton(BcdaQPushButton):
     
     USAGE::
     
-        from moxy.qtlib import bcdaqwidgets
+        from PvMail import bcdaqwidgets
         
         ...
     
@@ -473,7 +472,7 @@ class BcdaQToggleButton(BcdaQPushButton):
     
     USAGE::
     
-        from moxy.qtlib import bcdaqwidgets
+        from PvMail import bcdaqwidgets
         
         ...
     
