@@ -27,8 +27,9 @@ import ini_config
 
 
 WINDOW_TITLE = 'pvMail'
-MAIN_UI_FILE = 'gui.ui'
-ABOUT_UI_FILE = 'about.ui'
+RESOURCE_PATH = 'resources'
+MAIN_UI_FILE = os.path.join(RESOURCE_PATH, 'gui.ui')
+ABOUT_UI_FILE = os.path.join(RESOURCE_PATH, 'about.ui')
 
 
 class PvMail_GUI(object):
@@ -78,9 +79,9 @@ class PvMail_GUI(object):
         about.description.setText(PvMail.__description__)
         about.authors.setText(', '.join(PvMail.__full_author_list__))
         about.copyright.setText(PvMail.__license__)
-		# TODO: can this URL be an active link?
+        # TODO: can this URL be an active link?
         about.url.setText(PvMail.__url__)
-		# TODO: provide control to show the license
+        # TODO: provide control to show the license
 
         # feed the status message
         msg = 'About: '
@@ -102,7 +103,7 @@ class PvMail_GUI(object):
         else:
             self.pvmail = PvMail.pvMail.PvMail(self.config)
             self.pvmail.triggerPV = str(self.getTriggerPV())
-			# TODO: when running, show triggerPV value
+            # TODO: when running, show triggerPV value
             self.pvmail.messagePV = str(self.getMessagePV())
             addresses = self.getEmailList_Stripped()
             self.pvmail.recipients = addresses
