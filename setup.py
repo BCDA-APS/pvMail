@@ -25,7 +25,7 @@ setup(
     install_requires = PvMail.__install_requires__,
     packages         = ['PvMail',],
     package_dir      = {'PvMail': 'src/PvMail',},
-    package_data     = {'PvMail': ['test.db', 'LICENSE', 'VERSION',],},
+    package_data     = {'PvMail': ['test.db', 'LICENSE', 'VERSION', 'resources/*'],},
     entry_points     = {
         # create & install console_scripts in <python>/bin
         'console_scripts': PvMail.__console_scripts__,
