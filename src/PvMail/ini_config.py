@@ -9,7 +9,7 @@ To identify the configuration file (and create if it does not exist already)::
     /home/joeuser/.pvMail/pvMail.ini
 
 '''
-
+#  Copyright (c) 2014, UChicago Argonne, LLC.  See LICENSE file.
 
 import ConfigParser
 import datetime

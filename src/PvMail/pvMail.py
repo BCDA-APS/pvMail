@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 '''Watch an EPICS PV. Send email when it changes from 0 to 1'''
-# see file LICENSE included with this distribution. 
+
+# Copyright (c) 2014, UChicago Argonne, LLC.  See LICENSE file.
 # docs: http://PvMail.readthedocs.org
 
 

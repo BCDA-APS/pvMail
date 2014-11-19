@@ -4,6 +4,8 @@
 send a message by email to one or more recipients (by SMTP or sendmail)
 '''
 
+# Copyright (c) 2014, UChicago Argonne, LLC.  See LICENSE file.
+
 
 import os
 import sys
