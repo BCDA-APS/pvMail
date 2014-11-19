@@ -1,3 +1,4 @@
 include README.rst
 include src/PvMail/LICENSE
 include src/PvMail/VERSION
+include src/PvMail/resources/*

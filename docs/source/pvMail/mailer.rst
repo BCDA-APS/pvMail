@@ -24,6 +24,7 @@ TESTING THE CONFIGURATION
 .. index:: configuration file; testing
 
 It is possible to test the email sending using the configuration file.
+(Alternatively, the GUI has a *File* menu item to send a test email.)
 First, the help message for the command::
 
     [joeuser] $ pvMail_mail_test --help

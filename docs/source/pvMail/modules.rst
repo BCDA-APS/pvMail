@@ -36,5 +36,7 @@ PvMail source code documentation
    :maxdepth: 4
 
    pvMail
+   uic_gui
    ini_config
    mailer
+   bcdaqwidgets

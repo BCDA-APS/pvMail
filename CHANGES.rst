@@ -9,6 +9,7 @@
 Change History
 ##############
 
+:v3.2.0 (2014-11-18): refactor GUI to Qt4 framework
 :v3.1.0 (2014-11-11): add optional SMTP email support and configuration file
 :v3.0.5 (2014-11-06): move project to https://github.com/prjemian/pvMail
 :v3.0.4 (2014-11-05): make docs build at http://pvmail.readthedocs.org
