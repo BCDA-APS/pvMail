@@ -3,13 +3,14 @@
 '''
 handle application configuration settings in a .ini file
 
+Copyright (c) 2014, UChicago Argonne, LLC.  See LICENSE file.
+
 To identify the configuration file (and create if it does not exist already)::
 
     [joeuser] $ pvMail_mail_config_file
     /home/joeuser/.pvMail/pvMail.ini
 
 '''
-#  Copyright (c) 2014, UChicago Argonne, LLC.  See LICENSE file.
 
 import ConfigParser
 import datetime

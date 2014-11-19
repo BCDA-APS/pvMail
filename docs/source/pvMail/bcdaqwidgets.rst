@@ -5,7 +5,7 @@
 :mod:`bcdaqwidgets` Module
 ##########################
 
-Source code documentation for EPICS :mod:`PvMail.bcdaqwidgets`
+Source code documentation for EPICS :mod:`bcdaqwidgets`
 
 .. automodule:: PvMail.bcdaqwidgets
    :members:

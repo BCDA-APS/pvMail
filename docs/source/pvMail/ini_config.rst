@@ -73,7 +73,7 @@ Current choices available are: *SMTP* or *sendmail* (supported on Linux only).
 
 Comments in the application configuration settings file will be ignored
 and will not be written back to the file if the file is rewritten
-from :meth:`PvMail.ini_config.Config.write`.  A tricky way to preserve
+from :meth:`ini_config.Config.write`.  A tricky way to preserve
 *comment* information is to write the comment as if it were a variable 
 to be set inside a section, or possible an entire section.  Such as:
 

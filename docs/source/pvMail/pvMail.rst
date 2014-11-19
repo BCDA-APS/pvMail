@@ -2,7 +2,7 @@
 :mod:`pvMail` Module
 ====================
 
-Source code documentation for EPICS :mod:`PvMail.pvMail`
+Source code documentation for EPICS :mod:`pvMail`
 
 .. automodule:: PvMail.pvMail
    :members:
