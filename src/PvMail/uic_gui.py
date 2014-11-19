@@ -122,12 +122,25 @@ class PvMail_GUI(object):
             self.setStatus('already watching')
         else:
             self.pvmail = pvMail.PvMail(self.config)
+            
+            # acquire information, validate it first
             msg_pv = str(self.getMessagePV())
+            if len(msg_pv) == 0:
+                self.setStatus('must give a message PV name')
+                return
             trig_pv = str(self.getTriggerPV())
+            if len(trig_pv) == 0:
+                self.setStatus('must give a trigger PV name')
+                return
+            addresses = self.getEmailList_Stripped()
+            if len(addresses) == 0:
+                self.setStatus('need at least one email address for list of recipients')
+                return
 
             # report connection failure and abort
             for key, pv in dict(message=msg_pv, trigger=trig_pv).items():
-                if self.pvmail.testConnect(pv, timeout=pvMail.CONNECTION_TEST_TIMEOUT) is False:
+                tc = self.pvmail.testConnect(pv, timeout=pvMail.CONNECTION_TEST_TIMEOUT)
+                if tc is False:
                     msg = "could not connect to %s PV: %s" % (key, pv)
                     self.setStatus(msg)
                     self.pvmail = None
@@ -143,7 +156,6 @@ class PvMail_GUI(object):
             self.ui.pv_message.setText('<connecting...>')
             self.ui.pv_message.setReadOnly(False)
 
-            addresses = self.getEmailList_Stripped()
             self.pvmail.recipients = addresses
             self.setStatus('trigger PV: ' + self.pvmail.triggerPV)
             self.setStatus('message PV: ' + self.pvmail.messagePV)
@@ -320,4 +332,4 @@ def main(triggerPV, messagePV, recipients, logger=None, logfile=None, config=Non
 
 
 if __name__ == '__main__':
-    main('pvMail:trigger', 'pvMail:message', ['prjemian@gmail.com',])
+    main('pvMail:trigger', 'pvMail:message', ['joeuser@company.tld',])
