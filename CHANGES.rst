@@ -9,7 +9,7 @@
 Change History
 ##############
 
-:v3.2.3 (2014-11-?): email sent in separate thread
+:v3.2.3 (2014-11-19): email sent in separate thread, PV content shown in GUI when connected
 :v3.2.0 (2014-11-18): refactor GUI to Qt4 framework
 :v3.1.0 (2014-11-11): add optional SMTP email support and configuration file
 :v3.0.5 (2014-11-06): move project to https://github.com/prjemian/pvMail

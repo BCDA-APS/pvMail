@@ -20,6 +20,7 @@ Copyright (c) 2014, UChicago Argonne, LLC.  See LICENSE file.
 from PyQt4 import QtCore, QtGui, uic
 
 import datetime
+import epics
 import os
 import sys
 
@@ -33,6 +34,9 @@ WINDOW_TITLE = 'pvMail'
 RESOURCE_PATH = 'resources'
 MAIN_UI_FILE = os.path.join(RESOURCE_PATH, 'gui.ui')
 ABOUT_UI_FILE = os.path.join(RESOURCE_PATH, 'about.ui')
+TRIGGER_ON = 'lightgreen'
+TRIGGER_OFF = 'lightred'
+TRIGGER_UNKNOWN = '#eee'
 
 
 class PvMail_GUI(object):
@@ -74,13 +78,16 @@ class PvMail_GUI(object):
         self.ui.log_file_name.setText(str(logfile))
         self.ui.w_running_stopped.setText('stopped')
         
-        # replace standard widget with EPICS-aware widget
-        # FIXME: need to replace widget in layout also
-        # self.ui.messagePV_text = bcdaqwidgets.BcdaQLineEdit()
-#         self.ui.l_pv_message = QtGui.QLabel('message')
-#         self.ui.pv_message = bcdaqwidgets.BcdaQLineEdit()
-#         self.ui.pv_message.setToolTip('PV not connected, no text available')
-#         self.ui.formLayout.addRow(self.ui.l_pv_message, self.ui.pv_message)
+        self.ui.l_pv_trigger = QtGui.QLabel('trigger')
+        self.ui.pv_trigger = bcdaqwidgets.BcdaQLabel()
+        self.ui.pv_trigger.setToolTip('PV not connected, no text available')
+        self.ui.formLayout.addRow(self.ui.l_pv_trigger, self.ui.pv_trigger)
+        
+        self.ui.l_pv_message = QtGui.QLabel('message')
+        self.ui.pv_message = bcdaqwidgets.BcdaQLineEdit()
+        self.ui.pv_message.setToolTip('PV not connected, no text available')
+        self.ui.pv_message.setReadOnly(True)
+        self.ui.formLayout.addRow(self.ui.l_pv_message, self.ui.pv_message)
 
         self.setStatus('ready')
     
@@ -130,17 +137,18 @@ class PvMail_GUI(object):
             self.pvmail.triggerPV = trig_pv
             self.pvmail.messagePV = msg_pv
             
-            # TODO: when running, show triggerPV value
-#             self.ui.pv_message.ca_connect(msg_pv)
-#             self.ui.pv_message.setText('<connecting...>')
-            # TODO: onConnect: self.ui.pv_message needs to pull info from PV and set widget text
+            self.ui.pv_trigger.ca_connect(trig_pv)
+            self.ui.pv_trigger.setText('<connecting...>')
+            
+            self.ui.pv_message.ca_connect(msg_pv)
+            self.ui.pv_message.setText('<connecting...>')
+            self.ui.pv_message.setReadOnly(False)
+
             addresses = self.getEmailList_Stripped()
             self.pvmail.recipients = addresses
             self.setStatus('trigger PV: ' + self.pvmail.triggerPV)
             self.setStatus('message PV: ' + self.pvmail.messagePV)
             self.setStatus('recipients: ' + '  '.join(addresses))
-            # TODO: need to set status when email is sent
-            # TODO: when running, show/edit messagePV content
             try:
                 self.pvmail.do_start()
             except Exception, exc:
@@ -166,9 +174,16 @@ class PvMail_GUI(object):
             sty.updateStyleSheet({
                 'background-color': '#eee',
             })
-#             self.ui.pv_message.ca_disconnect()
-#             self.ui.pv_message.setToolTip('PV not connected, no text available')
-#             self.ui.pv_message.setText('<not connected>')
+            
+            self.ui.pv_trigger.ca_disconnect()
+            self.ui.pv_trigger.setToolTip('PV not connected, no text available')
+            self.ui.pv_trigger.setText('<not connected>')
+            
+            self.ui.pv_message.ca_disconnect()
+            self.ui.pv_message.setToolTip('PV not connected, no text available')
+            self.ui.pv_message.setText('<not connected>')
+            self.ui.pv_message.setReadOnly(False)
+
             self.setStatus('CA monitors stopped')
             self.pvmail = None
             self.watching = False
