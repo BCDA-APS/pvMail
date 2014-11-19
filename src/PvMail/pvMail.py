@@ -165,6 +165,7 @@ def SendMessage(pvm, agent_db):
     logger("SendMessage")
     pvm.trigger = False        # triggered event received
 
+    agent_db = agent_db or ini_config.Config()
     email_agent_dict = dict(sendmail=mailer.sendMail_sendmail, SMTP=mailer.sendMail_SMTP)
     emailer = email_agent_dict[agent_db.mail_transfer_agent]
 
@@ -240,7 +241,7 @@ def cli(results, config=None):
             logger("checkpoint")
         if pvm.trigger:
             SendMessage(pvm, config)
-            logger('triggered received, sending email')
+            logger('trigger received, sending email')
         time.sleep(sleep_duration)
     pvm.do_stop()        # this will never be called
 
