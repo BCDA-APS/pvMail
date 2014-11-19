@@ -20,7 +20,6 @@ Copyright (c) 2014, UChicago Argonne, LLC.  See LICENSE file.
 from PyQt4 import QtCore, QtGui, uic
 
 import datetime
-import epics
 import os
 import sys
 
