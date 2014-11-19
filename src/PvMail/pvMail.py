@@ -42,9 +42,11 @@ class PvMail(threading.Thread):
         self.messagePV = ""
         self.recipients = []
         self.old_value = None
-        self.monitoredPVs = []
         self.ca_timestamp = None
         self.config = config
+        self.running = False
+        self.pv = dict(trigger=None, message=None)
+        self.pv_cb_index = dict(trigger=None, message=None)
     
     def basicChecks(self):
         '''
@@ -57,13 +59,17 @@ class PvMail(threading.Thread):
             raise RuntimeWarning, msg
         parts = {'message': self.messagePV, 
                  'trigger': self.triggerPV}
-        for name, pv in parts.items():
+        for key, pv in parts.items():
             if len(pv) == 0:
-                raise RuntimeWarning, "no name for the %s PV" % name
-            if pv not in self.monitoredPVs:
+                raise RuntimeWarning, "no EPICS PV name for the %s PV" % key
+            if self.pv[key] is None:
                 if self.testConnect(pv, timeout=CONNECTION_TEST_TIMEOUT) is False:
                     fmt = "could not connect to %s PV: %s"
-                    raise RuntimeWarning, fmt % (name, pv)
+                    raise RuntimeWarning, fmt % (key, pv)
+            else:
+                if not self.pv[key].connected:
+                    fmt = "could not connect to %s PV: %s"
+                    raise RuntimeWarning, fmt % (key, pv)
         
     def testConnect(self, pvname, timeout=5.0):
         '''
@@ -88,25 +94,37 @@ class PvMail(threading.Thread):
     def do_start(self):
         '''start watching for triggers'''
         logger("do_start")
-        if len(self.monitoredPVs) == 0:
+        if not self.running:
             self.basicChecks()
             logger("passed basicChecks(), starting monitors")
-            epics.camonitor(self.messagePV, callback=self.receiveMessageMonitor)
-            epics.camonitor(self.triggerPV, callback=self.receiveTriggerMonitor)
-            self.old_value = epics.caget(self.triggerPV)
-            self.message = epics.caget(self.messagePV)
-            # What happens if either self.messagePV or self.triggerPV
-            # are changed after self.do_start() is called?
-            # Keep a local list of what was initiated.
-            self.monitoredPVs.append(self.messagePV)
-            self.monitoredPVs.append(self.triggerPV)
+            
+            handler_list = [
+                ['message', self.messagePV, self.receiveMessageMonitor], 
+                ['trigger', self.triggerPV, self.receiveTriggerMonitor]
+            ]
+            for key, pvname, cb in handler_list:
+                pv = epics.PV(pvname)
+                self.pv[key] = pv
+                self.pv_cb_index[key] = pv.add_callback(cb)
+            
+            self.old_value = self.pv['trigger'].get()
+            self.message = self.pv['message'].get()
+            
+            logger("PVs connected")
+            self.running = True
     
     def do_stop(self):
         '''stop watching for triggers'''
         logger("do_stop")
-        for pv in self.monitoredPVs:
-            epics.camonitor_clear(pv)   # no problem if pv was not monitored
-        self.monitoredPVs = []
+        if self.running:
+            for key, pv in self.pv.items():
+                if pv is not None and pv.connected:
+                    pv.remove_callback( self.pv_cb_index[key] )
+                    pv.disconnect()
+                    self.pv[key] = None
+                    self.pv_cb_index[key] = None
+            logger("PVs disconnected")
+            self.running = False
     
     def do_restart(self):
         '''restart watching for triggers'''
@@ -121,65 +139,70 @@ class PvMail(threading.Thread):
     def receiveTriggerMonitor(self, value, **kw):
         '''respond to EPICS CA monitors on trigger PV'''
         logger("%s = %s" % (self.triggerPV, value))
-        # print self.old_value, type(self.old_value), value, type(value)
-        if self.old_value == 0:
-            if value == 1:
-                self.ca_timestamp = None
-                # Cannot use this definition:
-                #     self.trigger = (value == 1)
-                # since the trigger PV just may transition back
-                # to zero before SendMessage() runs.
-                self.trigger = True
-                pv = epics.ca._PVMonitors[self.triggerPV]
-                self.ca_timestamp = pv.timestamp
-                # self.ca_timestamp = epics.ca.get_timestamp(pv.chid)
-                SendMessage(self, self.config)
+        #print self.old_value, type(self.old_value), value, type(value)
+        if self.old_value == 0 and value == 1:
+            self.trigger = True         # set email trigger flag
+            pv = self.pv['trigger']
+            #print pv.pvname, value,pv.timestamp
+            self.ca_timestamp = pv.timestamp
+            
+            # send the message in a different thread
+            #SendMessage(self, self.config)
+            t = threading.Thread(target=SendMessage, args=(self, self.config))
+            t.start()
         self.old_value = value
 
 
-class SendMessage(threading.Thread):
+def SendMessage(pvm, agent_db):
     '''
-    initiate sending the message in a separate thread
+    construct and send the message
     
     :param obj pvm: instance of PvMail object on which to report
     '''
+        
+    #print "SendMessage", type(pvm), pvm
+    logger("SendMessage")
+    pvm.trigger = False        # triggered event received
 
-    def __init__(self, pvm, agent_db):
-        logger("SendMessage")
-        pvm.trigger = False        # triggered event received
+    email_agent_dict = dict(sendmail=mailer.sendMail_sendmail, SMTP=mailer.sendMail_SMTP)
+    emailer = email_agent_dict[agent_db.mail_transfer_agent]
 
-        email_agent_dict = dict(sendmail=mailer.sendMail_sendmail, SMTP=mailer.sendMail_SMTP)
-        email_agent = email_agent_dict[agent_db.mail_transfer_agent]
+    try:
+        _send(emailer, pvm, agent_db)
+    except Exception, exc:
+        msg = 'problem sending email: ' + str(exc)
+        logger(msg)
 
-        try:
-            pvm.basicChecks()
-            
-            pvm.subject = "pvMail.py: " + pvm.triggerPV
-            
-            msg = ''        # start with a new message
-            msg += "\n\n"
-            msg += epics.caget(self.messagePV)
-            msg += "\n\n"
-            msg += 'user: %s\n' % os.environ['LOGNAME']
-            msg += 'host: %s\n' % socket.gethostname()
-            msg += 'date: %s (UNIX, not PV)\n' % datetime.datetime.now()
-            try:
-                msg += 'CA_timestamp: %d\n' % pvm.ca_timestamp
-            except:
-                msg += 'CA_timestamp: not available\n'
-            msg += 'program: %s\n' % sys.argv[0]
-            msg += 'PID: %d\n' % os.getpid()
-            msg += 'trigger PV: %s\n' % pvm.triggerPV
-            msg += 'message PV: %s\n' % pvm.messagePV
-            msg += 'recipients: %s\n' % ", ".join(pvm.recipients)
-            pvm.message = msg
 
-            email_agent(pvm.subject, msg, pvm.recipients, agent_db.get(), logger=logger)
-            logger("message(s) sent")
-        except:
-            err_msg = traceback.format_exc()
-            final_msg = "pvm.subject = %s\nmsg = %s\ntraceback: %s" % (pvm.subject, str(msg), err_msg)
-            logger(final_msg)
+def _send(emailer, pvm, agent_db):
+    pvm.basicChecks()
+    
+    pvm.subject = "pvMail.py: " + pvm.triggerPV
+    
+    msg = ''        # start with a new message
+    msg += "\n\n"
+    msg += epics.caget(pvm.messagePV)
+    msg += "\n\n"
+    u1 = os.environ.get('LOGNAME', None)
+    u2 = os.environ.get('USERNAME', None)
+    u3 = agent_db.get()['user']
+    username = u1 or u2 or u3
+    msg += 'user: %s\n' % username
+    msg += 'host: %s\n' % socket.gethostname()
+    msg += 'date: %s (UNIX, not PV)\n' % datetime.datetime.now()
+    try:
+        msg += 'CA_timestamp: %d\n' % pvm.ca_timestamp
+    except:
+        msg += 'CA_timestamp: not available\n'
+    msg += 'program: %s\n' % sys.argv[0]
+    msg += 'PID: %d\n' % os.getpid()
+    msg += 'trigger PV: %s\n' % pvm.triggerPV
+    msg += 'message PV: %s\n' % pvm.messagePV
+    msg += 'recipients: %s\n' % ", ".join(pvm.recipients)
+    pvm.message = msg
+
+    emailer(pvm.subject, msg, pvm.recipients, agent_db.get(), logger=logger)
+    logger("message(s) sent")
 
 
 def logger(message):
