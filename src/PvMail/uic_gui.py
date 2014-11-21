@@ -10,11 +10,7 @@ Run the Graphical User Interface for PvMail using PyQt4 from a .ui file with the
 Copyright (c) 2014, UChicago Argonne, LLC.  See LICENSE file.
 '''
 
-# TODO: Connect status updates from :class:`pvMail.PvMail()` with status in the GUI
 # TODO: GUI: display the tail end of the LOG_FILE.
-
-
-# http://pyqt.sourceforge.net/Docs/PyQt4/designer.html
 
 
 from PyQt4 import QtCore, QtGui, uic
