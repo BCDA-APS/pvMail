@@ -35,7 +35,7 @@ class PvMail(threading.Thread):
     when the PV changes from 0 to 1.
     '''
     
-    def __init__(self, config=None):
+    def __init__(self, config=None, statusLogger=None):
         self.trigger = False
         self.message = "default message"
         self.subject = "pvMail.py"
@@ -45,6 +45,7 @@ class PvMail(threading.Thread):
         self.old_value = None
         self.ca_timestamp = None
         self.config = config
+        self.statusLogger = statusLogger
         self.running = False
         self.pv = dict(trigger=None, message=None)
         self.pv_cb_index = dict(trigger=None, message=None)
@@ -80,7 +81,7 @@ class PvMail(threading.Thread):
         
         adapted from PyEpics __createPV() method
         '''
-        logger("test connect with %s" % pvname)
+        logger("test connect with %s" % pvname, other_logger=self.statusLogger)
         retry_interval_s = 0.0001
         start_time = time.time()
         thispv = epics.PV(pvname)
@@ -94,10 +95,10 @@ class PvMail(threading.Thread):
     
     def do_start(self):
         '''start watching for triggers'''
-        logger("do_start")
+        logger("do_start", other_logger=self.statusLogger)
         if not self.running:
             self.basicChecks()
-            logger("passed basicChecks(), starting monitors")
+            logger("passed basicChecks(), starting monitors", other_logger=self.statusLogger)
             
             handler_list = [
                 ['message', self.messagePV, self.receiveMessageMonitor], 
@@ -111,12 +112,12 @@ class PvMail(threading.Thread):
             self.old_value = self.pv['trigger'].get()
             self.message = self.pv['message'].get()
             
-            logger("PVs connected")
+            logger("PVs connected", other_logger=self.statusLogger)
             self.running = True
     
     def do_stop(self):
         '''stop watching for triggers'''
-        logger("do_stop")
+        logger("do_stop", other_logger=self.statusLogger)
         if self.running:
             for key, pv in self.pv.items():
                 if pv is not None and pv.connected:
@@ -124,7 +125,7 @@ class PvMail(threading.Thread):
                     pv.disconnect()
                     self.pv[key] = None
                     self.pv_cb_index[key] = None
-            logger("PVs disconnected")
+            logger("PVs disconnected", other_logger=self.statusLogger)
             self.running = False
     
     def do_restart(self):
@@ -134,12 +135,12 @@ class PvMail(threading.Thread):
     
     def receiveMessageMonitor(self, value, **kw):
         '''respond to EPICS CA monitors on message PV'''
-        logger("%s = %s" % (self.messagePV, value))
+        logger("%s = %s" % (self.messagePV, value), other_logger=self.statusLogger)
         self.message = value
     
     def receiveTriggerMonitor(self, value, **kw):
         '''respond to EPICS CA monitors on trigger PV'''
-        logger("%s = %s" % (self.triggerPV, value))
+        logger("%s = %s" % (self.triggerPV, value), other_logger=self.statusLogger)
         #print self.old_value, type(self.old_value), value, type(value)
         if self.old_value == 0 and value == 1:
             self.trigger = True         # set email trigger flag
@@ -154,7 +155,7 @@ class PvMail(threading.Thread):
         self.old_value = value
 
 
-def SendMessage(pvm, agent_db):
+def SendMessage(pvm, agent_db, other_log=None):
     '''
     construct and send the message
     
@@ -162,7 +163,7 @@ def SendMessage(pvm, agent_db):
     '''
         
     #print "SendMessage", type(pvm), pvm
-    logger("SendMessage")
+    logger("SendMessage", other_logger=other_log)
     pvm.trigger = False        # triggered event received
 
     agent_db = agent_db or ini_config.Config()
@@ -173,10 +174,10 @@ def SendMessage(pvm, agent_db):
         _send(emailer, pvm, agent_db)
     except Exception, exc:
         msg = 'problem sending email: ' + str(exc)
-        logger(msg)
+        logger(msg, other_logger=other_log)
 
 
-def _send(emailer, pvm, agent_db):
+def _send(emailer, pvm, agent_db, other_log=None):
     pvm.basicChecks()
     
     pvm.subject = "pvMail.py: " + pvm.triggerPV
@@ -204,10 +205,10 @@ def _send(emailer, pvm, agent_db):
     pvm.message = msg
 
     emailer(pvm.subject, msg, pvm.recipients, agent_db.get(), logger=logger)
-    logger("message(s) sent")
+    logger("message(s) sent", other_logger=other_log)
 
 
-def logger(message):
+def logger(message, other_logger=None):
     '''
     log a message or report from PvMail
 
@@ -217,6 +218,8 @@ def logger(message):
     name = os.path.basename(sys.argv[0])
     text = "(%s,%s) %s" % (name, now, message)
     logging.info(text)
+    if other_logger is not None:
+        other_logger(text)
 
 
 def cli(results, config=None):
