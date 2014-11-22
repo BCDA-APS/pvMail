@@ -145,10 +145,10 @@ class PvMail_GUI(object):
             self.pvmail.triggerPV = trig_pv
             self.pvmail.messagePV = msg_pv
             
-            self.ui.pv_trigger.ca_connect(trig_pv)
+            self.ui.pv_trigger.ca_connect(trig_pv, ca_callback=self.onTrigger)
             self.ui.pv_trigger.setText('<connecting...>')
             
-            self.ui.pv_message.ca_connect(msg_pv)
+            self.ui.pv_message.ca_connect(msg_pv, ca_callback=self.onMessage)
             self.ui.pv_message.setText('<connecting...>')
             self.ui.pv_message.setReadOnly(False)
 
@@ -232,12 +232,22 @@ class PvMail_GUI(object):
     def getMessagePV(self):
         return self.ui.messagePV.text()
     
+    def onMessage(self, value=None, *args, **kw):
+        # TODO: this needs a "do later" signal to the GUI thread
+        # self.setStatus('message: ' + str(value))
+        pass
+    
     def setMessagePV(self, messagePV):
         self.ui.messagePV.setText(str(messagePV))
         self.setStatus('set message PV: ' + messagePV)
     
     def getTriggerPV(self):
         return self.ui.triggerPV.text()
+    
+    def onTrigger(self, value=None, char_value=None, *args, **kw):
+        # TODO: this needs a "do later" signal to the GUI thread
+        # self.setStatus('trigger: %s (%s)' % ( str(value), str(char_value)) )
+        pass
     
     def setTriggerPV(self, triggerPV):
         self.ui.triggerPV.setText(str(triggerPV))
@@ -248,6 +258,7 @@ class PvMail_GUI(object):
         self.ui.statusbar.showMessage(str(message))
         if hasattr(self.ui, 'history'):
             self.ui.history.append(ts + '  ' + message)
+            # TODO: scroll the history window to the bottom
         if self.logger is not None:
             self.logger(message)
 
