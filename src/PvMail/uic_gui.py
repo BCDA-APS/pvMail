@@ -31,9 +31,9 @@ WINDOW_TITLE = 'pvMail'
 RESOURCE_PATH = 'resources'
 MAIN_UI_FILE = os.path.join(RESOURCE_PATH, 'gui.ui')
 ABOUT_UI_FILE = os.path.join(RESOURCE_PATH, 'about.ui')
-TRIGGER_ON = 'lightgreen'
-TRIGGER_OFF = 'lightred'
-TRIGGER_UNKNOWN = '#eee'
+COLOR_ON = 'lightgreen'
+COLOR_OFF = 'lightred'
+COLOR_DEFAULT = '#eee'
 
 
 class PvMailSignalDef(QtCore.QObject):
@@ -179,7 +179,7 @@ class PvMail_GUI(object):
             self.ui.w_running_stopped.setText('running')
             sty = bcdaqwidgets.StyleSheet(self.ui.w_running_stopped)
             sty.updateStyleSheet({
-                'background-color': 'lightgreen',
+                'background-color': COLOR_ON,
                 'qproperty-alignment': 'AlignCenter',
             })
             self.setStatus('CA monitors started')
@@ -194,7 +194,7 @@ class PvMail_GUI(object):
             self.ui.w_running_stopped.setText('stopped')
             sty = bcdaqwidgets.StyleSheet(self.ui.w_running_stopped)
             sty.updateStyleSheet({
-                'background-color': '#eee',
+                'background-color': COLOR_DEFAULT,
             })
             
             obj = self.ui.pv_trigger
@@ -203,7 +203,7 @@ class PvMail_GUI(object):
             obj.setText('<not connected>')
             sty = bcdaqwidgets.StyleSheet(obj)
             sty.updateStyleSheet({
-                'background-color': '#eee',
+                'background-color': COLOR_DEFAULT,
             })
             
             obj = self.ui.pv_message
@@ -273,10 +273,11 @@ class PvMail_GUI(object):
         value = obj[0]
         self.setStatus('trigger: %s' % str(value) )
         sty = bcdaqwidgets.StyleSheet(self.ui.pv_trigger)
-        color = {0:'#eee', 1:'lightgreen'}[value]
+        color = {0:COLOR_DEFAULT, 1:COLOR_ON}[value]
         sty.updateStyleSheet({
             'background-color': color,
         })
+        self.ui.pv_trigger
     
     def setTriggerPV(self, triggerPV):
         self.ui.triggerPV.setText(str(triggerPV))
