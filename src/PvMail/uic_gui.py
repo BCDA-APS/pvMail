@@ -14,6 +14,7 @@ Copyright (c) 2014, UChicago Argonne, LLC.  See LICENSE file.
 
 
 from PyQt4 import QtCore, QtGui, uic
+pyqtSignal = QtCore.pyqtSignal
 
 import datetime
 import os
@@ -32,6 +33,14 @@ ABOUT_UI_FILE = os.path.join(RESOURCE_PATH, 'about.ui')
 TRIGGER_ON = 'lightgreen'
 TRIGGER_OFF = 'lightred'
 TRIGGER_UNKNOWN = '#eee'
+
+
+class PvMailSignalDef(QtCore.QObject):
+    '''Define the signals used to communicate between the threads.'''
+
+    newFgColor = pyqtSignal(object)
+    newBgColor = pyqtSignal(object)
+    newText    = pyqtSignal(object)
 
 
 class PvMail_GUI(object):
@@ -77,12 +86,16 @@ class PvMail_GUI(object):
         self.ui.pv_trigger = bcdaqwidgets.BcdaQLabel()
         self.ui.pv_trigger.setToolTip('PV not connected, no text available')
         self.ui.formLayout.addRow(self.ui.l_pv_trigger, self.ui.pv_trigger)
+        self.triggerSignal = PvMailSignalDef()
+        self.triggerSignal.newText.connect(self.onTrigger_gui_thread)
         
         self.ui.l_pv_message = QtGui.QLabel('message')
         self.ui.pv_message = bcdaqwidgets.BcdaQLineEdit()
         self.ui.pv_message.setToolTip('PV not connected, no text available')
         self.ui.pv_message.setReadOnly(True)
         self.ui.formLayout.addRow(self.ui.l_pv_message, self.ui.pv_message)
+        self.messageSignal = PvMailSignalDef()
+        self.messageSignal.newText.connect(self.onMessage_gui_thread)
 
         self.setStatus('ready')
     
@@ -145,10 +158,10 @@ class PvMail_GUI(object):
             self.pvmail.triggerPV = trig_pv
             self.pvmail.messagePV = msg_pv
             
-            self.ui.pv_trigger.ca_connect(trig_pv, ca_callback=self.onTrigger)
+            self.ui.pv_trigger.ca_connect(trig_pv, ca_callback=self.onTrigger_pv_thread)
             self.ui.pv_trigger.setText('<connecting...>')
             
-            self.ui.pv_message.ca_connect(msg_pv, ca_callback=self.onMessage)
+            self.ui.pv_message.ca_connect(msg_pv, ca_callback=self.onMessage_pv_thread)
             self.ui.pv_message.setText('<connecting...>')
             self.ui.pv_message.setReadOnly(False)
 
@@ -182,14 +195,20 @@ class PvMail_GUI(object):
                 'background-color': '#eee',
             })
             
-            self.ui.pv_trigger.ca_disconnect()
-            self.ui.pv_trigger.setToolTip('PV not connected, no text available')
-            self.ui.pv_trigger.setText('<not connected>')
+            obj = self.ui.pv_trigger
+            obj.ca_disconnect()
+            obj.setToolTip('PV not connected, no text available')
+            obj.setText('<not connected>')
+            sty = bcdaqwidgets.StyleSheet(obj)
+            sty.updateStyleSheet({
+                'background-color': '#eee',
+            })
             
-            self.ui.pv_message.ca_disconnect()
-            self.ui.pv_message.setToolTip('PV not connected, no text available')
-            self.ui.pv_message.setText('<not connected>')
-            self.ui.pv_message.setReadOnly(False)
+            obj = self.ui.pv_message
+            obj.ca_disconnect()
+            obj.setToolTip('PV not connected, no text available')
+            obj.setText('<not connected>')
+            obj.setReadOnly(False)
 
             self.setStatus('CA monitors stopped')
             self.pvmail = None
@@ -232,10 +251,11 @@ class PvMail_GUI(object):
     def getMessagePV(self):
         return self.ui.messagePV.text()
     
-    def onMessage(self, value=None, *args, **kw):
-        # TODO: this needs a "do later" signal to the GUI thread
-        # self.setStatus('message: ' + str(value))
-        pass
+    def onMessage_pv_thread(self, value=None, *args, **kw):
+        self.messageSignal.newText.emit(value)      # threadsafe update of the widget
+    
+    def onMessage_gui_thread(self, value):
+        self.setStatus('message: %s' % str(value) )
     
     def setMessagePV(self, messagePV):
         self.ui.messagePV.setText(str(messagePV))
@@ -244,10 +264,17 @@ class PvMail_GUI(object):
     def getTriggerPV(self):
         return self.ui.triggerPV.text()
     
-    def onTrigger(self, value=None, char_value=None, *args, **kw):
-        # TODO: this needs a "do later" signal to the GUI thread
-        # self.setStatus('trigger: %s (%s)' % ( str(value), str(char_value)) )
-        pass
+    def onTrigger_pv_thread(self, value=None, char_value=None, *args, **kw):
+        self.triggerSignal.newText.emit((value, char_value))      # threadsafe update of the widget
+    
+    def onTrigger_gui_thread(self, obj):
+        value = obj[0]
+        self.setStatus('trigger: %s' % str(value) )
+        sty = bcdaqwidgets.StyleSheet(self.ui.pv_trigger)
+        color = {0:'#eee', 1:'lightgreen'}[value]
+        sty.updateStyleSheet({
+            'background-color': color,
+        })
     
     def setTriggerPV(self, triggerPV):
         self.ui.triggerPV.setText(str(triggerPV))
@@ -257,10 +284,14 @@ class PvMail_GUI(object):
         ts = str(datetime.datetime.now())
         self.ui.statusbar.showMessage(str(message))
         if hasattr(self.ui, 'history'):
-            self.ui.history.append(ts + '  ' + message)
-            # TODO: scroll the history window to the bottom
-        if self.logger is not None:
-            self.logger(message)
+            if self.logger is None:
+                self.ui.history.append(ts + '  ' + message)
+            else:
+                self.logger(message)
+                # TODO: need to keep history updated with contents of self.logfile
+            # scroll the history window to the bottom
+            point = QtCore.QPoint( self.ui.history.x(), self.ui.history.y() )
+            self.ui.history.anchorAt( point )
 
 
 class EmailListModel(QtCore.QAbstractListModel): 
