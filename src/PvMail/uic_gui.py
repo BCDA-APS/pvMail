@@ -17,6 +17,7 @@ from PyQt4 import QtCore, QtGui, uic
 pyqtSignal = QtCore.pyqtSignal
 
 import datetime
+import functools
 import os
 import sys
 
