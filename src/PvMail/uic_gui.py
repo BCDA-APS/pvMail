@@ -38,8 +38,9 @@ TRIGGER_UNKNOWN = '#eee'
 class PvMailSignalDef(QtCore.QObject):
     '''Define the signals used to communicate between the threads.'''
 
-    newFgColor = pyqtSignal(object)
-    newBgColor = pyqtSignal(object)
+    # http://stackoverflow.com/questions/8824311/how-to-pass-arguments-to-callback-functions-in-pyqt/8824715#8824715
+    #newFgColor = pyqtSignal(object)
+    #newBgColor = pyqtSignal(object)
     newText    = pyqtSignal(object)
 
 
