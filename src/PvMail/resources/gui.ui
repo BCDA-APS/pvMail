@@ -192,7 +192,7 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
-        <widget class="QTextBrowser" name="history"/>
+        <widget class="QTextEdit" name="history"/>
        </item>
       </layout>
      </widget>
