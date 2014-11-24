@@ -9,7 +9,7 @@
 Change History
 ##############
 
-:v3.2.4 (2014-11-xx): Log status updates from :class:`pvMail.PvMail()` in the GUI
+:v3.2.4 (2014-11-24): Log status updates from :class:`pvMail.PvMail()` in the GUI
 :v3.2.3 (2014-11-19): email sent in separate thread, PV content shown in GUI when connected
 :v3.2.0 (2014-11-18): refactor GUI to Qt4 framework
 :v3.1.0 (2014-11-11): add optional SMTP email support and configuration file
@@ -31,5 +31,5 @@ Change History
 
 :2011-11-23 prj: complete rewrite using PyEpics and combined GUI (Traits) and CLI
 :2009-12-02 prj: converted to use wxPython (no Tkinter or Pmw)
-:2005.09.07 kag:   Initial alpha version.  Needs testing.
+:2005.09.07 kag: Initial alpha version.  Needs testing.
     
