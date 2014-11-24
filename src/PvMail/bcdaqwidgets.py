@@ -502,7 +502,7 @@ class BcdaQToggleButton(BcdaQPushButton):
     
     This is a special case of a BcdaQPushButton where the text on the button
     changes with the value of the attached EPICS PV.  In this case, the 
-    displayed value is the name of the next state of the EPICS PV when 
+    displayed value is the name of the *next* state of the EPICS PV when 
     the button is pressed.
     
     It is a good choice to use, for example, for an ON/OFF button.
