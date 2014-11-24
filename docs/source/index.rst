@@ -2,7 +2,8 @@
 PvMail: combined CLI and GUI
 ############################
 
-http://PvMail.readthedocs.org
+:version: |version|
+:url:     http://PvMail.readthedocs.org
 
 .. note:: While *PvMail* is the name of the Python package, 
    the executable installed in <python>/bin is called 
@@ -36,11 +37,13 @@ the value of another PV that is the first part of the message to be
 sent.  Additional metadata will be appended to the message.
 
 .. note::
-	Email is sent using a call to the ``sendmail`` program on the native OS.
-	This almost certainly precludes its use on Windows systems.
-	The GUI or command-line versions will operate but likely no email
-	is sent.  Also, the host computer must allow and be configured for
-	sending email to the intended recipients.
+	Email is sent using either a call to a configured SMTP server or
+	the ``sendmail`` program on the native OS.
+	The sendmail protocol is only supported on Linux systems
+	that provide a ``sendmail`` program.
+	The SMTP protocol is more general but requires valid credentials
+	on the SMTP server and the credentials must be stored
+	in a local configuration file.
 
 PvMail provides either a command-line interface or a graphical user
 interface.  Both are accessed from the same command, using different
