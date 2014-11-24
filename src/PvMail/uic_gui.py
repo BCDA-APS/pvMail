@@ -10,14 +10,11 @@ Run the Graphical User Interface for PvMail using PyQt4 from a .ui file with the
 Copyright (c) 2014, UChicago Argonne, LLC.  See LICENSE file.
 '''
 
-# TODO: GUI: display the tail end of the LOG_FILE.
-
 
 from PyQt4 import QtCore, QtGui, uic
 pyqtSignal = QtCore.pyqtSignal
 
 import datetime
-import functools
 import os
 import sys
 
@@ -34,15 +31,15 @@ ABOUT_UI_FILE = os.path.join(RESOURCE_PATH, 'about.ui')
 COLOR_ON = 'lightgreen'
 COLOR_OFF = 'lightred'
 COLOR_DEFAULT = '#eee'
+LOG_REDISPLAY_DELAY_MS = 1000
 
 
 class PvMailSignalDef(QtCore.QObject):
     '''Define the signals used to communicate between the threads.'''
 
-    # http://stackoverflow.com/questions/8824311/how-to-pass-arguments-to-callback-functions-in-pyqt/8824715#8824715
     #newFgColor = pyqtSignal(object)
     #newBgColor = pyqtSignal(object)
-    newText    = pyqtSignal(object)
+    EPICS_monitor = pyqtSignal(object)
 
 
 class PvMail_GUI(object):
@@ -58,12 +55,12 @@ class PvMail_GUI(object):
 
         self.ui.history.clear()
         self.logger = logger
+        self.logfile = logfile
+        self.config = config or ini_config.Config()
         
         self.setStatus('starting')
 
         self.email_address_model = EmailListModel([], self.ui)
-        self.logfile = logfile
-        self.config = config or ini_config.Config()
         self.pvmail = None
         self.watching = False
         
@@ -89,7 +86,7 @@ class PvMail_GUI(object):
         self.ui.pv_trigger.setToolTip('PV not connected, no text available')
         self.ui.formLayout.addRow(self.ui.l_pv_trigger, self.ui.pv_trigger)
         self.triggerSignal = PvMailSignalDef()
-        self.triggerSignal.newText.connect(self.onTrigger_gui_thread)
+        self.triggerSignal.EPICS_monitor.connect(self.onTrigger_gui_thread)
         
         self.ui.l_pv_message = QtGui.QLabel('message')
         self.ui.pv_message = bcdaqwidgets.BcdaQLineEdit()
@@ -97,7 +94,7 @@ class PvMail_GUI(object):
         self.ui.pv_message.setReadOnly(True)
         self.ui.formLayout.addRow(self.ui.l_pv_message, self.ui.pv_message)
         self.messageSignal = PvMailSignalDef()
-        self.messageSignal.newText.connect(self.onMessage_gui_thread)
+        self.messageSignal.EPICS_monitor.connect(self.onMessage_gui_thread)
 
         self.setStatus('ready')
     
@@ -254,10 +251,13 @@ class PvMail_GUI(object):
         return self.ui.messagePV.text()
     
     def onMessage_pv_thread(self, value=None, *args, **kw):
-        self.messageSignal.newText.emit(value)      # threadsafe update of the widget
+        self.messageSignal.EPICS_monitor.emit(value)      # threadsafe update of the widget
     
     def onMessage_gui_thread(self, value):
         self.setStatus('message: %s' % str(value) )
+        if self.ui.pv_message.text() != value:
+            self.ui.pv_message.text_cache = value
+            self.ui.pv_message.SetText()
     
     def setMessagePV(self, messagePV):
         self.ui.messagePV.setText(str(messagePV))
@@ -267,17 +267,18 @@ class PvMail_GUI(object):
         return self.ui.triggerPV.text()
     
     def onTrigger_pv_thread(self, value=None, char_value=None, *args, **kw):
-        self.triggerSignal.newText.emit((value, char_value))      # threadsafe update of the widget
+        self.triggerSignal.EPICS_monitor.emit(value)      # threadsafe update of the widget
     
-    def onTrigger_gui_thread(self, obj):
-        value = obj[0]
+    def onTrigger_gui_thread(self, value):
         self.setStatus('trigger: %s' % str(value) )
-        sty = bcdaqwidgets.StyleSheet(self.ui.pv_trigger)
         color = {0:COLOR_DEFAULT, 1:COLOR_ON}[value]
-        sty.updateStyleSheet({
-            'background-color': color,
-        })
-        self.ui.pv_trigger
+        self.ui.pv_trigger.SetBackgroundColor(color)
+        if self.ui.pv_trigger.text() != str(value):
+            self.ui.pv_trigger.text_cache = str(value)
+            self.ui.pv_trigger.SetText()
+        if value == 1:
+            # delayed update, wait for sending the email to be logged
+            QtCore.QTimer.singleShot(LOG_REDISPLAY_DELAY_MS, self.logfile_to_history)
     
     def setTriggerPV(self, triggerPV):
         self.ui.triggerPV.setText(str(triggerPV))
@@ -287,14 +288,18 @@ class PvMail_GUI(object):
         ts = str(datetime.datetime.now())
         self.ui.statusbar.showMessage(str(message))
         if hasattr(self.ui, 'history'):
-            if self.logger is None:
+            if self.logger is None or self.logfile is None:
                 self.ui.history.append(ts + '  ' + message)
             else:
                 self.logger(message)
-                # TODO: need to keep history updated with contents of self.logfile
-            # scroll the history window to the bottom
-            point = QtCore.QPoint( self.ui.history.x(), self.ui.history.y() )
-            self.ui.history.anchorAt( point )
+                # update with log file contents
+                self.logfile_to_history()
+            self.ui.history.ensureCursorVisible()
+
+    def logfile_to_history(self):
+        # update history with logfile contents
+        self.ui.history.clear()
+        self.ui.history.append(open(self.logfile, 'r').read())
 
 
 class EmailListModel(QtCore.QAbstractListModel): 
@@ -355,7 +360,7 @@ class EmailListModel(QtCore.QAbstractListModel):
 def main(triggerPV, messagePV, recipients, logger=None, logfile=None, config=None):
     app = QtGui.QApplication(sys.argv)
     config = config or ini_config.Config()
-    gui = PvMail_GUI(logger = logger, config=config)
+    gui = PvMail_GUI(logger=logger, logfile=logfile, config=config)
     
     gui.setStatus('PID: ' + str(os.getpid()))
     if logfile is not None and os.path.exists(logfile):
@@ -373,4 +378,7 @@ def main(triggerPV, messagePV, recipients, logger=None, logfile=None, config=Non
 
 
 if __name__ == '__main__':
-    main('pvMail:trigger', 'pvMail:message', ['joeuser@company.tld',])
+    import logging
+    logfile='pvMail_gui.log'
+    logging.basicConfig(filename=logfile, level=logging.INFO)
+    main('pvMail:trigger', 'pvMail:message', ['joeuser@company.tld',], logger=pvMail.logger, logfile=logfile)

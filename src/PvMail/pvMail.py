@@ -170,13 +170,13 @@ def SendMessage(pvm, agent_db, reporter=None):
     emailer = email_agent_dict[agent_db.mail_transfer_agent]
 
     try:
-        _send(emailer, pvm, agent_db)
+        _send(emailer, pvm, agent_db, logger=logger)
     except Exception, exc:
         msg = 'problem sending email: ' + str(exc)
         logger(msg)
 
 
-def _send(emailer, pvm, agent_db, reporter=None):
+def _send(emailer, pvm, agent_db, reporter=None, logger=None):
     pvm.basicChecks()
     
     pvm.subject = "pvMail.py: " + pvm.triggerPV
@@ -202,6 +202,11 @@ def _send(emailer, pvm, agent_db, reporter=None):
     msg += 'message PV: %s\n' % pvm.messagePV
     msg += 'recipients: %s\n' % ", ".join(pvm.recipients)
     pvm.message = msg
+    
+    if logger is not None:
+        logger('#'*60)
+        logger(pvm.message)
+        logger('#'*60)
 
     emailer(pvm.subject, msg, pvm.recipients, agent_db.get(), logger=logger)
     logger("message(s) sent")
@@ -215,7 +220,8 @@ def logger(message):
     '''
     now = datetime.datetime.now()
     name = os.path.basename(sys.argv[0])
-    text = "(%s,%s) %s" % (name, now, message)
+    pid = os.getpid()
+    text = "(%d,%s,%s) %s" % (pid, name, now, message)
     logging.info(text)
 
 
