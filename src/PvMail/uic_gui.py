@@ -26,8 +26,8 @@ import bcdaqwidgets
 
 WINDOW_TITLE = 'pvMail'
 RESOURCE_PATH = 'resources'
-MAIN_UI_FILE = os.path.join(RESOURCE_PATH, 'gui.ui')
-ABOUT_UI_FILE = os.path.join(RESOURCE_PATH, 'about.ui')
+MAIN_UI_FILE = PvMail.get_pkg_file_path(os.path.join(RESOURCE_PATH, 'gui.ui'))
+ABOUT_UI_FILE = PvMail.get_pkg_file_path(os.path.join(RESOURCE_PATH, 'about.ui'))
 COLOR_ON = 'lightgreen'
 COLOR_OFF = 'lightred'
 COLOR_DEFAULT = '#eee'
@@ -102,6 +102,9 @@ class PvMail_GUI(object):
         self.ui.show()
 
     def doAbout(self, *args, **kw):
+        # TODO:  add a check for a new version #5 
+        # based on a comparison with this online file:
+        # https://raw.githubusercontent.com/prjemian/pvMail/master/src/PvMail/VERSION
         about = uic.loadUi(PvMail.get_pkg_file_path(ABOUT_UI_FILE))
         about.title.setText(PvMail.__project_name__ + '  ' + PvMail.__version__)
         about.description.setText(PvMail.__description__)

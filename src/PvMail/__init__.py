@@ -13,6 +13,11 @@ def get_pkg_file_path(fname):
     return vfile
 
 
+def read_resource_file(fname):
+    '''return contents of the named file in the package directory'''
+    return open(get_pkg_file_path(fname)).read()
+
+
 __classifiers__ = [
      'Development Status :: 5 - Production/Stable',
      'Environment :: Console',
@@ -31,7 +36,7 @@ __install_requires__ = ['pyepics>=3.2.3', ]
 
 __project_name__ = "PvMail"
 __description__ = "Watch an EPICS PV. Send email when it changes from 0 to 1."
-__version__ = open(get_pkg_file_path(VERSION_FILE)).read().strip()
+__version__ = read_resource_file(VERSION_FILE).strip()
 __author__ = "Pete Jemian"
 __full_author_list__ = ["Pete Jemian", "Kurt Goetze"]
 __institution__ = "Advanced Photon Source, Argonne National Laboratory"
