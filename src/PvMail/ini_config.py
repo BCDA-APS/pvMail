@@ -45,8 +45,13 @@ class Config(object):
             # only use sendmail on linux systems
             self.mail_transfer_agent = 'SMTP'
 
-        self.agent_db = dict(sendmail=dict(user='joeuser'),
-                             SMTP=dict(user='joeuser',
+        u1 = os.environ.get('LOGNAME', None)
+        u2 = os.environ.get('USERNAME', None)
+        u3 = 'joeuser'
+        username = u1 or u2 or u3
+
+        self.agent_db = dict(sendmail=dict(user=username),
+                             SMTP=dict(user=username,
                                        password='keep_this_private',
                                        server='smtp.server.org',
                                        port='465',

@@ -176,6 +176,13 @@ def SendMessage(pvm, agent_db, reporter=None):
         logger(msg)
 
 
+def getUserName(db):
+    u1 = os.environ.get('LOGNAME', None)
+    u2 = os.environ.get('USERNAME', None)
+    u3 = db.get()['user']
+    return u1 or u2 or u3
+
+
 def _send(emailer, pvm, agent_db, reporter=None, logger=None):
     pvm.basicChecks()
     
@@ -185,10 +192,7 @@ def _send(emailer, pvm, agent_db, reporter=None, logger=None):
     msg += "\n\n"
     msg += epics.caget(pvm.messagePV)
     msg += "\n\n"
-    u1 = os.environ.get('LOGNAME', None)
-    u2 = os.environ.get('USERNAME', None)
-    u3 = agent_db.get()['user']
-    username = u1 or u2 or u3
+    username = getUserName(agent_db)
     msg += 'user: %s\n' % username
     msg += 'host: %s\n' % socket.gethostname()
     msg += 'date: %s (UNIX, not PV)\n' % datetime.datetime.now()
