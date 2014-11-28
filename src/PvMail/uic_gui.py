@@ -70,8 +70,8 @@ class PvMail_GUI(object):
         self.ui.actionAbout_pvMail.triggered.connect(self.doAbout)
         
         # button handlers
-        self.ui.w_btn_run.released.connect(self.doRun)
-        self.ui.w_btn_stop.released.connect(self.doStop)
+        self.ui.w_btn_run.clicked.connect(self.doRun)
+        self.ui.w_btn_stop.clicked.connect(self.doStop)
 
         # the list of email recipients
         self.ui.emails.setModel(self.email_address_model)
