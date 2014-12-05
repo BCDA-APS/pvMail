@@ -103,15 +103,22 @@ class PvMail_GUI(object):
 
     def doAbout(self, *args, **kw):
         # TODO:  add a check for a new version #5 
-        # based on a comparison with this online file:
+        # based on a comparison with the PyPI version:
+        # https://pypi.python.org/pypi/PvMail
+        #
+        # Comparing with the VERSION file will show the development trunk
+        # which is not always the production release version.
         # https://raw.githubusercontent.com/prjemian/pvMail/master/src/PvMail/VERSION
+        #
         about = uic.loadUi(PvMail.get_pkg_file_path(ABOUT_UI_FILE))
         about.title.setText(PvMail.__project_name__ + '  ' + PvMail.__version__)
         about.description.setText(PvMail.__description__)
         about.authors.setText(', '.join(PvMail.__full_author_list__))
         about.copyright.setText(PvMail.__license__)
-        # TODO: can this URL be an active link?
-        about.url.setText(PvMail.__url__)
+        
+        pb = QtGui.QPushButton(PvMail.__url__, clicked=self.doUrl)
+        about.verticalLayout_main.addWidget(pb)
+        
         # TODO: provide control to show the license
 
         # feed the status message
@@ -122,6 +129,12 @@ class PvMail_GUI(object):
         self.setStatus(msg)
         about.show()
         about.exec_()
+    
+    def doUrl(self):
+        self.setStatus('opening documentation URL in default browser')
+        service = QtGui.QDesktopServices()
+        url = QtCore.QUrl(PvMail.__url__)
+        service.openUrl(url)
 
     def doClose(self, *args, **kw):
         self.setStatus('application exit requested')
