@@ -9,6 +9,14 @@ it with a ``-g`` or ``--gui`` command line option to force the GUI to run,
 otherwise you get the background daemon.  Either way, it makes a log
 file (based on PID number) with any program output.
 
+.. tip::
+   Since *PvMail* creates a log file (by default in the current working directory),
+   be sure you start the program from a directory to which you have write
+   access or specify the absolute path to the log file as a command line
+   argument::
+   
+     pvMail -l /path/to/log_file.txt triggerPV messagePV user1@email.domain &
+
 .. index:: example
 
 background daemon::

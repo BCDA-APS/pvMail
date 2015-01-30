@@ -19,6 +19,14 @@ command-line interface is started.::
    Usually, you want to run the GUI as a background task by appending
    the ampersand (``&``) on the command line, as shown above.
 
+.. tip::
+   Since *PvMail* creates a log file (by default in the current working directory),
+   be sure you start the program from a directory to which you have write
+   access or specify the absolute path to the log file as a command line
+   argument::
+   
+     pvMail -g -l /path/to/log_file.txt &
+
 .. figure:: gui.png
    
    GUI of the *PvMail* application
