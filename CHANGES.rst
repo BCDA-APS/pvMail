@@ -9,6 +9,7 @@
 Change History
 ##############
 
+:v3.2.6 (2015.04.13): bcdaqwidgets has replaced PySide with PyQt4, do that here
 :v3.2.5 (2014.12.05): make URL be an active (QPushButton) link in About box
 :v3.2.4 (2014-11-24): Log status updates from :class:`pvMail.PvMail()` in the GUI
 :v3.2.3 (2014-11-19): email sent in separate thread, PV content shown in GUI when connected

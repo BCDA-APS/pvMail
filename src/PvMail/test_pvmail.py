@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 '''
 unit tests for the spec module
 '''
@@ -5,7 +7,7 @@ unit tests for the spec module
 #-----------------------------------------------------------------------------
 # :author:    Pete R. Jemian
 # :email:     prjemian@gmail.com
-# :copyright: (c) 2014, Pete R. Jemian
+# :copyright: (c) 2014-2015w, Pete R. Jemian
 #
 # Distributed under the terms of the Creative Commons Attribution 4.0 International Public License.
 #
@@ -24,9 +26,6 @@ class Test(unittest.TestCase):
 
     def setUp(self):
         pass
-
-#     def tearDown(self):
-#         pass
 
     def test_sendmail(self):
         logging.basicConfig(filename=pvMail.LOG_FILE,level=logging.INFO)

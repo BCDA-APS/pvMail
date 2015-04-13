@@ -3,7 +3,7 @@
 '''
 send a message by email to one or more recipients (by SMTP or sendmail)
 
-Copyright (c) 2014, UChicago Argonne, LLC.  See LICENSE file.
+Copyright (c) 2014-2015, UChicago Argonne, LLC.  See LICENSE file.
 '''
 
 

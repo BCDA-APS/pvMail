@@ -3,7 +3,7 @@
 '''
 handle application configuration settings in a .ini file
 
-Copyright (c) 2014, UChicago Argonne, LLC.  See LICENSE file.
+Copyright (c) 2014-2015, UChicago Argonne, LLC.  See LICENSE file.
 
 To identify the configuration file (and create if it does not exist already)::
 

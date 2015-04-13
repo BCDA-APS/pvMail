@@ -2,7 +2,7 @@
 
 '''Watch an EPICS PV. Send email when it changes from 0 to 1'''
 
-# Copyright (c) 2014, UChicago Argonne, LLC.  See LICENSE file.
+# Copyright (c) 2014-2015, UChicago Argonne, LLC.  See LICENSE file.
 # docs: http://PvMail.readthedocs.org
 
 

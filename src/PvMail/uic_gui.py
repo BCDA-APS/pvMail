@@ -7,7 +7,7 @@ pvMail: just the GUI
 
 Run the Graphical User Interface for PvMail using PyQt4 from a .ui file with the uic subpackage. 
 
-Copyright (c) 2014, UChicago Argonne, LLC.  See LICENSE file.
+Copyright (c) 2014-2015, UChicago Argonne, LLC.  See LICENSE file.
 '''
 
 
