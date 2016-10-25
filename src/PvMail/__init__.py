@@ -1,4 +1,5 @@
 import os
+from ._version import git_release
 
 
 VERSION_FILE = 'VERSION'
@@ -37,6 +38,7 @@ __install_requires__ = ['pyepics>=3.2.3', ]
 __project_name__ = "PvMail"
 __description__ = "Watch an EPICS PV. Send email when it changes from 0 to 1."
 __version__ = read_resource_file(VERSION_FILE).strip()
+__release__ = git_release(__project_name__, __version__)
 __author__ = "Pete Jemian"
 __full_author_list__ = ["Pete Jemian", "Kurt Goetze"]
 __institution__ = "Advanced Photon Source, Argonne National Laboratory"

@@ -1,9 +1,8 @@
+.. include:: ../../README.rst
 
-PvMail: combined CLI and GUI
-############################
-
-:version: |version|
-:url:     http://PvMail.readthedocs.org
+:version:   |version|
+:release:   |release|
+:published: |today|
 
 .. note:: While *PvMail* is the name of the Python package, 
    the executable installed in <python>/bin is called 
@@ -62,6 +61,3 @@ Overview of Contents
    contents
    glossary
    dependencies
-
-
-*This documentation was built:* |today| 

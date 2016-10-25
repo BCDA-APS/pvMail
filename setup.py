@@ -25,18 +25,16 @@ setup(
     install_requires = PvMail.__install_requires__,
     packages         = ['PvMail',],
     package_dir      = {'PvMail': 'src/PvMail',},
-    package_data     = {'PvMail': ['test.db', 'LICENSE', 'VERSION', 'resources/*'],},
+    package_data     = {'PvMail': [
+                                    'test.db', 
+                                    'resources/*',
+                                    'LICENSE', 
+                                    'VERSION', 
+                                   ],
+                        },
     entry_points     = {
         # create & install console_scripts in <python>/bin
         'console_scripts': PvMail.__console_scripts__,
     },
     zip_safe = False,
 )
-
-########### SVN repository information ###################
-# $Date: 2014-07-10 13:47:46 -0500 (Thu, 10 Jul 2014) $
-# $Author: jemian $
-# $Revision: 1580 $
-# $URL: https://subversion.xray.aps.anl.gov/bcdaext/pvMail/trunk/setup.py $
-# $Id: setup.py 1580 2014-07-10 18:47:46Z jemian $
-########### SVN repository information ###################
