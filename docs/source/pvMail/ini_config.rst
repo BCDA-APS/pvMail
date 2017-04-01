@@ -20,8 +20,8 @@ as selected by the :attr:`os.name` value, as shown in this table:
 ===============  =======================================
 :attr:`os.name`  path
 ===============  =======================================
-*posix*          *$HOST/.pvMail/pvMail.ini*
-*nt*             *%APPDATA%\\\\pvMail\\\\pvMail.ini*
+*posix*          ``*$HOST/.pvMail/pvMail.ini*``
+*nt*             ``*%APPDATA%\\\\pvMail\\\\pvMail.ini*``
 ===============  =======================================
 
 The user can override this path by defining the 

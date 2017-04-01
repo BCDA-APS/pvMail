@@ -12,14 +12,14 @@ There are now several parts to the PvMail support package.
    single: pvMail_mail_config_file (executable)
    single: pvMail_mail_test (executable)
 
-==========================  ==========================  =============================================
-command                     section                     description
-==========================  ==========================  =============================================
-`pvMail -g`                 :ref:`GUI`                  runs the graphical user interface
-`pvMail`                    :ref:`cli`                  runs the command line interface
-`pvMail_mail_config_file`   :ref:`ini_config`           prints the name of the configuration file
-`pvMail_mail_test`          :ref:`mailer`               tests the emailer and configuration file
-==========================  ==========================  =============================================
+============================  ==========================  =============================================
+command                       section                     description
+============================  ==========================  =============================================
+``pvMail -g``                 :ref:`GUI`                  runs the graphical user interface
+``pvMail``                    :ref:`cli`                  runs the command line interface
+``pvMail_mail_config_file``   :ref:`ini_config`           prints the name of the configuration file
+``pvMail_mail_test``          :ref:`mailer`               tests the emailer and configuration file
+============================  ==========================  =============================================
 
 One-time steps
 **************
