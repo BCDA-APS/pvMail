@@ -9,7 +9,7 @@
 Change History
 ##############
 
-:3.2.7: 
+:3.2.8: 
 
     * `#15 <https://github.com/prjemian/pvMail/issues/14>`_
       [bcdaqwidgets](https://pypi.python.org/pypi/PvMail) now on PyPI
