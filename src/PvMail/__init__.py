@@ -29,10 +29,10 @@ __license__ += " (see LICENSE file for details)"
 
 # create & install console_scripts in <python>/bin
 __console_scripts__ = [
-                       'pvMail = PvMail.cli:main', 
-                       'pvMail_mail_test = PvMail.mailer:main', 
-                       'pvMail_mail_config_file = PvMail.ini_config:main', 
-                       ]
+    'pvMail = PvMail.cli:main', 
+    'pvMail_mail_test = PvMail.mailer:main', 
+    'pvMail_mail_config_file = PvMail.ini_config:main', 
+]
 
 
 from ._version import get_versions

@@ -35,7 +35,7 @@ PvMail source code documentation
 .. toctree::
    :maxdepth: 4
 
-   pvMail
+   cli
    uic_gui
    ini_config
    mailer

@@ -6,7 +6,7 @@ Contents
    :maxdepth: 4
    
    overview
-   cli
+   command_line
    gui
    test_database
    pvMail/modules

@@ -7,7 +7,7 @@ unit tests for the spec module
 #-----------------------------------------------------------------------------
 # :author:    Pete R. Jemian
 # :email:     prjemian@gmail.com
-# :copyright: (c) 2014-2015w, Pete R. Jemian
+# :copyright: (c) 2014-2017, Pete R. Jemian
 #
 # Distributed under the terms of the Creative Commons Attribution 4.0 International Public License.
 #
@@ -19,7 +19,7 @@ import logging
 import time
 import unittest
 
-import pvMail
+import cli
 
 
 class Test(unittest.TestCase):
@@ -28,9 +28,9 @@ class Test(unittest.TestCase):
         pass
 
     def test_sendmail(self):
-        logging.basicConfig(filename=pvMail.LOG_FILE,level=logging.INFO)
-        pvMail.logger("startup")
-        pvm = pvMail.PvMail()
+        logging.basicConfig(filename=cli.LOG_FILE,level=logging.INFO)
+        cli.logger("startup")
+        pvm = cli.PvMail()
         pvm.recipients = ['prjemian@gmail.com']
         pvm.triggerPV = "pvMail:trigger"
         pvm.messagePV = "pvMail:message"
@@ -41,7 +41,7 @@ class Test(unittest.TestCase):
         while time.time() < end_time:
             if time.time() > report_time:
                 report_time = time.time() + 5.0
-                pvMail.logger("time remaining: %.1f seconds ..." % (end_time - time.time()))
+                cli.logger("time remaining: %.1f seconds ..." % (end_time - time.time()))
             time.sleep(retry_interval_s)
         pvm.do_stop()
 
