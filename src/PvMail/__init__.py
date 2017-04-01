@@ -44,7 +44,7 @@ __full_author_list__ = ["Pete Jemian", "Kurt Goetze"]
 __institution__ = "Advanced Photon Source, Argonne National Laboratory"
 __author_email__= "jemian@anl.gov"
 __url__ = "http://PvMail.readthedocs.org"
-__license__ = "(c) 2009-2014, UChicago Argonne, LLC"
+__license__ = "(c) 2009-2017, UChicago Argonne, LLC"
 __license__ += " (see LICENSE file for details)"
 
 # create & install console_scripts in <python>/bin
