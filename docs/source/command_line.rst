@@ -146,7 +146,7 @@ or the 32-bit version::
 	/APSshare/epd/rh5-x86/bin/pvMail -h
 
 ..	note::
-	Support for both RHEL5 and RHEL6 use the same Enthought Python Distribution.
+	Support at APS for both RHEL5 and RHEL6 use the same Enthought Python Distribution.
 
 
 

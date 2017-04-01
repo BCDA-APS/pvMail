@@ -7,7 +7,7 @@ pvMail: just the GUI
 
 Run the Graphical User Interface for PvMail using PyQt4 from a .ui file with the uic subpackage. 
 
-Copyright (c) 2014-2015, UChicago Argonne, LLC.  See LICENSE file.
+Copyright (c) 2014-2017, UChicago Argonne, LLC.  See LICENSE file.
 '''
 
 
@@ -18,16 +18,17 @@ import datetime
 import os
 import sys
 
-import PvMail
-import pvMail
+import utils
+import cli
 import ini_config
 import bcdaqwidgets
+import __init__
 
 
 WINDOW_TITLE = 'pvMail'
 RESOURCE_PATH = 'resources'
-MAIN_UI_FILE = PvMail.get_pkg_file_path(os.path.join(RESOURCE_PATH, 'gui.ui'))
-ABOUT_UI_FILE = PvMail.get_pkg_file_path(os.path.join(RESOURCE_PATH, 'about.ui'))
+MAIN_UI_FILE = utils.get_pkg_file_path(os.path.join(RESOURCE_PATH, 'gui.ui'))
+ABOUT_UI_FILE = utils.get_pkg_file_path(os.path.join(RESOURCE_PATH, 'about.ui'))
 COLOR_ON = 'lightgreen'
 COLOR_OFF = 'lightred'
 COLOR_DEFAULT = '#eee'
@@ -49,7 +50,7 @@ class PvMail_GUI(object):
     
     def __init__(self, ui_file=None, logger=None, logfile=None, config=None, *args, **kw):
         '''make this class callable from pvMail application'''
-        self.ui = uic.loadUi(PvMail.get_pkg_file_path(ui_file or MAIN_UI_FILE))
+        self.ui = uic.loadUi(utils.get_pkg_file_path(ui_file or MAIN_UI_FILE))
         # PySide way: 
         # http://stackoverflow.com/questions/7144313/loading-qtdesigners-ui-files-in-pyside/18293756#18293756
 
@@ -110,21 +111,21 @@ class PvMail_GUI(object):
         # which is not always the production release version.
         # https://raw.githubusercontent.com/prjemian/pvMail/master/src/PvMail/VERSION
         #
-        about = uic.loadUi(PvMail.get_pkg_file_path(ABOUT_UI_FILE))
-        about.title.setText(PvMail.__project_name__ + '  ' + PvMail.__version__)
-        about.description.setText(PvMail.__description__)
-        about.authors.setText(', '.join(PvMail.__full_author_list__))
-        about.copyright.setText(PvMail.__license__)
+        about = uic.loadUi(utils.get_pkg_file_path(ABOUT_UI_FILE))
+        about.title.setText(__init__.__project_name__ + '  ' + __init__.__version__)
+        about.description.setText(__init__.__description__)
+        about.authors.setText(', '.join(__init__.__full_author_list__))
+        about.copyright.setText(__init__.__license__)
         
-        pb = QtGui.QPushButton(PvMail.__url__, clicked=self.doUrl)
+        pb = QtGui.QPushButton(__init__.__url__, clicked=self.doUrl)
         about.verticalLayout_main.addWidget(pb)
         
         # TODO: provide control to show the license
 
         # feed the status message
         msg = 'About: '
-        msg += PvMail.__project_name__ 
-        msg += ', v' + PvMail.__version__
+        msg += __init__.__project_name__ 
+        msg += ', v' + __init__.__version__
         msg += ', PID=' + str(os.getpid())
         self.setStatus(msg)
         about.show()
@@ -133,7 +134,7 @@ class PvMail_GUI(object):
     def doUrl(self):
         self.setStatus('opening documentation URL in default browser')
         service = QtGui.QDesktopServices()
-        url = QtCore.QUrl(PvMail.__url__)
+        url = QtCore.QUrl(__init__.__url__)
         service.openUrl(url)
 
     def doClose(self, *args, **kw):
@@ -145,7 +146,7 @@ class PvMail_GUI(object):
         if self.watching:
             self.setStatus('already watching')
         else:
-            self.pvmail = pvMail.PvMail(self.config)
+            self.pvmail = cli.PvMail(self.config)
             
             # acquire information, validate it first
             msg_pv = str(self.getMessagePV())
@@ -163,7 +164,7 @@ class PvMail_GUI(object):
 
             # report connection failure and abort
             for key, pv in dict(message=msg_pv, trigger=trig_pv).items():
-                tc = self.pvmail.testConnect(pv, timeout=pvMail.CONNECTION_TEST_TIMEOUT)
+                tc = self.pvmail.testConnect(pv, timeout=cli.CONNECTION_TEST_TIMEOUT)
                 if tc is False:
                     msg = "could not connect to %s PV: %s" % (key, pv)
                     self.setStatus(msg)
@@ -233,13 +234,13 @@ class PvMail_GUI(object):
         import mailer
         self.setStatus('requested a test email')
         subject = 'PvMail mailer test message: ' + self.config.mail_transfer_agent
-        message = 'This is a test of the PvMail mailer, v' + PvMail.__version__
+        message = 'This is a test of the PvMail mailer, v' + __init__.__version__
         msg_pv = str(self.getMessagePV())
         if self.watching:
             message += '\n\n' + self.pvmail.message
         message += '\n\n triggerPV = ' + str(self.getTriggerPV())
         message += '\n messagePV = ' + msg_pv
-        message += '\n\n For more help, see: ' + PvMail.__url__
+        message += '\n\n For more help, see: ' + __init__.__url__
         recipients = self.getEmailList_Stripped()
         mailer.send_message(subject, message, recipients, self.config)
         self.setStatus('sent a test email')
@@ -397,4 +398,10 @@ if __name__ == '__main__':
     import logging
     logfile='pvMail_gui.log'
     logging.basicConfig(filename=logfile, level=logging.INFO)
-    main('pvMail:trigger', 'pvMail:message', ['joeuser@company.tld',], logger=pvMail.logger, logfile=logfile)
+    main(
+        'pvMail:trigger', 
+        'pvMail:message', 
+        ['joeuser@company.tld',], 
+        logger=cli.logger, 
+        logfile=logfile
+    )

@@ -3,7 +3,7 @@
 '''
 send a message by email to one or more recipients (by SMTP or sendmail)
 
-Copyright (c) 2014-2015, UChicago Argonne, LLC.  See LICENSE file.
+Copyright (c) 2014-2017, UChicago Argonne, LLC.  See LICENSE file.
 '''
 
 
@@ -218,9 +218,9 @@ def main():
     '''
     import argparse
     import ini_config
-    import PvMail
+    import __init__
     
-    doc = 'test the email sender from PvMail ' + PvMail.__version__
+    doc = 'test the email sender from PvMail ' + __init__.__version__
     parser = argparse.ArgumentParser(description=doc)
     msg = 'email address(es), whitespace-separated if more than one'
     parser.add_argument('recipient', action='store', nargs='+',
@@ -238,8 +238,8 @@ def main():
     print "mail transfer agent: " + cfg.mail_transfer_agent
 
     subject = 'PvMail mailer test message: ' + cfg.mail_transfer_agent
-    message = 'This is a test of the PvMail mailer, v' + PvMail.__version__
-    message += '\nFor more help, see: ' + PvMail.__url__
+    message = 'This is a test of the PvMail mailer, v' + __init__.__version__
+    message += '\nFor more help, see: ' + __init__.__url__
     
     send_message(subject, message, recipients, cfg)
     
