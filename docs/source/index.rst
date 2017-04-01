@@ -10,7 +10,7 @@
    
    [user@host,518,~]$ pvMail
 
-PvMail was built to watch (monitor) an EPICS PV and send an email
+PvMail watches (monitor) an EPICS PV and send an email
 when the value of that PV changes from 0 to 1.  
 
 ..	sidebar:: IMPORTANT:
