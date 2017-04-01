@@ -39,4 +39,3 @@ PvMail source code documentation
    uic_gui
    ini_config
    mailer
-   bcdaqwidgets

@@ -11,3 +11,4 @@ dependencies:
     - versioneer
     - PyEpics
     - sphinx_rtd_theme
+    - bcdaqwidgets

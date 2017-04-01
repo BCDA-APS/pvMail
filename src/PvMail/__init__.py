@@ -15,7 +15,7 @@ __classifiers__ = [
    ]
 __keywords__ = ['EPICS', 'PV', 'email', 'monitor']
 #__install_requires__ = ['pyepics>=3.2.3', 'PyQt4>=4.8.5', ]
-__install_requires__ = ['pyepics>=3.2.3', ]
+__install_requires__ = ['pyepics>=3.2.3', 'bcdaqwidgets', ]
 
 __project_name__ = "PvMail"
 __description__ = "Watch an EPICS PV. Send email when it changes from 0 to 1."
@@ -23,7 +23,7 @@ __author__ = "Pete Jemian"
 __full_author_list__ = ["Pete Jemian", "Kurt Goetze"]
 __institution__ = "Advanced Photon Source, Argonne National Laboratory"
 __author_email__= "jemian@anl.gov"
-__url__ = "http://PvMail.readthedocs.org"
+__url__ = "http://PvMail.readthedocs.io"
 __license__ = "(c) 2009-2017, UChicago Argonne, LLC"
 __license__ += " (see LICENSE file for details)"
 

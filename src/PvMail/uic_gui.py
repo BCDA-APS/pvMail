@@ -17,11 +17,11 @@ pyqtSignal = QtCore.pyqtSignal
 import datetime
 import os
 import sys
+from bcdaqwidgets import bcdaqwidgets
 
 import utils
 import cli
 import ini_config
-import bcdaqwidgets
 import __init__
 
 
