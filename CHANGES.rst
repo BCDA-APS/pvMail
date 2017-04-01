@@ -9,6 +9,15 @@
 Change History
 ##############
 
+:3.2.7: 
+
+    * `#15 <https://github.com/prjemian/pvMail/issues/14>`_
+      [bcdaqwidgets](https://pypi.python.org/pypi/PvMail) now on PyPI
+    * `#14 <https://github.com/prjemian/pvMail/issues/14>`_
+      pick up GitHub tag versions with [versioneer](https://github.com/warner/python-versioneer)
+    * `#12 <https://github.com/prjemian/pvMail/issues/12>`_
+      build for RTD in a conda environment
+
 :v3.2.6 (2015.04.13): bcdaqwidgets has replaced PySide with PyQt4, do that here
 :v3.2.5 (2014.12.05): make URL be an active (QPushButton) link in About box
 :v3.2.4 (2014-11-24): Log status updates from :class:`pvMail.PvMail()` in the GUI
