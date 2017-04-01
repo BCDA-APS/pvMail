@@ -49,10 +49,10 @@ is available from:
 
 .. _TODO:
 
-TODO items for a future release
-###############################
+TODO items for future releases
+##############################
 
-#. GUI: manage multiple pvMail.PvMail() objects (starting, stopping, detaching, ...)
+:see: https://github.com/prjemian/pvMail/issues
 
 
 Authors

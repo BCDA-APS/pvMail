@@ -19,6 +19,7 @@ import traceback
 
 import ini_config
 import mailer
+import __init__
 
 
 LOG_FILE = "pvMail-%d.log" % os.getpid()
@@ -277,9 +278,7 @@ def gui(results, config=None):
 
 def main():
     '''parse command-line arguments and choose which interface to use'''
-    vpath = os.path.abspath(os.path.dirname(__file__))
-    vfile = os.path.join(vpath, 'VERSION')
-    version = open(vfile).read().strip()
+    version = __init__.__version__
 
     doc = 'v' + version + ', ' + __doc__.strip()
     parser = argparse.ArgumentParser(description=doc)
