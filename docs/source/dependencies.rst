@@ -11,8 +11,6 @@ available in Python 2.7.  Additionally, these packages were added:
 *BcdaQWidgets* (EPICS-aware Qt widgets) 
    http://BcdaQWidgets.readthedocs.io
 
-Additionally, this program uses: 
-
 .. index:: PyEpics
 
 *PyEpics* (EPICS interface) 
