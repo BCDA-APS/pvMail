@@ -3,8 +3,13 @@ Dependencies
 ============
 
 This software was built with various standard Python packages
-available in Python 2.7.  
+available in Python 2.7.  Additionally, these packages were added:
 
+
+.. index:: BcdaQWidgets
+
+*BcdaQWidgets* (EPICS-aware Qt widgets) 
+   http://BcdaQWidgets.readthedocs.io
 
 Additionally, this program uses: 
 
@@ -16,11 +21,11 @@ Additionally, this program uses:
 .. index:: PyQt4
 
 *PyQt4* (Qt binding) 
-	https://wiki.python.org/moin/PyQt
+   https://wiki.python.org/moin/PyQt
 
-Both of these are available for 
-`easy_install <http://packages.python.org/distribute/easy_install.html>`_ 
-from the Python Package Index (http://pypi.python.org/pypi).
+All are available for installation 
+from the Python Package Index (http://pypi.python.org/pypi)
+using `pip <https://pip.pypa.io>`_.
 
 Installation
 ************
