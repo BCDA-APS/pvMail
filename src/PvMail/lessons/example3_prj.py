@@ -5,7 +5,7 @@ MVC demo
 '''
 
 
-from PyQt4 import QtCore, QtGui, uic
+from PyQt4 import QtCore, QtGui
 pyqtSignal = QtCore.pyqtSignal
 import datetime
 

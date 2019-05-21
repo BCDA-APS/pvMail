@@ -70,7 +70,7 @@ def sendMail_sendmail(subject, message, recipients, sendmail_cfg, sender = None,
         '''
         cmd = '''echo %s | %s''' % (mail_message, mail_command)
         raise MailerError('code needs improvement here')
-        # TODO: return mail_command, cmd
+        return mail_command, cmd    # lgtm [py/unreachable-statement]
     
     cmd = None
     for email_program, handler in (
@@ -174,21 +174,21 @@ def sendMail_SMTP(subject, message, recipients, smtp_cfg, sender = None, logger 
     smtpserver = smtplib.SMTP(timeout=SMTP_TIMEOUT)
     # smtpserver.set_debuglevel(1)
     if port is None:
-        _r = smtpserver.connect(host)
+        smtpserver.connect(host)
     else:
-        _r = smtpserver.connect(host, int(port))
+        smtpserver.connect(host, int(port))
     if logger is not None:
         logger('SMTP connected')
     
-    _r = smtpserver.ehlo()
+    smtpserver.ehlo()
     if smtp_cfg.get('connection_security', None) == 'STARTTLS':
-        _r = smtpserver.starttls()
-        _r = smtpserver.ehlo()
+        smtpserver.starttls()
+        smtpserver.ehlo()
         if logger is not None:
             logger('SMTP STARTTLS')
     
     if password is not None:
-        _r = smtpserver.login(username, password)
+        smtpserver.login(username, password)
         if logger is not None:
             logger('SMTP authenticated')
     
