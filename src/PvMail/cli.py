@@ -15,7 +15,6 @@ import socket
 import sys
 import threading
 import time
-import traceback
 
 import ini_config
 import mailer
@@ -30,7 +29,7 @@ CONNECTION_TEST_TIMEOUT = 0.5
 gui_object = None
 
 
-class PvMail(threading.Thread):
+class PvMail(threading.Thread):     # lgtm [py/missing-call-to-init] 
     '''
     Watch an EPICS PV (using PyEpics interface) and send an email
     when the PV changes from 0 to 1.
