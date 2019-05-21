@@ -70,7 +70,7 @@ def sendMail_sendmail(subject, message, recipients, sendmail_cfg, sender = None,
         '''
         cmd = '''echo %s | %s''' % (mail_message, mail_command)
         raise MailerError('code needs improvement here')
-        return mail_command, cmd
+        # TODO: return mail_command, cmd
     
     cmd = None
     for email_program, handler in (

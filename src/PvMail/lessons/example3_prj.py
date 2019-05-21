@@ -181,7 +181,7 @@ def main(*args, **kw):
     mw = QtGui.QMainWindow(None)
     mw.resize(600, 400)
 
-    data_array = [['row ' + str(_+1), _+.2, _+.3, _+.4, _+.5] for _ in range(3)]
+    # data_array = [['row ' + str(_+1), _+.2, _+.3, _+.4, _+.5] for _ in range(3)]
     data_array = None
     
     w = QtGui.QWidget(mw)

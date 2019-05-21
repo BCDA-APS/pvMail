@@ -196,9 +196,9 @@ def _send(emailer, pvm, agent_db, reporter=None, logger=None):
     msg += 'user: %s\n' % username
     msg += 'host: %s\n' % socket.gethostname()
     msg += 'date: %s (UNIX, not PV)\n' % datetime.datetime.now()
-    try:
+    if hasattr(pvm, "ca_timestamp"):
         msg += 'CA_timestamp: %d\n' % pvm.ca_timestamp
-    except:
+    else:
         msg += 'CA_timestamp: not available\n'
     msg += 'program: %s\n' % sys.argv[0]
     msg += 'PID: %d\n' % os.getpid()
@@ -253,7 +253,7 @@ def cli(results, config=None):
             SendMessage(pvm, config)
             logger('trigger received, sending email')
         time.sleep(sleep_duration)
-    pvm.do_stop()        # this will never be called
+    # pvm.do_stop()        # this will never be called
 
 
 def gui(results, config=None):
