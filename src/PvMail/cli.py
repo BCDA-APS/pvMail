@@ -15,7 +15,6 @@ import socket
 import sys
 import threading
 import time
-import traceback
 
 import ini_config
 import mailer
@@ -30,7 +29,7 @@ CONNECTION_TEST_TIMEOUT = 0.5
 gui_object = None
 
 
-class PvMail(threading.Thread):
+class PvMail(threading.Thread):     # lgtm [py/missing-call-to-init] 
     '''
     Watch an EPICS PV (using PyEpics interface) and send an email
     when the PV changes from 0 to 1.
@@ -197,9 +196,9 @@ def _send(emailer, pvm, agent_db, reporter=None, logger=None):
     msg += 'user: %s\n' % username
     msg += 'host: %s\n' % socket.gethostname()
     msg += 'date: %s (UNIX, not PV)\n' % datetime.datetime.now()
-    try:
+    if hasattr(pvm, "ca_timestamp"):
         msg += 'CA_timestamp: %d\n' % pvm.ca_timestamp
-    except:
+    else:
         msg += 'CA_timestamp: not available\n'
     msg += 'program: %s\n' % sys.argv[0]
     msg += 'PID: %d\n' % os.getpid()
@@ -254,7 +253,7 @@ def cli(results, config=None):
             SendMessage(pvm, config)
             logger('trigger received, sending email')
         time.sleep(sleep_duration)
-    pvm.do_stop()        # this will never be called
+    # pvm.do_stop()        # this will never be called
 
 
 def gui(results, config=None):

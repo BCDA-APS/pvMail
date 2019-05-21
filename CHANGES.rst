@@ -9,7 +9,16 @@
 Change History
 ##############
 
-:3.2.8: 
+:3.3.0: *planned: 2019-09-01*
+
+	* milestone: https://github.com/prjemian/pvMail/milestone/1
+
+:3.2.9: *-tba-*
+
+    * `#20 <https://github.com/prjemian/pvMail/issues/20>`_
+      apply recommendations from LGTM.com automated code review
+
+:3.2.8: *2017-04-01*
 
     * `#15 <https://github.com/prjemian/pvMail/issues/14>`_
       [bcdaqwidgets](https://pypi.python.org/pypi/PvMail) now on PyPI
