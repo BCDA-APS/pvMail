@@ -68,9 +68,9 @@ def sendMail_sendmail(subject, message, recipients, sendmail_cfg, sender = None,
         '''
         cat /tmp/message.txt | mail jemian@anl.gov
         '''
-        cmd = '''echo %s | %s''' % (mail_message, mail_command)
+        # cmd = '''echo %s | %s''' % (mail_message, mail_command)
+        # return mail_command, cmd    # lgtm [py/unreachable-statement]
         raise MailerError('code needs improvement here')
-        return mail_command, cmd    # lgtm [py/unreachable-statement]
     
     cmd = None
     for email_program, handler in (
