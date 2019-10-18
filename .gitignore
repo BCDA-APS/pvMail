@@ -102,7 +102,17 @@ coverage.xml
 # Mr Developer #
 ################
 .mr.developer.cfg
+
+# eclipse #
+###########
 #.project
 #.pydevproject
+
+# sublime text editor #
+#######################
 *.sublime-project
 *.sublime-workspace
+
+# Microsoft VS Code #
+#####################
+.vscode/
