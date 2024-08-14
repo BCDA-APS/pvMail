@@ -3,7 +3,9 @@
 '''PV controls to test the GUI: uses default database (test.db)'''
 
 import sys
-from PyQt4 import QtGui, uic
+
+from PyQt4 import QtGui
+from PyQt4 import uic
 
 
 class DemoView(object):

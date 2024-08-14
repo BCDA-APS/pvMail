@@ -8,7 +8,6 @@
 
 import argparse
 import datetime
-import epics
 import logging
 import os
 import socket
@@ -16,10 +15,10 @@ import sys
 import threading
 import time
 
+import __init__
+import epics
 import ini_config
 import mailer
-import __init__
-
 
 LOG_FILE = "pvMail-%d.log" % os.getpid()
 RETRY_INTERVAL_S = 0.2

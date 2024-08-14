@@ -8,12 +8,14 @@ http://www.gulon.co.uk/2013/01/30/
 # The following tells SIP (the system that binds Qt's C++ to Python)
 # to return Python native types rather than QString and QVariant
 import sip
+
 sip.setapi('QString', 2)
 sip.setapi('QVariant', 2)
  
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
- 
+
+
 class TableModel(QAbstractTableModel):
     """
     A simple 10x10 table model to demonstrate the button delegate
@@ -76,7 +78,8 @@ class TableView(QTableView):
         print "Cell Button Clicked", self.sender().text()
  
 if __name__=="__main__":
-    from sys import argv, exit
+    from sys import argv
+    from sys import exit
  
     class Widget(QWidget):
         """

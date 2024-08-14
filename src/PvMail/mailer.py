@@ -10,7 +10,6 @@ Copyright (c) 2014-2017, UChicago Argonne, LLC.  See LICENSE file.
 import os
 import sys
 
-
 SMTP_TIMEOUT = 10
 
 
@@ -137,8 +136,8 @@ def sendMail_SMTP(subject, message, recipients, smtp_cfg, sender = None, logger 
         >>> sendMail_SMTP(subject, message, recipients, smtp_cfg)
     
     '''
-    import smtplib
     import email
+    import smtplib
     
     host = smtp_cfg.get('server', None)
     if host is None:
@@ -217,8 +216,9 @@ def main():
     user on-demand test of the mailer module and configuration
     '''
     import argparse
-    import ini_config
+
     import __init__
+    import ini_config
     
     doc = 'test the email sender from PvMail ' + __init__.__version__
     parser = argparse.ArgumentParser(description=doc)

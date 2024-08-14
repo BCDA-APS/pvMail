@@ -2,9 +2,12 @@
 
 '''PV controls to test the GUI: uses default database (test.db)'''
 
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtCore
+from PyQt4 import QtGui
+
 pyqtSignal = QtCore.pyqtSignal
 import sys
+
 import bcdaqwidgets
 
 

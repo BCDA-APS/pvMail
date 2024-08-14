@@ -3,9 +3,10 @@
 http://www.saltycrane.com/blog/2007/06/pyqt-42-qabstracttablemodelqtableview/
 '''
 
+import sys
+
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-import sys
 
 my_array = [['00','01','02'],
             ['10','11','12'],

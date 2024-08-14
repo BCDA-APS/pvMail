@@ -12,11 +12,11 @@ To identify the configuration file (and create if it does not exist already)::
 
 '''
 
-import ConfigParser
 import datetime
 import os
 import sys
 
+import ConfigParser
 
 APPLICATION = 'pvMail'
 INI_FILE = 'pvMail.ini'

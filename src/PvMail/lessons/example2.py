@@ -4,7 +4,10 @@ http://www.saltycrane.com/blog/2008/01/pyqt-how-to-pass-arguments-while/
 '''
 
 import sys
-from PyQt4 import QtCore, QtGui
+
+from PyQt4 import QtCore
+from PyQt4 import QtGui
+
 
 #################################################################### 
 class MyWindow(QtGui.QWidget): 

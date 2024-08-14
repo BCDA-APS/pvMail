@@ -11,19 +11,21 @@ Copyright (c) 2014-2017, UChicago Argonne, LLC.  See LICENSE file.
 '''
 
 
-from PyQt4 import QtCore, QtGui, uic
+from PyQt4 import QtCore
+from PyQt4 import QtGui
+from PyQt4 import uic
+
 pyqtSignal = QtCore.pyqtSignal
 
 import datetime
 import os
 import sys
-from bcdaqwidgets import bcdaqwidgets
 
-import utils
+import __init__
 import cli
 import ini_config
-import __init__
-
+import utils
+from bcdaqwidgets import bcdaqwidgets
 
 WINDOW_TITLE = 'pvMail'
 RESOURCE_PATH = 'resources'

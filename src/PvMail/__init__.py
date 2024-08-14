@@ -1,6 +1,5 @@
 import os
 
-
 __classifiers__ = [
      'Development Status :: 5 - Production/Stable',
      'Environment :: Console',
@@ -36,5 +35,6 @@ __console_scripts__ = [
 
 
 from ._version import get_versions
+
 __version__ = get_versions()['version']
 del get_versions
