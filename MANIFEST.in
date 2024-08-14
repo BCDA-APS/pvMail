@@ -1,4 +1,3 @@
 include README.rst
+include src/PvMail/LICENSE.txt
 include src/PvMail/resources/*
-include versioneer.py
-include src/PvMail/_version.py

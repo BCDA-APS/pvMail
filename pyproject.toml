@@ -1,0 +1,64 @@
+[build-system]
+requires = [
+    "pydm",
+    "requests",
+    "setuptools_scm[toml]>=8",
+    "setuptools>=64.0",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "PvMail"
+description = "Watch an EPICS PV. Send email when it changes from 0 to 1."
+authors = [
+  { name="Pete Jemian", email="jemian@anl.gov" },
+  { name="Kurt Goetze", email="goetze@anl.gov" },
+]
+dynamic = ["version"]
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["NeXus", "HDF5"]
+# https://packaging.python.org/en/latest/specifications/declaring-project-metadata/?highlight=license
+license = {file = "src/PvMail/LICENSE.txt"}
+# https://pypi.org/classifiers/
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "License :: Freely Distributable",
+    "License :: Public Domain",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Utilities",
+]
+
+[tool.setuptools_scm]
+
+[project.urls]
+"Homepage" = "https://prjemian.github.io/pvmail/"
+"Source" = "https://github.com/prjemian/pvmail"
+"Bug Tracker" = "https://github.com/prjemian/pvmail/issues"
+
+[project.scripts]
+pvMail = "PvMail.cli:main"
+pvMail_mail_test = "PvMail.mailer:main"
+pvMail_mail_config_file = "PvMail.ini_config:main"
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E501"]
+
+[tool.isort]
+force_single_line = true
+# multi_line_output = 1
+line_length = 88
+include_trailing_comma = true
+
+[tool.black]
+line_length = 88

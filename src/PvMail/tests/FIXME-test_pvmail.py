@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 unit tests for the spec module
 """
@@ -17,9 +15,9 @@ unit tests for the spec module
 
 import logging
 import time
-import unittest
+import unittest  # TODO: refactor to pytest
 
-import cli
+from PvMail import cli
 
 
 class Test(unittest.TestCase):

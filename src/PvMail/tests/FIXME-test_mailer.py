@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 unit tests for the spec module
 """
@@ -18,10 +16,10 @@ unit tests for the spec module
 import datetime
 import socket
 import sys
-import unittest
+import unittest  # TODO: refactor to pytest
 
-import ini_config
-import mailer
+from PvMail import ini_config
+from PvMail import mailer
 
 
 class Test(unittest.TestCase):

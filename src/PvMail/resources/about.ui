@@ -90,7 +90,7 @@
           </font>
          </property>
          <property name="text">
-          <string>(c) 2009-2014, UChicago Argonne, LLC, (see LICENSE file for details)</string>
+          <string>(c) 2009-2024, UChicago Argonne, LLC, (see LICENSE file for details)</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>

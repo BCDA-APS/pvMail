@@ -1,36 +1,34 @@
-#!/usr/bin/env python
-
 """
 ===================================
 pvMail: just the GUI
 ===================================
 
-Run the Graphical User Interface for PvMail using PyQt4 from a .ui file with the uic subpackage. 
-
-Copyright (c) 2014-2017, UChicago Argonne, LLC.  See LICENSE file.
+Run the Graphical User Interface for PvMail using PyQt4 from a .ui file with the uic subpackage.
 """
 
-
-from PyQt4 import QtCore
-from PyQt4 import QtGui
-from PyQt4 import uic
-
-pyqtSignal = QtCore.pyqtSignal
+# Copyright (c) 2009-2024, UChicago Argonne, LLC.  See LICENSE file.
 
 import datetime
 import os
+import pathlib
 import sys
 
-import __init__
-import cli
-import ini_config
-import utils
-from bcdaqwidgets import bcdaqwidgets
+from bcdaqwidgets import bcdaqwidgets  # TODO: refactor to pydm
+from PyQt4 import QtCore  # TODO: refactor to PyQt5
+from PyQt4 import QtGui
+from PyQt4 import uic
+
+from . import __init__
+from . import cli
+from . import ini_config
+from . import utils
+
+pyqtSignal = QtCore.pyqtSignal
 
 WINDOW_TITLE = "pvMail"
-RESOURCE_PATH = "resources"
-MAIN_UI_FILE = utils.get_pkg_file_path(os.path.join(RESOURCE_PATH, "gui.ui"))
-ABOUT_UI_FILE = utils.get_pkg_file_path(os.path.join(RESOURCE_PATH, "about.ui"))
+RESOURCE_PATH = pathlib.Path(__file__).parent / "resources"
+MAIN_UI_FILE = utils.get_pkg_file_path(RESOURCE_PATH / "gui.ui")
+ABOUT_UI_FILE = utils.get_pkg_file_path(RESOURCE_PATH / "about.ui")
 COLOR_ON = "lightgreen"
 COLOR_OFF = "lightred"
 COLOR_DEFAULT = "#eee"
@@ -392,7 +390,9 @@ def main(triggerPV, messagePV, recipients, logger=None, logfile=None, config=Non
     gui = PvMail_GUI(logger=logger, logfile=logfile, config=config)
 
     gui.setStatus("PID: " + str(os.getpid()))
-    if logfile is not None and os.path.exists(logfile):
+    if logfile is not None:
+        logfile = pathlib.Path(logfile)
+    if logfile is not None and logfile.exists():
         gui.ui.history.append(open(logfile, "r").read())
         gui.setStatus("log file: " + logfile)
     gui.setStatus("email configuration file: " + config.ini_file)

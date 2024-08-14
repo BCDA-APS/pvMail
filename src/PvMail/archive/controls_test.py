@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """PV controls to test the GUI: uses default database (test.db)"""
 
 from PyQt4 import QtCore

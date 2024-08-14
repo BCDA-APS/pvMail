@@ -1,11 +1,8 @@
-#!/usr/bin/env python
-
 """
-send a message by email to one or more recipients (by SMTP or sendmail)
-
-Copyright (c) 2014-2017, UChicago Argonne, LLC.  See LICENSE file.
+Send a message by email to one or more recipients (by SMTP or sendmail).
 """
 
+# Copyright (c) 2009-2024, UChicago Argonne, LLC.  See LICENSE file.
 
 import os
 import sys
@@ -21,7 +18,7 @@ def sendMail_sendmail(
     subject, message, recipients, sendmail_cfg, sender=None, logger=None
 ):
     """
-    send an email message using sendmail (linux only)
+    Send an email message using sendmail (linux only).
 
     :param str subject: short text for email subject
     :param str message: full text of email body
@@ -45,7 +42,7 @@ def sendMail_sendmail(
     """
 
     if sys.platform not in ("linux2"):
-        raise MailerError("Cannot use this method on sys.platform=" + sys.platform)
+        raise MailerError(f"Cannot use this method on {sys.platform=!r}")
 
     sender = sender or sendmail_cfg["user"]
     if isinstance(recipients, str):
@@ -67,15 +64,15 @@ def sendMail_sendmail(
         return mail_command, cmd
 
     def _mail_handler(email_program, from_addr, recipients, subject, message):
-        to_addr = str(" ".join(recipients))
-        mail_command = "%s %s" % (email_program, to_addr)
-        mail_message = "%s\n%s" % (subject, message)
-        # TODO: needs to do THIS
-        """
-        cat /tmp/message.txt | mail jemian@anl.gov
-        """
-        # cmd = '''echo %s | %s''' % (mail_message, mail_command)
-        # return mail_command, cmd    # lgtm [py/unreachable-statement]
+        # to_addr = str(" ".join(recipients))
+        # mail_command = "%s %s" % (email_program, to_addr)
+        # mail_message = "%s\n%s" % (subject, message)
+        # # TODO: needs to do THIS
+        # """
+        # cat /tmp/message.txt | mail jemian@anl.gov
+        # """
+        # # cmd = '''echo %s | %s''' % (mail_message, mail_command)
+        # # return mail_command, cmd    # lgtm [py/unreachable-statement]
         raise MailerError("code needs improvement here")
 
     cmd = None
@@ -220,14 +217,15 @@ def send_message(subject, message, recipients, config):
 
 def main():
     """
-    user on-demand test of the mailer module and configuration
+    User on-demand test of the mailer module and configuration.
     """
     import argparse
 
-    import __init__
-    import ini_config
+    from . import DOCS_URL
+    from . import __version__
+    from . import ini_config
 
-    doc = "test the email sender from PvMail " + __init__.__version__
+    doc = f"Test the email sender from PvMail {__version__}"
     parser = argparse.ArgumentParser(description=doc)
     msg = "email address(es), whitespace-separated if more than one"
     parser.add_argument("recipient", action="store", nargs="+", help=msg, default="")
@@ -243,8 +241,7 @@ def main():
     print("mail transfer agent: " + cfg.mail_transfer_agent)
 
     subject = "PvMail mailer test message: " + cfg.mail_transfer_agent
-    message = "This is a test of the PvMail mailer, v" + __init__.__version__
-    message += "\nFor more help, see: " + __init__.__url__
+    message = f"{doc}\nFor more help, see: {DOCS_URL}"
 
     send_message(subject, message, recipients, cfg)
 

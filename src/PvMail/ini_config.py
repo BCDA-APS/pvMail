@@ -1,9 +1,5 @@
-#!/usr/bin/env python
-
 """
-handle application configuration settings in a .ini file
-
-Copyright (c) 2014-2017, UChicago Argonne, LLC.  See LICENSE file.
+Handle application configuration settings in a .ini file.
 
 To identify the configuration file (and create if it does not exist already)::
 
@@ -12,11 +8,12 @@ To identify the configuration file (and create if it does not exist already)::
 
 """
 
+# Copyright (c) 2009-2024, UChicago Argonne, LLC.  See LICENSE file.
+
 import datetime
 import os
 import sys
-
-import ConfigParser
+from configparser import ConfigParser
 
 APPLICATION = "pvMail"
 INI_FILE = "pvMail.ini"
@@ -31,7 +28,6 @@ class NoConfigFile(Exception):
 
 
 class Config(object):
-
     def __init__(self):
         if "PVMAIL_INI_FILE" in os.environ:
             self.ini_file = os.path.abspath(os.environ["PVMAIL_INI_FILE"])
@@ -83,12 +79,11 @@ class Config(object):
         if not os.path.exists(self.ini_file):
             raise NoConfigFile(str(self.ini_file))
 
-        config = ConfigParser.ConfigParser()
+        config = ConfigParser()
         config.read(self.ini_file)
 
         self.mail_transfer_agent = config.get("mailer", "mail_transfer_agent")
 
-        # https://docs.python.org/2/library/configparser.html#ConfigParser.RawConfigParser
         for section in config.sections():
             if section not in ("header", "mailer"):
                 for option in config.options(section):
@@ -100,7 +95,7 @@ class Config(object):
         """
         (re)write the configuration file
         """
-        config = ConfigParser.ConfigParser()
+        config = ConfigParser()
         config.add_section("header")
         config.set("header", "application", "pvMail")
         config.set("header", "written", str(datetime.datetime.now()))
@@ -127,8 +122,4 @@ class Config(object):
 def main():
     con = Config()
     print(con.ini_file)
-    # print len(con.agent_db), ' configuration(s) described'
-
-
-if __name__ == "__main__":
-    main()
+    print(len(con.agent_db), " configuration(s) described")

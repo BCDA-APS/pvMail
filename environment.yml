@@ -1,14 +1,8 @@
 name: PvMail
+
 dependencies:
-  - h5py
-  - numpy
-  - python=2.7.*
-  - pyqt=4.*
+  - pydm
+  - pyepics
+  - pyqt =5
+  - python
   - requests
-  - sip
-  - sphinx
-  - pip:
-    - versioneer
-    - PyEpics
-    - sphinx_rtd_theme
-    - bcdaqwidgets

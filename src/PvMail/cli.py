@@ -1,10 +1,7 @@
-#!/usr/bin/env python
+"""Watch an EPICS PV. Send email when it changes from 0 to 1."""
 
-"""Watch an EPICS PV. Send email when it changes from 0 to 1"""
-
-# Copyright (c) 2014-2015, UChicago Argonne, LLC.  See LICENSE file.
+# Copyright (c) 2009-2024, UChicago Argonne, LLC.  See LICENSE file.
 # docs: http://PvMail.readthedocs.org
-
 
 import argparse
 import datetime
@@ -15,12 +12,13 @@ import sys
 import threading
 import time
 
-import __init__
 import epics
-import ini_config
-import mailer
 
-LOG_FILE = "pvMail-%d.log" % os.getpid()
+from . import __version__
+from . import ini_config
+from . import mailer
+
+LOG_FILE = f"pvMail-{os.getpid()}.log"
 RETRY_INTERVAL_S = 0.2
 CHECKPOINT_INTERVAL_S = 5 * 60.0
 CONNECTION_TEST_TIMEOUT = 0.5
@@ -28,10 +26,9 @@ CONNECTION_TEST_TIMEOUT = 0.5
 gui_object = None
 
 
-class PvMail(threading.Thread):  # lgtm [py/missing-call-to-init]
+class PvMail(threading.Thread):
     """
-    Watch an EPICS PV (using PyEpics interface) and send an email
-    when the PV changes from 0 to 1.
+    Watches an EPICS PV and sends email when value changes from 0 to 1.
     """
 
     def __init__(self, config=None):
@@ -275,9 +272,9 @@ def gui(results, config=None):
 
 def main():
     """parse command-line arguments and choose which interface to use"""
-    version = __init__.__version__
+    version = __version__
 
-    doc = "v" + version + ", " + __doc__.strip()
+    doc = f"v{version}, {__doc__.strip()}"
     parser = argparse.ArgumentParser(description=doc)
 
     # positional arguments
