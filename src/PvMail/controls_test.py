@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-'''PV controls to test the GUI: uses default database (test.db)'''
+"""PV controls to test the GUI: uses default database (test.db)"""
 
 from PyQt4 import QtCore
 from PyQt4 import QtGui
@@ -12,7 +12,7 @@ import bcdaqwidgets
 
 
 class DemoView(QtGui.QWidget):
-    '''Controls for the default pvMail test database.'''
+    """Controls for the default pvMail test database."""
 
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
@@ -20,12 +20,12 @@ class DemoView(QtGui.QWidget):
         layout = QtGui.QFormLayout()
         self.setLayout(layout)
 
-        lbl = QtGui.QLabel('trigger')
-        pb = bcdaqwidgets.BcdaQToggleButton('pvMail:trigger')
+        lbl = QtGui.QLabel("trigger")
+        pb = bcdaqwidgets.BcdaQToggleButton("pvMail:trigger")
         layout.addRow(lbl, pb)
 
-        lbl = QtGui.QLabel('message')
-        msg = bcdaqwidgets.BcdaQLineEdit('pvMail:message')
+        lbl = QtGui.QLabel("message")
+        msg = bcdaqwidgets.BcdaQLineEdit("pvMail:message")
         layout.addRow(lbl, msg)
 
 

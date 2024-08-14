@@ -1,22 +1,21 @@
-
-'''
+"""
 http://www.saltycrane.com/blog/2007/06/pyqt-42-qabstracttablemodelqtableview/
-'''
+"""
 
 import sys
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
-my_array = [['00','01','02'],
-            ['10','11','12'],
-            ['20','21','22']]
+my_array = [["00", "01", "02"], ["10", "11", "12"], ["20", "21", "22"]]
+
 
 def main():
     app = QApplication(sys.argv)
     w = MyWindow()
     w.show()
     sys.exit(app.exec_())
+
 
 class MyWindow(QWidget):
     def __init__(self, *args):
@@ -29,6 +28,7 @@ class MyWindow(QWidget):
         layout = QVBoxLayout(self)
         layout.addWidget(tableview)
         self.setLayout(layout)
+
 
 class MyTableModel(QAbstractTableModel):
     def __init__(self, datain, parent=None, *args):
@@ -47,6 +47,7 @@ class MyTableModel(QAbstractTableModel):
         elif role != Qt.DisplayRole:
             return QVariant()
         return QVariant(self.arraydata[index.row()][index.column()])
+
 
 if __name__ == "__main__":
     main()
