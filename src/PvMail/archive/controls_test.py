@@ -1,12 +1,14 @@
 """PV controls to test the GUI: uses default database (test.db)"""
 
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtGui
 
 pyqtSignal = QtCore.pyqtSignal
 import sys
 
-import bcdaqwidgets
+# import bcdaqwidgets  # TODO: refactor to pydm
+from pydm.widgets.pushbutton import PyDMPushButton
+from pydm.widgets.line_edit import PyDMLineEdit
 
 
 class DemoView(QtGui.QWidget):

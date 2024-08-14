@@ -13,10 +13,13 @@ import os
 import pathlib
 import sys
 
-from bcdaqwidgets import bcdaqwidgets  # TODO: refactor to pydm
-from PyQt4 import QtCore  # TODO: refactor to PyQt5
-from PyQt4 import QtGui
-from PyQt4 import uic
+from PyQt5 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import uic
+# from bcdaqwidgets import bcdaqwidgets  # TODO: refactor to pydm
+from pydm.widgets.label import PyDMLabel
+from pydm.widgets.line_edit import PyDMLineEdit
+from pydm.utilities import stylesheet
 
 from . import __init__
 from . import cli
