@@ -3,7 +3,8 @@
 pvMail: just the GUI
 ===================================
 
-Run the Graphical User Interface for PvMail using PyQt4 from a .ui file with the uic subpackage.
+Run the Graphical User Interface for PvMail using
+PyQt from a .ui file with the uic subpackage.
 """
 
 # Copyright (c) 2009-2024, UChicago Argonne, LLC.  See LICENSE file.
@@ -13,18 +14,20 @@ import os
 import pathlib
 import sys
 
-from PyQt5 import QtCore
-from PyQt5 import QtGui
-from PyQt5 import uic
-# from bcdaqwidgets import bcdaqwidgets  # TODO: refactor to pydm
 from pydm.widgets.label import PyDMLabel
 from pydm.widgets.line_edit import PyDMLineEdit
-from pydm.utilities import stylesheet
+from PyQt5 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
+from PyQt5 import uic
 
 from . import __init__
 from . import cli
 from . import ini_config
 from . import utils
+
+# from pydm.utilities import stylesheet
+
 
 pyqtSignal = QtCore.pyqtSignal
 
@@ -87,15 +90,23 @@ class PvMail_GUI(object):
         self.ui.log_file_name.setText(str(logfile))
         self.ui.w_running_stopped.setText("stopped")
 
-        self.ui.l_pv_trigger = QtGui.QLabel("trigger")
-        self.ui.pv_trigger = bcdaqwidgets.BcdaQLabel()
+        self.ui.l_pv_trigger = QtWidgets.QLabel("trigger")
+        self.ui.pv_trigger = PyDMLabel()
+
+        # TODO: developer
+        def response(*args, **kwargs):
+            print(f"response: {args=!r}  {kwargs=!r} {self.getTriggerPV()=}")
+
+        self.ui.messagePV.returnPressed.connect(self.setMessageChannel)
+        self.ui.triggerPV.returnPressed.connect(self.setTriggerChannel)
+
         self.ui.pv_trigger.setToolTip("PV not connected, no text available")
         self.ui.formLayout.addRow(self.ui.l_pv_trigger, self.ui.pv_trigger)
         self.triggerSignal = PvMailSignalDef()
         self.triggerSignal.EPICS_monitor.connect(self.onTrigger_gui_thread)
 
-        self.ui.l_pv_message = QtGui.QLabel("message")
-        self.ui.pv_message = bcdaqwidgets.BcdaQLineEdit()
+        self.ui.l_pv_message = QtWidgets.QLabel("message")
+        self.ui.pv_message = PyDMLineEdit()
         self.ui.pv_message.setToolTip("PV not connected, no text available")
         self.ui.pv_message.setReadOnly(True)
         self.ui.formLayout.addRow(self.ui.l_pv_message, self.ui.pv_message)
@@ -179,11 +190,12 @@ class PvMail_GUI(object):
             self.pvmail.triggerPV = trig_pv
             self.pvmail.messagePV = msg_pv
 
-            self.ui.pv_trigger.ca_connect(trig_pv, ca_callback=self.onTrigger_pv_thread)
-            self.ui.pv_trigger.setText("<connecting...>")
+            # FIXME: PyDM
+            # self.ui.pv_trigger.ca_connect(trig_pv, ca_callback=self.onTrigger_pv_thread)
+            # self.ui.pv_trigger.setText("<connecting...>")
 
-            self.ui.pv_message.ca_connect(msg_pv, ca_callback=self.onMessage_pv_thread)
-            self.ui.pv_message.setText("<connecting...>")
+            # self.ui.pv_message.ca_connect(msg_pv, ca_callback=self.onMessage_pv_thread)
+            # self.ui.pv_message.setText("<connecting...>")
             self.ui.pv_message.setReadOnly(False)
 
             self.pvmail.recipients = addresses
@@ -196,14 +208,14 @@ class PvMail_GUI(object):
                 self.setStatus(str(reason))
                 return
             self.ui.w_running_stopped.setText("running")
-            sty = bcdaqwidgets.StyleSheet(self.ui.w_running_stopped)
-            sty.updateStyleSheet(
-                {
-                    "background-color": COLOR_ON,
-                    "qproperty-alignment": "AlignCenter",
-                }
-            )
-            self.setStatus("CA monitors started")
+            # sty = bcdaqwidgets.StyleSheet(self.ui.w_running_stopped)  # TODO: refactor
+            # sty.updateStyleSheet(
+            #     {
+            #         "background-color": COLOR_ON,
+            #         "qproperty-alignment": "AlignCenter",
+            #     }
+            # )
+            # self.setStatus("CA monitors started")
             self.watching = True
 
     def doStop(self, *args, **kw):
@@ -213,26 +225,26 @@ class PvMail_GUI(object):
             self.setStatus("<Stop> button pressed")
             self.pvmail.do_stop()
             self.ui.w_running_stopped.setText("stopped")
-            sty = bcdaqwidgets.StyleSheet(self.ui.w_running_stopped)
-            sty.updateStyleSheet(
-                {
-                    "background-color": COLOR_DEFAULT,
-                }
-            )
+            # sty = bcdaqwidgets.StyleSheet(self.ui.w_running_stopped)  # TODO: refactor
+            # sty.updateStyleSheet(
+            #     {
+            #         "background-color": COLOR_DEFAULT,
+            #     }
+            # )
 
             obj = self.ui.pv_trigger
-            obj.ca_disconnect()
+            # obj.ca_disconnect()
             obj.setToolTip("PV not connected, no text available")
             obj.setText("<not connected>")
-            sty = bcdaqwidgets.StyleSheet(obj)
-            sty.updateStyleSheet(
-                {
-                    "background-color": COLOR_DEFAULT,
-                }
-            )
+            # sty = bcdaqwidgets.StyleSheet(obj)  # TODO: refactor
+            # sty.updateStyleSheet(
+            #     {
+            #         "background-color": COLOR_DEFAULT,
+            #     }
+            # )
 
             obj = self.ui.pv_message
-            obj.ca_disconnect()
+            # obj.ca_disconnect()
             obj.setToolTip("PV not connected, no text available")
             obj.setText("<not connected>")
             obj.setReadOnly(False)
@@ -271,10 +283,9 @@ class PvMail_GUI(object):
 
     def setEmailList(self, email_list):
         self.email_address_model.reset()
+        email_list.append("")  # add blank item at end for UI to grow the list
         for v in email_list:
             self.appendEmailList(v)
-        # always keep a blank item at end to grow the list
-        self.appendEmailList("")
 
     def getMessagePV(self):
         return self.ui.messagePV.text()
@@ -290,7 +301,14 @@ class PvMail_GUI(object):
 
     def setMessagePV(self, messagePV):
         self.ui.messagePV.setText(str(messagePV))
+        self.setMessageChannel()
         self.setStatus("set message PV: " + messagePV)
+
+    def setMessageChannel(self):
+        pv = self.getMessagePV().strip()
+        print(f"setMessageChannel({pv})")
+        if len(pv) > 0:
+            self.ui.pv_message.set_channel(f"ca://{pv}")
 
     def getTriggerPV(self):
         return self.ui.triggerPV.text()
@@ -311,7 +329,14 @@ class PvMail_GUI(object):
 
     def setTriggerPV(self, triggerPV):
         self.ui.triggerPV.setText(str(triggerPV))
+        self.setTriggerChannel()
         self.setStatus("set trigger PV: " + triggerPV)
+
+    def setTriggerChannel(self):
+        pv = self.getTriggerPV().strip()
+        # print(f"setTriggerChannel({pv})")
+        if len(pv) > 0:
+            self.ui.pv_trigger.set_channel(f"ca://{pv}")
 
     def setStatus(self, message):
         ts = str(datetime.datetime.now())
@@ -360,7 +385,7 @@ class EmailListModel(QtCore.QAbstractListModel):
     def setData(self, index, value, role=QtCore.Qt.EditRole):
         if role == QtCore.Qt.EditRole:
             row = index.row()
-            self.listdata[row] = str(value.toString())
+            self.listdata[row] = str(value)
             if row + 1 == len(self.listdata):
                 # always keep a blank item at end to grow the list
                 self.listdata.append("")
@@ -386,9 +411,12 @@ class EmailListModel(QtCore.QAbstractListModel):
         else:
             return defaultFlags | QtCore.Qt.ItemIsDropEnabled
 
+    def reset(self, *args, **kwargs):
+        self.listdata = []
+
 
 def main(triggerPV, messagePV, recipients, logger=None, logfile=None, config=None):
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     config = config or ini_config.Config()
     gui = PvMail_GUI(logger=logger, logfile=logfile, config=config)
 
@@ -397,7 +425,7 @@ def main(triggerPV, messagePV, recipients, logger=None, logfile=None, config=Non
         logfile = pathlib.Path(logfile)
     if logfile is not None and logfile.exists():
         gui.ui.history.append(open(logfile, "r").read())
-        gui.setStatus("log file: " + logfile)
+        gui.setStatus(f"log file: {logfile}")
     gui.setStatus("email configuration file: " + config.ini_file)
     gui.setStatus("email agent: " + config.mail_transfer_agent)
     gui.setMessagePV(messagePV)
@@ -405,8 +433,7 @@ def main(triggerPV, messagePV, recipients, logger=None, logfile=None, config=Non
     gui.setEmailList(recipients)
 
     gui.show()
-    _r = app.exec_()
-    sys.exit(_r)
+    sys.exit(app.exec_())
 
 
 if __name__ == "__main__":

@@ -258,7 +258,7 @@ def gui(results, config=None):
     :param obj config: email configuration from ini_config.Config()
     """
 
-    import uic_gui
+    from . import uic_gui
 
     uic_gui.main(
         results.trigger_PV,
