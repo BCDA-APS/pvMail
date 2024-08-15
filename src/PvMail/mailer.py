@@ -244,7 +244,3 @@ def main():
     message = f"{doc}\nFor more help, see: {DOCS_URL}"
 
     send_message(subject, message, recipients, cfg)
-
-
-if __name__ == "__main__":
-    main()

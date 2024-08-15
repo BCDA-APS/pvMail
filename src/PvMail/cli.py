@@ -348,13 +348,15 @@ def main():
 
     agent_db = ini_config.Config()
 
+    results.log_file = results.log_file.strip()
+
     logging.basicConfig(filename=results.log_file, level=logging.INFO)
     logger("#" * 60)
     logger("startup")
     logger("trigger PV       = " + results.trigger_PV)
     logger("message PV       = " + results.message_PV)
     logger("email list       = " + str(addresses))
-    logger("log file         = " + results.log_file)
+    logger("log file         = {results.log_file}")
     logger("logging interval = " + str(results.logging_interval))
     logger("sleep duration   = " + str(results.sleep_duration))
     logger("interface        = " + interface)
