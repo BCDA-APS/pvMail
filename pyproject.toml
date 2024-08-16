@@ -38,6 +38,13 @@ classifiers = [
     "Topic :: Utilities",
 ]
 
+# qt ==5
+# pyqt ==5
+dependencies = [
+  "pydm",
+  "pyepics",
+]
+
 [tool.setuptools_scm]
 
 [project.urls]

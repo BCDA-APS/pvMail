@@ -101,7 +101,7 @@ of two different SMTP configurations.  For example:
 
 .. index:: configuration file; example
 
-.. code-block:: guess
+.. code-block:: ini
     :linenos:
 
     [header]
@@ -175,21 +175,21 @@ It is possible to edit this file with any text editor.
     owner can read the file (owner: read+write).  
     One way to do this on a linux system:
 
-    .. code-block:: guess
+    .. code-block:: bash
         :linenos:
    
-        [joeuser] $ /path/to/PvMail/ini_config.py
+        $ /path/to/PvMail/ini_config.py
         /home/joeuser/.pvMail/pvMail.ini
-        [joeuser] $ chmod 600 /home/joeuser/.pvMail/pvMail.ini
+        $ chmod 600 /home/joeuser/.pvMail/pvMail.ini
    
     It is also advisable to restrict access to the parent
     directory of this file (owner: read+write+executable),
     such as this linux command:
 
-    .. code-block:: guess
+    .. code-block:: bash
         :linenos:
 
-        [joeuser] $ chmod 700 /home/joeuser/.pvMail
+        $ chmod 700 /home/joeuser/.pvMail
 
 On Windows, the default file might be:
 ``C:\\Users\\JoeUser\\AppData\\Roaming\\pvMail\\pvMail.ini``.
