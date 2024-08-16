@@ -5,7 +5,7 @@ Watches an EPICS PV and sends email when value changes from 0 to 1.
 
 :author:    Pete R. Jemian
 :email:     jemian@anl.gov
-:copyright: 2009-2017, UChicago Argonne, LLC
+:copyright: 2009-2024, UChicago Argonne, LLC
 :license:   ANL OPEN SOURCE LICENSE (see *LICENSE*)
 :docs:      http://PvMail.readthedocs.io
 :git:       https://github.com/prjemian/pvMail
@@ -27,7 +27,7 @@ when the value of that PV changes from 0 to 1.
 
 	PvMail *only* triggers when the trigger_PV makes a transition from 0 to 1.
 	
-	* It will ignore transitions (in floating-point PVs) to
+	* It ignores transitions (in floating-point PVs) to
 	  1.0000... that do not come directly from 0.0000...
 	  If you wish to watch a PV that presents values other than 0 and 1,
 	  then use a calculation PV as the trigger which results in a 

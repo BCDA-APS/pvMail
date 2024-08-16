@@ -116,3 +116,7 @@ coverage.xml
 # Microsoft VS Code #
 #####################
 .vscode/
+
+# Local developer files #
+#########################
+dev_*
