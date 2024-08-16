@@ -10,4 +10,12 @@ except (LookupError, ModuleNotFoundError):
 
     __version__ = version("PvMail")
 
+PROJECT = "PvMail"
+DESCRIPTION = "Watch an EPICS PV. Send email when it changes from 0 to 1."
 DOCS_URL = "https://PvMail.readthedocs.io"
+AUTHORS = [
+    "Pete Jemian",
+    "Kurt Goetze",
+]
+COPYRIGHT = "Copyright (c) 2009-2024, UChicago Argonne, LLC."
+LICENSE = "LICENSE"

@@ -1,7 +1,6 @@
 """Watch an EPICS PV. Send email when it changes from 0 to 1."""
 
 # Copyright (c) 2009-2024, UChicago Argonne, LLC.  See LICENSE file.
-# docs: http://PvMail.readthedocs.org
 
 import argparse
 import datetime
@@ -14,7 +13,8 @@ import time
 
 import epics
 
-from . import __version__
+from . import PROJECT
+from . import __version__ as VERSION
 from . import ini_config
 from . import mailer
 
@@ -272,9 +272,7 @@ def gui(results, config=None):
 
 def main():
     """parse command-line arguments and choose which interface to use"""
-    version = __version__
-
-    doc = f"v{version}, {__doc__.strip()}"
+    doc = f"{PROJECT}, v{VERSION}, {__doc__.strip()}"
     parser = argparse.ArgumentParser(description=doc)
 
     # positional arguments
@@ -339,7 +337,7 @@ def main():
         help="Use the graphical rather than command-line interface",
     )
 
-    parser.add_argument("-v", "--version", action="version", version=version)
+    parser.add_argument("-v", "--version", action="version", version=VERSION)
 
     results = parser.parse_args()
 

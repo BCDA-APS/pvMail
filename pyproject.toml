@@ -17,9 +17,9 @@ authors = [
 dynamic = ["version"]
 readme = "README.md"
 requires-python = ">=3.8"
-keywords = ["NeXus", "HDF5"]
+keywords = ["EPICS", "PV", "email", "monitor"]
 # https://packaging.python.org/en/latest/specifications/declaring-project-metadata/?highlight=license
-license = {file = "src/PvMail/LICENSE.txt"}
+license = {file = "src/PvMail/LICENSE"}
 # https://pypi.org/classifiers/
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -50,6 +50,24 @@ pvMail = "PvMail.cli:main"
 pvMail_mail_test = "PvMail.mailer:main"
 pvMail_mail_config_file = "PvMail.ini_config:main"
 
+[tool.black]
+line_length = 88
+
+[tool.copyright]
+copyright = "Copyright (c) 2009-2024, UChicago Argonne, LLC.  See LICENSE file."
+
+[tool.coverage.run]
+concurrency = [
+    "thread",
+    "multiprocessing"
+]
+omit = [
+    # omit anything under the installed packages directory
+    "*/site-packages/*",
+    # omit these individual files
+]
+relative_files = true
+
 [tool.flake8]
 max-line-length = 88
 extend-ignore = ["E501"]
@@ -59,6 +77,3 @@ force_single_line = true
 # multi_line_output = 1
 line_length = 88
 include_trailing_comma = true
-
-[tool.black]
-line_length = 88

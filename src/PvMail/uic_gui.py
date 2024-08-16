@@ -21,12 +21,15 @@ from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import uic
 
-from . import __init__
+from . import AUTHORS
+from . import COPYRIGHT
+from . import DESCRIPTION
+from . import DOCS_URL
+from . import __version__ as VERSION
 from . import cli
 from . import ini_config
 from . import utils
-from . import __version__
-
+from .email_model import EmailListModel
 
 pyqtSignal = QtCore.pyqtSignal
 
@@ -46,9 +49,6 @@ PYDM_TOOLTIP_TEXT = "\n".join(
         "connected=$(pv_value.connection)",
     ]
 )
-
-# TODO:
-DOC_URL = "https://PvMail.readthedocs.io"
 
 
 class PvMailSignalDef(QtCore.QObject):
@@ -128,19 +128,18 @@ class PvMail_GUI(object):
         # https://raw.githubusercontent.com/prjemian/pvMail/master/src/PvMail/VERSION
         #
         about = uic.loadUi(utils.get_pkg_file_path(PATH_ABOUT_UI))
-        # FIXME: these items do not come from __init__ now
-        about.title.setText(f"PvMail  {__version__}")
-        # about.description.setText(__init__.__description__)
-        # about.authors.setText(", ".join(__init__.__full_author_list__))
-        # about.copyright.setText(__init__.__license__)
+        about.title.setText(f"PvMail  {VERSION}")
+        about.description.setText(DESCRIPTION)
+        about.authors.setText(", ".join(AUTHORS))
+        about.copyright.setText(COPYRIGHT)
 
-        pb = QtWidgets.QPushButton(DOC_URL, clicked=self.doUrl)
+        pb = QtWidgets.QPushButton(DOCS_URL, clicked=self.doUrl)
         about.verticalLayout_main.addWidget(pb)
 
         # TODO: provide control to show the license
 
         # feed the status message
-        msg = f"About: PvMail, v{__version__}, PID={os.getpid()}"
+        msg = f"About: PvMail, v{VERSION}, PID={os.getpid()}"
         self.setStatus(msg)
         about.show()
         about.exec_()
@@ -148,7 +147,7 @@ class PvMail_GUI(object):
     def doUrl(self):
         self.setStatus("opening documentation URL in default browser")
         service = QtGui.QDesktopServices()
-        url = QtCore.QUrl(DOC_URL)
+        url = QtCore.QUrl(DOCS_URL)
         service.openUrl(url)
 
     def doClose(self, *args, **kw):
@@ -217,7 +216,7 @@ class PvMail_GUI(object):
             self.pvmail.do_stop()
             self.ui.w_running_stopped.setText("stopped")
             for obj in (self.ui.messagePV, self.ui.triggerPV):
-                obj.setStyleSheet(f"background-color: white")
+                obj.setStyleSheet("background-color: white")
                 obj.setReadOnly(False)
             self.ui.w_running_stopped.setStyleSheet(
                 f"background-color: {COLOR_DEFAULT}"
@@ -233,13 +232,13 @@ class PvMail_GUI(object):
 
         self.setStatus("requested a test email")
         subject = "PvMail mailer test message: " + self.config.mail_transfer_agent
-        message = f"This is a test of the PvMail mailer, v{__version__}"
+        message = f"This is a test of the PvMail mailer, v{VERSION}"
         msg_pv = str(self.getMessagePV())
         if self.watching:
             message += "\n\n" + self.pvmail.message
         message += "\n\n triggerPV = " + str(self.getTriggerPV())
         message += "\n messagePV = " + msg_pv
-        message += f"\n\n For more help, see: {DOC_URL}"
+        message += f"\n\n For more help, see: {DOCS_URL}"
         mailer.send_message(subject, message, self.email_list, self.config)
         self.setStatus("sent a test email")
 
@@ -329,58 +328,6 @@ class PvMail_GUI(object):
         # update history with logfile contents
         self.ui.history.clear()
         self.ui.history.append(open(self.logfile, "r").read())
-
-
-class EmailListModel(QtCore.QAbstractListModel):
-    def __init__(self, input_list, parent=None, *args):
-        """
-        data model for GUI: supports list of email addresses
-
-        :param [str] input_list: list of email addresses
-        :param QWidget parent: view widget for this data model
-        """
-        super(EmailListModel, self).__init__(parent, *args)
-        self.listdata = input_list
-
-    def rowCount(self, parent=QtCore.QModelIndex()):
-        return len(self.listdata)
-
-    def data(self, index, role):
-        if index.isValid():
-            if role == QtCore.Qt.DisplayRole:
-                return QtCore.QVariant(self.listdata[index.row()])
-            elif role == QtCore.Qt.EditRole:
-                return QtCore.QVariant(self.listdata[index.row()])
-            else:
-                return QtCore.QVariant()
-
-    def setData(self, index, value, role=QtCore.Qt.EditRole):
-        if role == QtCore.Qt.EditRole:
-            row = index.row()
-            self.listdata[row] = str(value)
-            if row + 1 == len(self.listdata):
-                # always keep a blank item at end to grow the list
-                self.listdata.append("")
-            self.dataChanged.emit(index, index)
-            return True
-        return False
-
-    def flags(self, index):
-        defaultFlags = QtCore.QAbstractItemModel.flags(self, index)
-
-        if index.isValid():
-            return (
-                defaultFlags
-                | QtCore.Qt.ItemIsEditable
-                | QtCore.Qt.ItemIsDragEnabled
-                | QtCore.Qt.ItemIsDropEnabled
-            )
-
-        else:
-            return defaultFlags | QtCore.Qt.ItemIsDropEnabled
-
-    def reset(self):
-        self.listdata = []
 
 
 def main(triggerPV, messagePV, recipients, logger=None, logfile=None, config=None):
