@@ -1,3 +1,4 @@
+.. _glossary:
 
 Glossary
 ========
@@ -27,6 +28,9 @@ Glossary
 :index:`PV`
     EPICS process variable
 
+:index:`PVA`
+    EPICS PV Access protocol (not used here)
+
 :index:`PvMail`
     Name of the Python package that provides the ``pvMail`` executable
 
@@ -36,7 +40,7 @@ Glossary
 :index:`PyEpics`
     Python package to manage connections with PVs served by an EPICS IOC
 
-:index:`PyQt4`
+:index:`PyQt5`
     Python framework for GUI and other Qt components
 
 :index:`trigger PV`

@@ -1,6 +1,7 @@
+.. _api:
 
-PvMail as a Python package
-==========================
+Source Code Documentation
+=========================
 
 This section provides the source code documentation.
 The documentation here may be of little or no use 
@@ -39,3 +40,4 @@ PvMail source code documentation
    uic_gui
    ini_config
    mailer
+   email_model

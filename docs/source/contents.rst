@@ -9,8 +9,8 @@ Contents
    command_line
    gui
    test_database
-   pvMail/modules
    info
+   pvMail/index
    changes
    license
 

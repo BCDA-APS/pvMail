@@ -27,7 +27,7 @@ It is possible to test the email sending using the configuration file.
 (Alternatively, the GUI has a *File* menu item to send a test email.)
 First, the help message for the command::
 
-    [joeuser] $ pvMail_mail_test --help
+    $ pvMail_mail_test --help
     
     usage: pvMail_mail_test [-h] recipient [recipient ...]
     
@@ -42,7 +42,7 @@ First, the help message for the command::
 
 To test the email sending using the configuration file::
 
-    [joeuser] $ python ./mailer.py joeuser@example.com
+    $ python ./mailer.py joeuser@example.com
 
 An email message is sent from *joeuser* to  joeuser@example.com:
 
@@ -51,11 +51,11 @@ An email message is sent from *joeuser* to  joeuser@example.com:
 
    To: joeuser@example.com
    Subject: PvMail mailer test message: sendmail
-   Date: Tue, 11 Nov 2014 13:17:31 -0600 (CST)
+   Date: Tue, 16 Aug 2024 13:17:31 -0600 (CDT)
    From: joeuser@example.com
 
-   This is a test of the PvMail mailer, v3.1.0
-   For more help, see: http://PvMail.readthedocs.org
+   This is a test of the PvMail mailer, v4.0.0
+   For more help, see: https://prjemian.github.io/pvMail
 
 
 Source Code Documentation

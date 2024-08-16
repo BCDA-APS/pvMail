@@ -27,6 +27,7 @@ History of user-visible changes between the versions.
    ----------------
 
    * Documentation moved to GitHub Pages (from readthedocs).
+   * Documentation now uses 'pydata_sphinx_theme'.
    * Project moved to GitHub "BCDA-APS" organization.
    * Python 3.8 - 3.12 now supported (no Python 2 support).
    * Switch to use PyDM widgets (dropped bcdaqwidgets).

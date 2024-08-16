@@ -12,7 +12,7 @@ except (LookupError, ModuleNotFoundError):
 
 PROJECT = "PvMail"
 DESCRIPTION = "Watch an EPICS PV. Send email when it changes from 0 to 1."
-DOCS_URL = "https://PvMail.readthedocs.io"
+DOCS_URL = "https://prjemian.github.io/pvMail"
 AUTHORS = [
     "Pete Jemian",
     "Kurt Goetze",

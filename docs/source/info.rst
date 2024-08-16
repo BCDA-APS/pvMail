@@ -39,17 +39,17 @@ Documentation
     PvMail project
 
 Documentation for the PvMail project, 
-maintained using Sphinx (http://sphinx.pocoo.org),
+maintained using Sphinx (http://www.sphinx-doc.org),
 is available from:
 
-* http://PvMail.readthedocs.org
+* https://prjemian.github.io/pvMail
 
 
 .. index:: TODO items
 
 .. _TODO:
 
-TODO items for future releases
+Items for future releases
 ##############################
 
 :see: https://github.com/prjemian/pvMail/issues
@@ -60,17 +60,14 @@ Authors
 
 :author: Kurt Goetze (original version)
 :author: Pete Jemian (this version)
-:organization: AES/BCDA, Advanced Photon Source, Argonne National Laboratory
+:organization: BCDA, Advanced Photon Source, Argonne National Laboratory
 
 
 
 Requirements
 ############
 
-:requires: EPICS system (http://www.aps.anl.gov/epics) 
-    with at least two process variables (PVs)
-    where the "Trigger PV" toggles between values of 0 and 1
-    and the "SendMessage PV" contains a string to send as part of 
-    the email message.
-:requires: PyEpics (http://cars9.uchicago.edu/software/python/pyepics3/)
-:requires: PyQt4 (https://wiki.python.org/moin/PyQt)
+Requires these Python :ref:`packages <install.dependencies>` and an `EPICS
+<https://www.aps.anl.gov/epics>`_ system with at least two process variables
+(PVs) where the "Trigger PV" toggles between values of 0 and 1 and the
+"SendMessage PV" contains a string to send as part of the email message.
