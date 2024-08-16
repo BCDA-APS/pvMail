@@ -45,17 +45,15 @@ dependencies = [
   "pyepics",
 ]
 
-[tool.setuptools_scm]
-
-[project.urls]
-"Homepage" = "https://prjemian.github.io/pvmail/"
-"Source" = "https://github.com/BCDA-APS/pvmail"
-"Bug Tracker" = "https://github.com/BCDA-APS/pvmail/issues"
-
 [project.scripts]
 pvMail = "PvMail.cli:main"
 pvMail_mail_test = "PvMail.mailer:main"
 pvMail_mail_config_file = "PvMail.ini_config:main"
+
+[project.urls]
+"Homepage" = "https://BCDA-APS.github.io/pvmail/"
+"Source" = "https://github.com/BCDA-APS/pvmail"
+"Bug Tracker" = "https://github.com/BCDA-APS/pvmail/issues"
 
 [tool.black]
 line_length = 88
@@ -84,3 +82,5 @@ force_single_line = true
 # multi_line_output = 1
 line_length = 88
 include_trailing_comma = true
+
+[tool.setuptools_scm]

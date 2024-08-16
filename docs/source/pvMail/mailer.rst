@@ -55,7 +55,7 @@ An email message is sent from *joeuser* to  joeuser@example.com:
    From: joeuser@example.com
 
    This is a test of the PvMail mailer, v4.0.0
-   For more help, see: https://prjemian.github.io/pvMail
+   For more help, see: https://BCDA-APS.github.io/pvMail
 
 
 Source Code Documentation

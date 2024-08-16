@@ -6,9 +6,9 @@ pvMail: graphical user interface
 
 .. index:: example
 
-The *PvMail* program GUI is started from the command line with the ``-g`` 
-or ``--gui`` command-line options.  
-If either GUI option is used, then the positional arguments 
+The *PvMail* program GUI is started from the command line with the ``-g``
+or ``--gui`` command-line options.
+If either GUI option is used, then the positional arguments
 (``triggerPV messagePV email@address``) are optional.
 Without either GUI option, the
 command-line interface is started.::
@@ -20,11 +20,11 @@ command-line interface is started.::
    the ampersand (``&``) on the command line, as shown above.
 
 .. figure:: gui.png
-   
+
    GUI of the *PvMail* application
 
-The GUI provides editable text entry widgets for each of the required 
-command-line terms (a.k.a. *positional arguments*): 
+The GUI provides editable text entry widgets for each of the required
+command-line terms (a.k.a. *positional arguments*):
 ``trigger_PV message_PV email_addresses``.
 The list of email addresses is separated.  The GUI provides a tool
 to add additional address or remove addresses.
@@ -42,7 +42,7 @@ At present, there is no feature to detach or reattach a monitor set.
 Also, *PvMail* can only monitor a single set of PVs using the current design.
 A request to enhance this capability is on the TODO list (see :ref:`TODO`).
 
-At the bottom of the GUI panel, a status log is shown.  
+At the bottom of the GUI panel, a status log is shown.
 These are the contents of the log file.
 
 .. tip::
@@ -50,7 +50,7 @@ These are the contents of the log file.
    be sure you start the program from a directory to which you have write
    access or specify the absolute path to the log file as a command line
    argument::
-   
+
      pvMail -g -l /path/to/log_file.txt &
 
 Send test email

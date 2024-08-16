@@ -9,6 +9,6 @@ tag | release | PyPI | conda
 
 - copyright:   (c) 2009-2024, UChicago Argonne, LLC
 - license: [ANL OPEN SOURCE LICENSE](./src/PvMail/LICENSE)
-- documentation: [https://prjemian.github.io/pvMail/](https://prjemian.github.io/pvMail/)
+- documentation: [https://BCDA-APS.github.io/pvMail/](https://BCDA-APS.github.io/pvMail/)
 - source: [https://github.com/BCDA-APS/pvMail](https://github.com/BCDA-APS/pvMail)
 - authors: Pete R. Jemian, Kurt Goetze

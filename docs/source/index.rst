@@ -36,7 +36,7 @@ About
 :email:     jemian@anl.gov
 :copyright: 2009-2024, UChicago Argonne, LLC
 :license:   ANL OPEN SOURCE LICENSE (see *LICENSE*)
-:docs:      https://prjemian.github.io/pvMail/
+:docs:      https://BCDA-APS.github.io/pvMail/
 :git:       https://github.com/BCDA-APS/pvMail
 :PyPI:      https://pypi.python.org/pypi/PvMail
 :version:   |version|

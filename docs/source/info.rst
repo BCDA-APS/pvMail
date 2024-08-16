@@ -42,7 +42,7 @@ Documentation for the PvMail project,
 maintained using Sphinx (http://www.sphinx-doc.org),
 is available from:
 
-* https://prjemian.github.io/pvMail
+* https://BCDA-APS.github.io/pvMail
 
 
 .. index:: TODO items

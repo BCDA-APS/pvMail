@@ -1,7 +1,7 @@
 
 # EPICS database to use while testing and developing pvMail.py code
 
-#  /APSshare/epics/base-3.14.12.1/bin/linux-x86-el5-debug/softIoc -d test.db
+#  softIoc -d test.db
 #
 #  IOC:     softIoc -d test.db
 #  client:  camonitor pvMail:{trigger,message}
