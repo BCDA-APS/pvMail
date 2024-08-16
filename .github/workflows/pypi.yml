@@ -8,6 +8,9 @@ on:
       tags:
         - "*"  # all tags
 
+permissions:
+  id-token: write
+
 jobs:
   publish-to-pypi:
     name: Build and publish Python 🐍 distributions 📦 to PyPI and TestPyPI
@@ -20,7 +23,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: "3.11" 
+        python-version: "3.11"
 
     - name: Install pypa/build
       run: >-
