@@ -17,26 +17,25 @@ Changes
 
 History of user-visible changes between the versions.
 
-..
-   4.0.0
-   ******
+4.0.0
+******
 
-   release expected by 2024-09-01
+Released 2024-08-16
 
-   Breaking Changes
-   ----------------
+Breaking Changes
+----------------
 
-   * Documentation moved to GitHub Pages (from readthedocs).
-   * Documentation now uses 'pydata_sphinx_theme'.
-   * Project moved to GitHub "BCDA-APS" organization.
-   * Python 3.8 - 3.12 now supported (no Python 2 support).
-   * Switch to use PyDM widgets (dropped bcdaqwidgets).
+* Documentation moved to GitHub Pages (from readthedocs).
+* Documentation now uses 'pydata_sphinx_theme'.
+* Project moved to GitHub "BCDA-APS" organization.
+* Python 3.8 - 3.12 now supported (no Python 2 support).
+* Switch to use PyDM widgets (dropped bcdaqwidgets).
 
-   Maintenance
-   -----------
+Maintenance
+-----------
 
-   * Started unit testing.
-   * Source code style enforced in continuous integration.
+* Started unit testing.
+* Source code style enforced in continuous integration.
 
 Releases for Python 2
 *********************
