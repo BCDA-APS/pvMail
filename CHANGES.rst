@@ -1,13 +1,44 @@
 ..
-  This file describes user-visible changes between the versions.
+   Subsections could include these headings (in this order).
+   Only include a subsection if there is content.
 
+   Notice
+   Breaking Changes
+   New Features
+   Enhancements
+   Fixes
+   Maintenance
+   Deprecations
+   Known Problems
+   New Contributors
 
-.. index:: change history
+Changes
+#######
 
-.. _changes:
+History of user-visible changes between the versions.
 
-Change History
-##############
+..
+   4.0.0
+   ******
+
+   release expected by 2024-09-01
+
+   Breaking Changes
+   ----------------
+
+   * Documentation moved to GitHub Pages (from readthedocs).
+   * Project moved to GitHub "BCDA-APS" organization.
+   * Python 3.8 - 3.12 now supported (no Python 2 support).
+   * Switch to use PyDM widgets (dropped bcdaqwidgets).
+
+   Maintenance
+   -----------
+
+   * Started unit testing.
+   * Source code style enforced in continuous integration.
+
+Releases for Python 2
+*********************
 
 :3.3.0: *planned: 2019-09-01*
 
