@@ -59,7 +59,7 @@ pvMail_mail_config_file = "PvMail.ini_config:main"
 line_length = 88
 
 [tool.copyright]
-copyright = "Copyright (c) 2009-2024, UChicago Argonne, LLC.  See LICENSE file."
+copyright = "(c) 2009-2024, UChicago Argonne, LLC.  See LICENSE file."
 
 [tool.coverage.run]
 concurrency = [

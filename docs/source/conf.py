@@ -57,9 +57,27 @@ exclude_patterns = []
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
+html_logo = "_static/logo2.png"
 html_static_path = ["_static"]
 html_theme = "pydata_sphinx_theme"
 html_title = f"{project} {version}"
+
+html_context = {
+    "github_user": "BCDA-APS",
+    "github_repo": "pvMail",
+    "github_version": "main",
+    "doc_path": "docs",
+}
+
+html_theme_options = {
+    "github_url": "https://github.com/BCDA-APS/pvMail",
+    "logo": {
+        "text": html_title,
+        "image_dark": "_static/logo2.png",
+    },
+    "use_edit_page_button": True,
+    "navbar_align": "content", 
+}
 
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#confval-autodoc_mock_imports
 autodoc_mock_imports = """
