@@ -158,7 +158,7 @@ def sendMail_SMTP(subject, message, recipients, smtp_cfg, sender=None, logger=No
         msg = "connection_security must be: STARTTLS or not defined, found: "
         raise MailerError(msg + connection_security)
 
-    msg = email.Message.Message()
+    msg = email.message.Message()
     if isinstance(recipients, str):
         msg["To"] = recipients
     else:
