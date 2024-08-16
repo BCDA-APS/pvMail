@@ -23,11 +23,11 @@ PV value can be either integer or float.
 version control repository
 **************************
 
-The PvMail project is hosted on GitHub (https://github.com/prjemian/pvMail).
+The PvMail project is hosted on GitHub (https://github.com/BCDA-APS/pvMail).
 You may check out the entire project source code 
 :index:`github repository`::
 
-	git clone  https://github.com/prjemian/pvMail
+	git clone  https://github.com/BCDA-APS/pvMail
 
 GitHub has additional advice for alternative methods.
 
@@ -52,7 +52,7 @@ is available from:
 Items for future releases
 ##############################
 
-:see: https://github.com/prjemian/pvMail/issues
+:see: https://github.com/BCDA-APS/pvMail/issues
 
 
 Authors

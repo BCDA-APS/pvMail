@@ -125,7 +125,7 @@ class PvMail_GUI(object):
         #
         # Comparing with the VERSION file will show the development trunk
         # which is not always the production release version.
-        # https://raw.githubusercontent.com/prjemian/pvMail/master/src/PvMail/VERSION
+        # https://raw.githubusercontent.com/BCDA-APS/pvMail/master/src/PvMail/VERSION
         #
         about = uic.loadUi(utils.get_pkg_file_path(PATH_ABOUT_UI))
         about.title.setText(f"PvMail  {VERSION}")

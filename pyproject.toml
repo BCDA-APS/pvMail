@@ -49,8 +49,8 @@ dependencies = [
 
 [project.urls]
 "Homepage" = "https://prjemian.github.io/pvmail/"
-"Source" = "https://github.com/prjemian/pvmail"
-"Bug Tracker" = "https://github.com/prjemian/pvmail/issues"
+"Source" = "https://github.com/BCDA-APS/pvmail"
+"Bug Tracker" = "https://github.com/BCDA-APS/pvmail/issues"
 
 [project.scripts]
 pvMail = "PvMail.cli:main"

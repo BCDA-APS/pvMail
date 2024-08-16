@@ -37,7 +37,7 @@ About
 :copyright: 2009-2024, UChicago Argonne, LLC
 :license:   ANL OPEN SOURCE LICENSE (see *LICENSE*)
 :docs:      https://prjemian.github.io/pvMail/
-:git:       https://github.com/prjemian/pvMail
+:git:       https://github.com/BCDA-APS/pvMail
 :PyPI:      https://pypi.python.org/pypi/PvMail
 :version:   |version|
 :release:   |release|

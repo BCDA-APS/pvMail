@@ -7,7 +7,7 @@ Installation Guide
 ====================================
 
 ``PvMail`` is available for installation by ``pip`` or from source. Please
-[report](https://github.com/prjemian/pvmail/issues/new) any issues you encounter
+[report](https://github.com/BCDA-APS/pvmail/issues/new) any issues you encounter
 or feature requests, too.
 
 ..
@@ -45,7 +45,7 @@ source code
 The latest development version of ``PvMail`` can be downloaded from the
 GitHub repository listed above::
 
-   $ git clone https://github.com/prjemian/pvmail
+   $ git clone https://github.com/BCDA-APS/pvmail
 
 To install from the source directory using ``pip`` in editable mode::
 
