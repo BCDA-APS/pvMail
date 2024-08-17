@@ -17,6 +17,17 @@ Changes
 
 History of user-visible changes between the versions.
 
+..
+    4.0.1
+    ******
+
+    Release expected by 2024-09-01
+
+    Maintenance
+    -----------
+
+    * Available on conda-forge. https://anaconda.org/conda-forge/pvmail
+
 4.0.0
 ******
 
@@ -29,7 +40,10 @@ Breaking Changes
 * Documentation now uses 'pydata_sphinx_theme'.
 * Project moved to GitHub "BCDA-APS" organization.
 * Python 3.8 - 3.12 now supported (no Python 2 support).
+* Source code style enforced by *ruff*.
 * Switch to use PyDM widgets (dropped bcdaqwidgets).
+* Switch to use PyQt5 (from PyQt4).
+* Switch to use setuptools_scm (dropped versioneer).
 
 Maintenance
 -----------
@@ -40,21 +54,17 @@ Maintenance
 Releases for Python 2
 *********************
 
-:3.3.0: *planned: 2019-09-01*
-
-	* milestone: https://github.com/prjemian/pvMail/milestone/1
-
-:3.2.9: *-tba-*
+:3.2.8+:
 
     * `#20 <https://github.com/prjemian/pvMail/issues/20>`_
       apply recommendations from LGTM.com automated code review
 
-:3.2.8: *2017-04-01*
+:3.2.8 (2017-04-01):
 
     * `#15 <https://github.com/prjemian/pvMail/issues/14>`_
-      [bcdaqwidgets](https://pypi.python.org/pypi/PvMail) now on PyPI
+      *bcdaqwidgets* now on `PyPI <https://pypi.python.org/pypi/PvMail>`_
     * `#14 <https://github.com/prjemian/pvMail/issues/14>`_
-      pick up GitHub tag versions with [versioneer](https://github.com/warner/python-versioneer)
+      pick up GitHub tag versions with `versioneer <https://github.com/warner/python-versioneer>`_
     * `#12 <https://github.com/prjemian/pvMail/issues/12>`_
       build for RTD in a conda environment
 

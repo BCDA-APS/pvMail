@@ -37,6 +37,9 @@ Glossary
 :index:`pvMail`
     Name of the ``pvMail`` executable
 
+:index:`PyDM`
+    Python package providing Qt widgets that manage EPICS PVs
+
 :index:`PyEpics`
     Python package to manage connections with PVs served by an EPICS IOC
 
