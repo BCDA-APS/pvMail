@@ -6,51 +6,58 @@
 Installation Guide
 ====================================
 
-``PvMail`` is available for installation by ``pip`` or from source. Please
-[report](https://github.com/BCDA-APS/pvmail/issues/new) any issues you encounter
-or feature requests, too.
+``PvMail`` is available for installation by ``conda``, ``pip``, or from source.
+Please [report](https://github.com/BCDA-APS/pvmail/issues/new) any issues you
+encounter or feature requests, too.
 
-..
-    .. _install.conda:
+.. tab-set::
 
-    conda
-    -----
+    .. tab-item:: conda
 
-    Released versions of ``PvMail`` are available on `conda-forge
-    <https://anaconda.org/conda-forge/pvmail>`_.
+        .. _install.conda:
 
-    If you have ``conda`` installed, then you can install::
+        conda
+        -----
 
-        $ conda install PvMail
+        Released versions of ``PvMail`` are available on `conda-forge
+        <https://anaconda.org/conda-forge/pvmail>`_.
 
-.. _install.pip:
+        If you have ``conda`` installed, then you can install::
 
-pip
----
+            $ conda install conda-forge::pvmail
 
-Released versions of ``PvMail`` are available on `PyPI
-<https://pypi.org/project/PvMail/>`_.
+    .. tab-item:: pip
 
-If you have ``pip`` installed, then you can install::
+        .. _install.pip:
 
-    $ pip install PvMail
+        pip
+        ---
 
-.. index:: source code
+        Released versions of ``PvMail`` are available on `PyPI
+        <https://pypi.org/project/PvMail/>`_.
 
-.. _install.source:
+        If you have ``pip`` installed, then you can install::
 
-source code
------------
+            $ pip install PvMail
 
-The latest development version of ``PvMail`` can be downloaded from the
-GitHub repository listed above::
+    .. tab-item:: source
 
-   $ git clone https://github.com/BCDA-APS/pvmail
+        .. index:: source code
 
-To install from the source directory using ``pip`` in editable mode::
+        .. _install.source:
 
-    $ cd pvmail
-    $ python -m pip install -e .
+        source code
+        -----------
+
+        The latest development version of ``PvMail`` can be downloaded from the
+        GitHub repository::
+
+        $ git clone https://github.com/BCDA-APS/pvmail
+
+        Install from the source directory using ``pip`` in editable mode::
+
+            $ cd pvmail
+            $ python -m pip install -e .
 
 .. _install.dependencies:
 

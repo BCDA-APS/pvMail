@@ -19,7 +19,7 @@ command-line interface is started.::
    Usually, you want to run the GUI as a background task by appending
    the ampersand (``&``) on the command line, as shown above.
 
-.. figure:: gui.png
+.. figure:: _static/gui.png
 
    GUI of the *PvMail* application
 
