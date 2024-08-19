@@ -1,0 +1,725 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PvMail.mailer &#8212; PvMail 4.0</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=a5c4661c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=41a5184c"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/tabs.js?v=3030b3cb"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/PvMail/mailer';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo2.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../../_static/logo2.png" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">PvMail 4.0</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../contents.html">
+    Contents
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../overview.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../glossary.html">
+    Glossary
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../install.html">
+    Installation Guide
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/BCDA-APS/pvMail" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../contents.html">
+    Contents
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../overview.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../glossary.html">
+    Glossary
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../install.html">
+    Installation Guide
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/BCDA-APS/pvMail" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">PvMail.mailer</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for PvMail.mailer</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Send a message by email to one or more recipients (by SMTP or sendmail).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Copyright (c) 2009-2024, UChicago Argonne, LLC.  See LICENSE file.</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">SMTP_TIMEOUT</span> <span class="o">=</span> <span class="mi">10</span>
+
+
+<div class="viewcode-block" id="MailerError">
+<a class="viewcode-back" href="../../pvMail/mailer.html#PvMail.mailer.MailerError">[docs]</a>
+<span class="k">class</span> <span class="nc">MailerError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="sendMail_sendmail">
+<a class="viewcode-back" href="../../pvMail/mailer.html#PvMail.mailer.sendMail_sendmail">[docs]</a>
+<span class="k">def</span> <span class="nf">sendMail_sendmail</span><span class="p">(</span>
+    <span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">recipients</span><span class="p">,</span> <span class="n">sendmail_cfg</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Send an email message using sendmail (linux only).</span>
+
+<span class="sd">    :param str subject: short text for email subject</span>
+<span class="sd">    :param str message: full text of email body</span>
+<span class="sd">    :param [str] recipients: list of email addresses to receive the message</span>
+<span class="sd">    :param dict sendmail_cfg: such as returned from :mod:`PvMail.ini_config.Config.get`</span>
+
+<span class="sd">        :user: required - (*str*) username to for sendmail (or similar) program</span>
+
+<span class="sd">    :param str sender: &quot;From&quot; address, if *None* use *smtp_cfg[&#39;user&#39;]* value</span>
+<span class="sd">    :param obj logger: optional message logging method</span>
+
+<span class="sd">    EXAMPLE::</span>
+
+<span class="sd">        &gt;&gt;&gt; import PvMail.ini_config</span>
+<span class="sd">        &gt;&gt;&gt; sendmail_cfg = PvMail.ini_config.Config().get()</span>
+<span class="sd">        &gt;&gt;&gt; recipients = [&#39;joe@gmail.com&#39;, &#39;sally@example.org&#39;]</span>
+<span class="sd">        &gt;&gt;&gt; subject = &#39;sendmail test message&#39;</span>
+<span class="sd">        &gt;&gt;&gt; message = PvMail.ini_config.__doc__</span>
+<span class="sd">        &gt;&gt;&gt; sendMail_sendmail(subject, message, recipients, sendmail_cfg)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;linux2&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">MailerError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot use this method on </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="si">=!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">sender</span> <span class="o">=</span> <span class="n">sender</span> <span class="ow">or</span> <span class="n">sendmail_cfg</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">recipients</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">recipients</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">recipients</span><span class="p">,</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_sendmail_handler</span><span class="p">(</span><span class="n">email_program</span><span class="p">,</span> <span class="n">from_addr</span><span class="p">,</span> <span class="n">recipients</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="n">to_addr</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">recipients</span><span class="p">))</span>
+        <span class="n">mail_command</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> -F </span><span class="si">%s</span><span class="s2"> -t </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">email_program</span><span class="p">,</span> <span class="n">from_addr</span><span class="p">,</span> <span class="n">to_addr</span><span class="p">)</span>
+        <span class="n">mail_message</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">mail_command</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">who</span> <span class="ow">in</span> <span class="n">recipients</span><span class="p">:</span>
+            <span class="n">mail_message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;To: &quot;</span> <span class="o">+</span> <span class="n">who</span><span class="p">)</span>
+        <span class="n">mail_message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Subject: &quot;</span> <span class="o">+</span> <span class="n">subject</span><span class="p">)</span>
+        <span class="n">mail_message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;cat &lt;&lt; +++ | </span><span class="si">%s</span><span class="se">\n</span><span class="s2">+++&quot;&quot;&quot;</span> <span class="o">%</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mail_message</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mail_command</span><span class="p">,</span> <span class="n">cmd</span>
+
+    <span class="k">def</span> <span class="nf">_mail_handler</span><span class="p">(</span><span class="n">email_program</span><span class="p">,</span> <span class="n">from_addr</span><span class="p">,</span> <span class="n">recipients</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="c1"># to_addr = str(&quot; &quot;.join(recipients))</span>
+        <span class="c1"># mail_command = &quot;%s %s&quot; % (email_program, to_addr)</span>
+        <span class="c1"># mail_message = &quot;%s\n%s&quot; % (subject, message)</span>
+        <span class="c1"># # TODO: needs to do THIS</span>
+        <span class="c1"># &quot;&quot;&quot;</span>
+        <span class="c1"># cat /tmp/message.txt | mail jemian@anl.gov</span>
+        <span class="c1"># &quot;&quot;&quot;</span>
+        <span class="c1"># # cmd = &#39;&#39;&#39;echo %s | %s&#39;&#39;&#39; % (mail_message, mail_command)</span>
+        <span class="c1"># # return mail_command, cmd    # lgtm [py/unreachable-statement]</span>
+        <span class="k">raise</span> <span class="n">MailerError</span><span class="p">(</span><span class="s2">&quot;code needs improvement here&quot;</span><span class="p">)</span>
+
+    <span class="n">cmd</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">email_program</span><span class="p">,</span> <span class="n">handler</span> <span class="ow">in</span> <span class="p">(</span>
+        <span class="p">(</span><span class="s2">&quot;/usr/lib/sendmail&quot;</span><span class="p">,</span> <span class="n">_sendmail_handler</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;/usr/bin/sendmail&quot;</span><span class="p">,</span> <span class="n">_sendmail_handler</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;/usr/bin/mail&quot;</span><span class="p">,</span> <span class="n">_mail_handler</span><span class="p">),</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">email_program</span><span class="p">):</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">handler</span><span class="p">(</span><span class="n">email_program</span><span class="p">,</span> <span class="n">sender</span><span class="p">,</span> <span class="n">recipients</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+            <span class="n">mail_command</span><span class="p">,</span> <span class="n">cmd</span> <span class="o">=</span> <span class="n">results</span>
+            <span class="k">break</span>
+
+    <span class="k">if</span> <span class="n">cmd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">MailerError</span><span class="p">(</span><span class="s2">&quot;Cannot find mail transport agent for sendmail.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">logger</span><span class="p">(</span><span class="s2">&quot;sending email to: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">recipients</span><span class="p">))</span>
+        <span class="n">logger</span><span class="p">(</span><span class="s2">&quot;email program: &quot;</span> <span class="o">+</span> <span class="n">email_program</span><span class="p">)</span>
+        <span class="n">logger</span><span class="p">(</span><span class="s2">&quot;mail command: &quot;</span> <span class="o">+</span> <span class="n">mail_command</span><span class="p">)</span>
+        <span class="n">logger</span><span class="p">(</span><span class="s2">&quot;email From: &quot;</span> <span class="o">+</span> <span class="n">sender</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="p">(</span><span class="s2">&quot;email command:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">cmd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">email_program</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>  <span class="c1"># send the message</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">logger</span><span class="p">(</span><span class="s2">&quot;email program (</span><span class="si">%s</span><span class="s2">) does not exist&quot;</span> <span class="o">%</span> <span class="n">email_program</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">reason</span><span class="p">:</span>
+        <span class="c1"># err_msg = traceback.format_exc()</span>
+        <span class="n">final_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cmd</span><span class="si">=!r}</span><span class="se">\n</span><span class="s2">traceback: </span><span class="si">{</span><span class="n">reason</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">logger</span><span class="p">(</span><span class="n">final_msg</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">MailerError</span><span class="p">(</span><span class="n">final_msg</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">logger</span><span class="p">(</span><span class="s2">&quot;sendmail sent&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="sendMail_SMTP">
+<a class="viewcode-back" href="../../pvMail/mailer.html#PvMail.mailer.sendMail_SMTP">[docs]</a>
+<span class="k">def</span> <span class="nf">sendMail_SMTP</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">recipients</span><span class="p">,</span> <span class="n">smtp_cfg</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    send email message through SMTP server</span>
+
+<span class="sd">    :param str subject: short text for email subject</span>
+<span class="sd">    :param str message: full text of email body</span>
+<span class="sd">    :param [str] recipients: list of email addresses to receive the message</span>
+<span class="sd">    :param dict smtp_cfg: such as returned from :mod:`PvMail.ini_config.Config.get`</span>
+
+<span class="sd">        :server:               required - (*str*) SMTP server</span>
+<span class="sd">        :user:                 required - (*str*) username to login to SMTP server</span>
+<span class="sd">        :port:                 optional - (*str*) SMTP port</span>
+<span class="sd">        :password:             optional - (*str*) password for username</span>
+<span class="sd">        :connection_security:  optional - (*str*) **STARTTLS** (the only choice, if specified)</span>
+
+<span class="sd">    :param str sender: &quot;From&quot; address, if *None* use *smtp_cfg[&#39;user&#39;]* value</span>
+
+<span class="sd">    EXAMPLE::</span>
+
+<span class="sd">        &gt;&gt;&gt; import PvMail.ini_config</span>
+<span class="sd">        &gt;&gt;&gt; smtp_cfg = PvMail.ini_config.Config().get()</span>
+<span class="sd">        &gt;&gt;&gt; recipients = [&#39;joe@gmail.com&#39;, &#39;sally@example.org&#39;]</span>
+<span class="sd">        &gt;&gt;&gt; subject = &#39;SMTP test message&#39;</span>
+<span class="sd">        &gt;&gt;&gt; message = PvMail.ini_config.__doc__</span>
+<span class="sd">        &gt;&gt;&gt; sendMail_SMTP(subject, message, recipients, smtp_cfg)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">email</span>
+    <span class="kn">import</span> <span class="nn">smtplib</span>
+
+    <span class="n">host</span> <span class="o">=</span> <span class="n">smtp_cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;server&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">host</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">MailerError</span><span class="p">(</span><span class="s2">&quot;must define an SMTP host to be used&quot;</span><span class="p">)</span>
+    <span class="n">port</span> <span class="o">=</span> <span class="n">smtp_cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;port&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">smtp_cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">username</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">MailerError</span><span class="p">(</span><span class="s2">&quot;must define a username for the SMTP server&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">sender</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sender</span> <span class="o">=</span> <span class="n">username</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">smtp_cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;password&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">connection_security</span> <span class="o">=</span> <span class="n">smtp_cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;connection_security&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">connection_security</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;STARTTLS&quot;</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;connection_security must be: STARTTLS or not defined, found: &quot;</span>
+        <span class="k">raise</span> <span class="n">MailerError</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="n">connection_security</span><span class="p">)</span>
+
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">email</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">Message</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">recipients</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;To&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">recipients</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">who</span> <span class="ow">in</span> <span class="n">recipients</span><span class="p">:</span>
+            <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;To&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">who</span>
+    <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;From&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sender</span>
+    <span class="n">msg</span><span class="p">[</span><span class="s2">&quot;Subject&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">subject</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">set_payload</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">logger</span><span class="p">(</span><span class="s2">&quot;sending email to: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">recipients</span><span class="p">))</span>
+        <span class="n">logger</span><span class="p">(</span><span class="s2">&quot;SMTP server: &quot;</span> <span class="o">+</span> <span class="n">host</span><span class="p">)</span>
+        <span class="n">logger</span><span class="p">(</span><span class="s2">&quot;SMTP user: &quot;</span> <span class="o">+</span> <span class="n">username</span><span class="p">)</span>
+        <span class="n">logger</span><span class="p">(</span><span class="s2">&quot;email From: &quot;</span> <span class="o">+</span> <span class="n">sender</span><span class="p">)</span>
+
+    <span class="n">smtpserver</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">SMTP_TIMEOUT</span><span class="p">)</span>
+    <span class="c1"># smtpserver.set_debuglevel(1)</span>
+    <span class="k">if</span> <span class="n">port</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">smtpserver</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">smtpserver</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">port</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">logger</span><span class="p">(</span><span class="s2">&quot;SMTP connected&quot;</span><span class="p">)</span>
+
+    <span class="n">smtpserver</span><span class="o">.</span><span class="n">ehlo</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">smtp_cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;connection_security&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;STARTTLS&quot;</span><span class="p">:</span>
+        <span class="n">smtpserver</span><span class="o">.</span><span class="n">starttls</span><span class="p">()</span>
+        <span class="n">smtpserver</span><span class="o">.</span><span class="n">ehlo</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="p">(</span><span class="s2">&quot;SMTP STARTTLS&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">password</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">smtpserver</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="p">(</span><span class="s2">&quot;SMTP authenticated&quot;</span><span class="p">)</span>
+
+    <span class="n">smtpserver</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">recipients</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span>
+    <span class="n">smtpserver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">logger</span><span class="p">(</span><span class="s2">&quot;SMTP complete&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="send_message">
+<a class="viewcode-back" href="../../pvMail/mailer.html#PvMail.mailer.send_message">[docs]</a>
+<span class="k">def</span> <span class="nf">send_message</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">recipients</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    send an email message</span>
+
+<span class="sd">    :param str subject: short text for email subject</span>
+<span class="sd">    :param str message: full text of email body</span>
+<span class="sd">    :param [str] recipients: list of email addresses to receive the message</span>
+<span class="sd">    :param dict config: such as returned from :mod:`PvMail.ini_config.Config`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">email_agent_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">sendmail</span><span class="o">=</span><span class="n">sendMail_sendmail</span><span class="p">,</span> <span class="n">SMTP</span><span class="o">=</span><span class="n">sendMail_SMTP</span><span class="p">)</span>
+    <span class="n">agent</span> <span class="o">=</span> <span class="n">email_agent_dict</span><span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">mail_transfer_agent</span><span class="p">]</span>
+    <span class="n">agent</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">recipients</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../pvMail/mailer.html#PvMail.mailer.main">[docs]</a>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    User on-demand test of the mailer module and configuration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">argparse</span>
+
+    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">DOCS_URL</span>
+    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">__version__</span>
+    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">ini_config</span>
+
+    <span class="n">doc</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Test the email sender from PvMail </span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="n">doc</span><span class="p">)</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;email address(es), whitespace-separated if more than one&quot;</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;recipient&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+
+    <span class="n">cfg</span> <span class="o">=</span> <span class="n">ini_config</span><span class="o">.</span><span class="n">Config</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Using configuration from: &quot;</span> <span class="o">+</span> <span class="n">cfg</span><span class="o">.</span><span class="n">ini_file</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Using user name: &quot;</span> <span class="o">+</span> <span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">()[</span><span class="s2">&quot;user&quot;</span><span class="p">])</span>
+
+    <span class="n">recipients</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">recipient</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sending email(s) to: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">recipients</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;mail transfer agent: &quot;</span> <span class="o">+</span> <span class="n">cfg</span><span class="o">.</span><span class="n">mail_transfer_agent</span><span class="p">)</span>
+
+    <span class="n">subject</span> <span class="o">=</span> <span class="s2">&quot;PvMail mailer test message: &quot;</span> <span class="o">+</span> <span class="n">cfg</span><span class="o">.</span><span class="n">mail_transfer_agent</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">doc</span><span class="si">}</span><span class="se">\n</span><span class="s2">For more help, see: </span><span class="si">{</span><span class="n">DOCS_URL</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="n">send_message</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">recipients</span><span class="p">,</span> <span class="n">cfg</span><span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright (c) 2009-2024, UChicago Argonne, LLC.  See LICENSE file..
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
