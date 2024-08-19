@@ -7,7 +7,7 @@ Installation Guide
 ====================================
 
 ``PvMail`` is available for installation by ``conda``, ``pip``, or from source.
-Please [report](https://github.com/BCDA-APS/pvmail/issues/new) any issues you
+Please `report <https://github.com/BCDA-APS/pvmail/issues/new>`_ any issues you
 encounter or feature requests, too.
 
 .. tab-set::
